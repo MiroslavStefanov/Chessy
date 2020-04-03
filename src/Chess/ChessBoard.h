@@ -5,7 +5,7 @@
 namespace chess
 {
 	class Chessy;
-	enum EColor : int;
+	enum class EColor : int;
 
 	class ChessBoard
 	{

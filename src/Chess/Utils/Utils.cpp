@@ -7,29 +7,29 @@ namespace chess
 	{
 		switch (direction)
 		{
-		case chess::ForwardLeft:
-			return BackwardRight;
-		case chess::Forward:
-			return Backward;
-		case chess::ForwardRight:
-			return BackwardLeft;
-		case chess::Right:
-			return Left;
-		case chess::BackwardRight:
-			return ForwardLeft;
-		case chess::Backward:
-			return Forward;
-		case chess::BackwardLeft:
-			return ForwardRight;
-		case chess::Left:
-			return Right;
+		case chess::EDirection::ForwardLeft:
+			return EDirection::BackwardRight;
+		case chess::EDirection::Forward:
+			return EDirection::Backward;
+		case chess::EDirection::ForwardRight:
+			return EDirection::BackwardLeft;
+		case chess::EDirection::Right:
+			return EDirection::Left;
+		case chess::EDirection::BackwardRight:
+			return EDirection::ForwardLeft;
+		case chess::EDirection::Backward:
+			return EDirection::Forward;
+		case chess::EDirection::BackwardLeft:
+			return EDirection::ForwardRight;
+		case chess::EDirection::Left:
+			return EDirection::Right;
 		default:
-			return NoDirection;
+			return EDirection::NoDirection;
 		}
 	}
 
 	int8_t GetKingPosition(EColor color)
 	{
-		return color == White ? 4 : 5;
+		return color == EColor::White ? 4 : 5;
 	}
 }

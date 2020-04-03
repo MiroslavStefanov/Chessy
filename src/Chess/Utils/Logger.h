@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-enum EEntryType
+enum class EEntryType
 {
 	Move,
 	Check,

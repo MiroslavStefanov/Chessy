@@ -6,7 +6,7 @@ namespace chess
 {
 	class ChessPiece;
 
-	enum EDirection
+	enum class EDirection
 	{
 		ForwardLeft,
 		Forward,
@@ -19,7 +19,7 @@ namespace chess
 		NoDirection
 	};
 
-	enum EMoveType
+	enum class EMoveType
 	{
 		PawnMove,
 		PawnJump,
@@ -31,14 +31,14 @@ namespace chess
 		Error
 	};
 
-	enum EColor
+	enum class EColor
 	{
 		White,
 		Black,
 		Colorless
 	};
 
-	enum EChessPieceType
+	enum class EChessPieceType
 	{
 		PawnType = 1,
 		KnightType,
@@ -48,13 +48,13 @@ namespace chess
 		KingType
 	};
 
-	enum EChessboardSide
+	enum class EChessboardSide
 	{
 		Top,
 		Bottom
 	};
 
-	enum ETurnState
+	enum class ETurnState
 	{
 		StartGame,
 		EndTurn,

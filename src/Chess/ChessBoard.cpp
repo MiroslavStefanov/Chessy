@@ -18,7 +18,7 @@ namespace chess
 		m_board = new ChessboardTile*[sChessBoardSize];
 		for (std::int8_t i = 0; i < sChessBoardSize; ++i)
 		{
-			m_board[i] = new ChessboardTile(TilePosition(i), i % 2 == 0 ? White : Black);
+			m_board[i] = new ChessboardTile(TilePosition(i), i % 2 == 0 ? EColor::White : EColor::Black);
 		}
 	}
 
@@ -37,22 +37,22 @@ namespace chess
 			ChessPiece* piece = nullptr;
 			switch (type)
 			{
-			case chess::PawnType:
+			case chess::EChessPieceType::PawnType:
 				piece = new Pawn(color);
 				break;
-			case chess::KnightType:
+			case chess::EChessPieceType::KnightType:
 				piece = new Knight(color);
 				break;
-			case chess::BishopType:
+			case chess::EChessPieceType::BishopType:
 				piece = new Bishop(color);
 				break;
-			case chess::RookType:
+			case chess::EChessPieceType::RookType:
 				piece = new Rook(color);
 				break;
-			case chess::QueenType:
+			case chess::EChessPieceType::QueenType:
 				piece = new Queen(color);
 				break;
-			case chess::KingType:
+			case chess::EChessPieceType::KingType:
 				piece = new King(color);
 				break;
 			}
@@ -62,41 +62,41 @@ namespace chess
 
 		for (int i = 0; i < sChessBoardSide; ++i)
 		{
-			InitializePieceOfTypeOnPosition(PawnType, TilePosition(1 * sChessBoardSide + i), topColor);
-			InitializePieceOfTypeOnPosition(PawnType, TilePosition((sChessBoardSide - 2) * sChessBoardSide + i), bottomColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::PawnType, TilePosition(1 * sChessBoardSide + i), topColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::PawnType, TilePosition((sChessBoardSide - 2) * sChessBoardSide + i), bottomColor);
 		}
 
 		auto lastRow = (sChessBoardSide - 1) * sChessBoardSide;
-		InitializePieceOfTypeOnPosition(RookType, TilePosition(0), topColor);
-		InitializePieceOfTypeOnPosition(RookType, TilePosition(sChessBoardSide - 1), topColor);
-		InitializePieceOfTypeOnPosition(RookType, TilePosition(lastRow + 0), bottomColor);
-		InitializePieceOfTypeOnPosition(RookType, TilePosition(lastRow + sChessBoardSide - 1), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::RookType, TilePosition(0), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::RookType, TilePosition(sChessBoardSide - 1), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::RookType, TilePosition(lastRow + 0), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::RookType, TilePosition(lastRow + sChessBoardSide - 1), bottomColor);
 
-		InitializePieceOfTypeOnPosition(KnightType, TilePosition(1), topColor);
-		InitializePieceOfTypeOnPosition(KnightType, TilePosition(sChessBoardSide - 2), topColor);
-		InitializePieceOfTypeOnPosition(KnightType, TilePosition(lastRow + 1), bottomColor);
-		InitializePieceOfTypeOnPosition(KnightType, TilePosition(lastRow + sChessBoardSide - 2), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::KnightType, TilePosition(1), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::KnightType, TilePosition(sChessBoardSide - 2), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::KnightType, TilePosition(lastRow + 1), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::KnightType, TilePosition(lastRow + sChessBoardSide - 2), bottomColor);
 
-		InitializePieceOfTypeOnPosition(BishopType, TilePosition(2), topColor);
-		InitializePieceOfTypeOnPosition(BishopType, TilePosition(sChessBoardSide - 3), topColor);
-		InitializePieceOfTypeOnPosition(BishopType, TilePosition(lastRow + 2), bottomColor);
-		InitializePieceOfTypeOnPosition(BishopType, TilePosition(lastRow + sChessBoardSide - 3), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::BishopType, TilePosition(2), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::BishopType, TilePosition(sChessBoardSide - 3), topColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::BishopType, TilePosition(lastRow + 2), bottomColor);
+		InitializePieceOfTypeOnPosition(EChessPieceType::BishopType, TilePosition(lastRow + sChessBoardSide - 3), bottomColor);
 
-		if (topColor == White)
+		if (topColor == EColor::White)
 		{
-			InitializePieceOfTypeOnPosition(QueenType, TilePosition(4), topColor);
-			InitializePieceOfTypeOnPosition(QueenType, TilePosition(lastRow + 4), bottomColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::QueenType, TilePosition(4), topColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::QueenType, TilePosition(lastRow + 4), bottomColor);
 
-			InitializePieceOfTypeOnPosition(KingType, TilePosition(3), topColor);
-			InitializePieceOfTypeOnPosition(KingType, TilePosition(lastRow + 3), bottomColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::KingType, TilePosition(3), topColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::KingType, TilePosition(lastRow + 3), bottomColor);
 		}
 		else
 		{
-			InitializePieceOfTypeOnPosition(QueenType, TilePosition(3), topColor);
-			InitializePieceOfTypeOnPosition(QueenType, TilePosition(lastRow + 3), bottomColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::QueenType, TilePosition(3), topColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::QueenType, TilePosition(lastRow + 3), bottomColor);
 
-			InitializePieceOfTypeOnPosition(KingType, TilePosition(4), topColor);
-			InitializePieceOfTypeOnPosition(KingType, TilePosition(lastRow + 4), bottomColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::KingType, TilePosition(4), topColor);
+			InitializePieceOfTypeOnPosition(EChessPieceType::KingType, TilePosition(lastRow + 4), bottomColor);
 		}
 	}
 
@@ -135,7 +135,7 @@ namespace chess
 		}
 		m_previousJump = Jump();
 
-		if (m_pickedUp->GetType() == PawnType)
+		if (m_pickedUp->GetType() == EChessPieceType::PawnType)
 		{
 			//hack for now
 			auto rowCheck1 = position.AsPosition().row == m_pickedUp->GetOnwerTilePosition().AsPosition().row + 2;

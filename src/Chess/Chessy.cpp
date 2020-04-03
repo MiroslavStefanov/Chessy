@@ -8,7 +8,7 @@
 
 namespace chess
 {
-	EColor Chessy::m_turnColor = White;
+	EColor Chessy::m_turnColor = EColor::White;
 	static auto OutOfBounds = [](int row, int col) {
 		return (row < 0 || row >= 8 ||
 			col < 0 || col >= 8);
@@ -16,8 +16,8 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	Chessy::Chessy(EChessboardSide whiteSide) : 
 		m_checkmate(false),
-		m_topSide(ChessySide(EChessboardSide::Top, whiteSide == Top ? White : Black)),
-		m_bottomSide(ChessySide(EChessboardSide::Bottom, whiteSide == Bottom ? White : Black))
+		m_topSide(ChessySide(EChessboardSide::Top, whiteSide == EChessboardSide::Top ? EColor::White : EColor::Black)),
+		m_bottomSide(ChessySide(EChessboardSide::Bottom, whiteSide == EChessboardSide::Bottom ? EColor::White : EColor::Black))
 	{
 		m_chessBoard = new ChessBoard(whiteSide);
 		m_chessBoard->Initialize(m_topSide.Color, m_bottomSide.Color);
@@ -47,18 +47,18 @@ namespace chess
 		auto tile = m_chessBoard->GetTileOnPosition(position);
 		if (!tile || (!m_chessBoard->GetPickedUp() && tile->GetChessPiece() == nullptr))
 		{
-			return ErrorState;
+			return ETurnState::ErrorState;
 		}
 		if (!m_chessBoard->GetPickedUp())
 		{
 			if (tile->GetChessPiece()->GetColor() != m_turnColor)
 			{
-				return ErrorState;
+				return ETurnState::ErrorState;
 			}
 			else
 			{
 				m_chessBoard->PickUp(position);
-				return Select;
+				return ETurnState::Select;
 			}
 		}
 		else
@@ -66,7 +66,7 @@ namespace chess
 			if (m_chessBoard->GetPickedUp() == tile->GetChessPiece())
 			{
 				m_chessBoard->Drop();
-				return Unselect;
+				return ETurnState::Unselect;
 			}
 			else if (IsPossibleMove(position))
 			{
@@ -75,19 +75,19 @@ namespace chess
 			}
 			else
 			{
-				return ErrorState;
+				return ETurnState::ErrorState;
 			}
 		}
 
-		OnEndTurn();
+		//OnEndTurn();
 		CheckmateCheck();
 
 		if (m_checkmate == true)
 		{
-			return Checkmate;
+			return ETurnState::Checkmate;
 		}
 
-		return EndTurn;
+		return ETurnState::EndTurn;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void Chessy::HandleKing(const TilePosition& position, const ChessPieceMove& chessPieceMove)
 	{
-		if (chessPieceMove.type == Castle)
+		if (chessPieceMove.type == EMoveType::Castle)
 		{
 			CastleCheck();
 			return;
@@ -208,7 +208,7 @@ namespace chess
 		
 		switch (chessPieceMove.type)
 		{
-		case chess::PawnMove:
+		case chess::EMoveType::PawnMove:
 			{
 				if (forwardTile && !forwardTile->GetChessPiece())
 				{
@@ -216,7 +216,7 @@ namespace chess
 				}
 				break;
 			}
-		case chess::PawnJump:
+		case chess::EMoveType::PawnJump:
 			{
 				auto& jumpPos = pos + modifier;
 				auto jumpTile = m_chessBoard->GetTileOnPosition(jumpPos);
@@ -227,7 +227,7 @@ namespace chess
 				m_possibleGameMoves.push_back(jumpPos);
 				break;
 			}
-		case chess::PawnHit:
+		case chess::EMoveType::PawnHit:
 			if ((forwardTile && forwardTile->GetChessPiece() && forwardTile->GetChessPiece()->GetColor() != chessPiece->GetColor()) ||
 				pos == m_chessBoard->GetPreviousJump().sneakyTakePosition && m_chessBoard->GetPreviousJump().piece->GetColor() != chessPiece->GetColor())
 			{
@@ -259,7 +259,7 @@ namespace chess
 				else if (tempChessPiece->GetColor() != chessPiece->GetColor())
 				{
 					m_possibleGameMoves.push_back(pos);
-					if (tempChessPiece->GetType() == KingType)
+					if (tempChessPiece->GetType() == EChessPieceType::KingType)
 					{
 						m_activateCheck = true;
 					}
@@ -297,13 +297,13 @@ namespace chess
 		auto chessPieceMoves = tileChessPiece->GetChessPieceMoves();
 		for (auto chessPieceMove : chessPieceMoves)
 		{
-			if (tileChessPiece->GetType() == KingType)
+			if (tileChessPiece->GetType() == EChessPieceType::KingType)
 			{
 				HandleKing(position, chessPieceMove);
 				continue;
 			}
 
-			if (tileChessPiece->GetType() == PawnType)
+			if (tileChessPiece->GetType() == EChessPieceType::PawnType)
 			{
 				HandlePawn(position, chessPieceMove);
 				continue;
@@ -405,28 +405,28 @@ namespace chess
 		Position modifier;
 		switch (move.direction)
 		{
-		case ForwardLeft:
+		case EDirection::ForwardLeft:
 			modifier = move.type == EMoveType::KnightMove ? Position(2, -1) : Position(1, -1);
 			break;
-		case Forward:
+		case EDirection::Forward:
 			modifier = move.type == EMoveType::KnightMove ? Position(2, 1) : Position(1, 0);
 			break;
-		case ForwardRight:
+		case EDirection::ForwardRight:
 			modifier = move.type == EMoveType::KnightMove ? Position(1, 2) : Position(1, 1);
 			break;
-		case Right:
+		case EDirection::Right:
 			modifier = move.type == EMoveType::KnightMove ? Position(-1, 2) : Position(0, 1);
 			break;
-		case BackwardRight:
+		case EDirection::BackwardRight:
 			modifier = move.type == EMoveType::KnightMove ? Position(-2, 1) : Position(-1, 1);
 			break;
-		case Backward:
+		case EDirection::Backward:
 			modifier = move.type == EMoveType::KnightMove ? Position(-2, -1) : Position(-1, 0);
 			break;
-		case BackwardLeft:
+		case EDirection::BackwardLeft:
 			modifier = move.type == EMoveType::KnightMove ? Position(-1, -2) : Position(-1, -1);
 			break;
-		case Left:
+		case EDirection::Left:
 			modifier = move.type == EMoveType::KnightMove ? Position(1, -2) : Position(0, -1);
 			break;
 		}
@@ -456,13 +456,13 @@ int main()
 	auto ToStr = [](chess::ETurnState state) {
 		switch (state)
 		{
-		case chess::EndTurn:
+		case chess::ETurnState::EndTurn:
 			return "EndTurn";
-		case chess::Select:
+		case chess::ETurnState::Select:
 			return "Select";
-		case chess::Unselect:
+		case chess::ETurnState::Unselect:
 			return "Unselect";
-		case chess::ErrorState:
+		case chess::ETurnState::ErrorState:
 			return "ErrorState";
 		default:
 			return "";
@@ -480,7 +480,7 @@ int main()
 		std::cin >> row >> col;
 
 		state = chessy->ChessyTurn(chess::TilePosition(chess::Position(row, col)));
-		if (state == chess::EndTurn)
+		if (state == chess::ETurnState::EndTurn)
 		{
 			chessy->OnEndTurn();
 		}

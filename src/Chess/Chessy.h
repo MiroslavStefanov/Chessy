@@ -9,9 +9,9 @@ namespace chess
 	class ChessboardTile;
 	struct Position;
 	struct ChessySide;
-	enum EColor : int;
-	enum EChessboardSide : int;
-	enum ETurnState : int;
+	enum class EColor : int;
+	enum class EChessboardSide : int;
+	enum class ETurnState : int;
 
 	class Chessy
 	{
@@ -30,9 +30,9 @@ namespace chess
 				: Side(side),
 				Color(color),
 				CastlePositions{ 
-				TilePosition(Position(Side == Bottom ? 7 : 0, GetKingPosition(Color))),
-				TilePosition(Position(Side == Bottom ? 7 : 0, 0)),
-				TilePosition(Position(Side == Bottom ? 7 : 0, 7)) }
+				TilePosition(Position(Side == EChessboardSide::Bottom ? 7 : 0, GetKingPosition(Color))),
+				TilePosition(Position(Side == EChessboardSide::Bottom ? 7 : 0, 0)),
+				TilePosition(Position(Side == EChessboardSide::Bottom ? 7 : 0, 7)) }
 			{
 			}
 

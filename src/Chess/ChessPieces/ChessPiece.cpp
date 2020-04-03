@@ -70,7 +70,7 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	std::string ChessPiece::GetDrawString()
 	{
-		char drawChar = '0' + m_type;
+		char drawChar = '0' + (int)m_type;
 		return std::string() + drawChar;
 	}
 }

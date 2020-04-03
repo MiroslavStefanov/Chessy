@@ -8,7 +8,7 @@ namespace chess
 	class ChessPiece;
 	class TilePosition;
 	struct TileHit;
-	enum EColor : int;
+	enum class EColor : int;
 
 	class ChessboardTile
 	{
