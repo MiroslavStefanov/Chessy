@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\event">
+      <UniqueIdentifier>{6340cfcc-3a33-4951-8012-353b6be22d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io">
+      <UniqueIdentifier>{e592c326-729d-4d5a-ba39-c8f38e0d5ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mvc">
+      <UniqueIdentifier>{2910db85-1e77-4b85-a652-f93f8bd4510b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\EventDispatcher.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SystemEventTypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\BaseApplication.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\event\ApplicationStartedEvent.h">
+      <Filter>Source Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\event\Event.h">
+      <Filter>Source Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\io\BaseInputDevice.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\io\BaseOutputDevice.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\mvc\BaseController.h">
+      <Filter>Source Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\mvc\Model.h">
+      <Filter>Source Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\mvc\ModelAndView.h">
+      <Filter>Source Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\mvc\View.h">
+      <Filter>Source Files\mvc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ViewResolver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\EventTypeInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\ForwardDeclarations.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\ViewId.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\BufferQueue.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\pch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\EventDispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ViewResolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\BaseApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\event\ApplicationStartedEvent.cpp">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\io\BaseInputDevice.cpp">
+      <Filter>Source Files\io</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\mvc\BaseController.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\mvc\ModelAndView.cpp">
+      <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\ViewId.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

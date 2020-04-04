@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Chess">
+      <UniqueIdentifier>{b23eca51-b541-4bc9-b6ef-2f82d9a1fd1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\ChessPieces">
+      <UniqueIdentifier>{3a89c902-04e2-4f4e-b831-05b5ee14e152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Utils">
+      <UniqueIdentifier>{595a2b2f-64f8-4c86-b30a-2d56139ee523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Controllers">
+      <UniqueIdentifier>{4b7f7560-03ed-495b-afb1-4bd55fbb814d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Events">
+      <UniqueIdentifier>{ba4de17f-a8b0-4599-a6c8-980aefc5475a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\App">
+      <UniqueIdentifier>{313629b1-8af3-451b-9c1e-b897f243cc28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\App\ConsoleChess">
+      <UniqueIdentifier>{f2eb98ff-4090-4301-bff3-dfecbe49b8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Models">
+      <UniqueIdentifier>{d867e243-9e53-410a-9e6b-b9e43f6c5afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Views">
+      <UniqueIdentifier>{247bbd9f-4dfb-4755-8cfa-591940cfe935}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Chess\ChessPieces\Bishop.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\ChessPiece.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\King.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Knight.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Pawn.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Queen.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Rook.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessBoard.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessboardTile.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Chessy.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Utils\Logger.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Utils\Utils.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Controllers\PlayerController.cpp">
+      <Filter>Chess\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\App\ChessApplication.cpp">
+      <Filter>Chess\App</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.cpp">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsolseChessMain.cpp">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Events\CellClickedEvent.cpp">
+      <Filter>Chess\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.cpp">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.cpp">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Views\ChessboardView.cpp">
+      <Filter>Chess\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\stdafx.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Chess\ChessPieces\Bishop.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\King.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Knight.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Pawn.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Queen.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Rook.h">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessBoard.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessboardTile.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Chessy.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\Logger.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\Utils.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Controllers\PlayerController.h">
+      <Filter>Chess\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Events\EventTypes.h">
+      <Filter>Chess\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ChessApplication.h">
+      <Filter>Chess\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ChessFactory.h">
+      <Filter>Chess\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.h">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Events\CellClickedEvent.h">
+      <Filter>Chess\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.h">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.h">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\ChessboardViewModel.h">
+      <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Views\ChessboardView.h">
+      <Filter>Chess\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Views\ChessViews.h">
+      <Filter>Chess\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\stdafx.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Chess\App\ChessApplication.cpp" />
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.cpp" />
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.cpp" />
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.cpp" />
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsolseChessMain.cpp" />
+    <ClCompile Include="src\Chess\ChessBoard.cpp" />
+    <ClCompile Include="src\Chess\ChessboardTile.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\Bishop.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\ChessPiece.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\King.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\Knight.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\Pawn.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\Queen.cpp" />
+    <ClCompile Include="src\Chess\ChessPieces\Rook.cpp" />
+    <ClCompile Include="src\Chess\Chessy.cpp" />
+    <ClCompile Include="src\Chess\Controllers\PlayerController.cpp" />
+    <ClCompile Include="src\Chess\Events\CellClickedEvent.cpp" />
+    <ClCompile Include="src\Chess\stdafx.cpp" />
+    <ClCompile Include="src\Chess\Utils\Logger.cpp" />
+    <ClCompile Include="src\Chess\Utils\Utils.cpp" />
+    <ClCompile Include="src\Chess\Views\ChessboardView.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Chess\App\ChessApplication.h" />
+    <ClInclude Include="src\Chess\App\ChessFactory.h" />
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.h" />
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.h" />
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.h" />
+    <ClInclude Include="src\Chess\ChessBoard.h" />
+    <ClInclude Include="src\Chess\ChessboardTile.h" />
+    <ClInclude Include="src\Chess\ChessPieces\Bishop.h" />
+    <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h" />
+    <ClInclude Include="src\Chess\ChessPieces\King.h" />
+    <ClInclude Include="src\Chess\ChessPieces\Knight.h" />
+    <ClInclude Include="src\Chess\ChessPieces\Pawn.h" />
+    <ClInclude Include="src\Chess\ChessPieces\Queen.h" />
+    <ClInclude Include="src\Chess\ChessPieces\Rook.h" />
+    <ClInclude Include="src\Chess\Chessy.h" />
+    <ClInclude Include="src\Chess\Controllers\PlayerController.h" />
+    <ClInclude Include="src\Chess\Events\CellClickedEvent.h" />
+    <ClInclude Include="src\Chess\Events\EventTypes.h" />
+    <ClInclude Include="src\Chess\Models\ChessboardViewModel.h" />
+    <ClInclude Include="src\Chess\stdafx.h" />
+    <ClInclude Include="src\Chess\Utils\Logger.h" />
+    <ClInclude Include="src\Chess\Utils\Utils.h" />
+    <ClInclude Include="src\Chess\Views\ChessboardView.h" />
+    <ClInclude Include="src\Chess\Views\ChessViews.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{A04F3F17-DB51-4F1A-BE4E-CA014F080F1F}</ProjectGuid>
+    <RootNamespace>ChessGame</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./src/Chess;../CoronaMVC/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>../x64/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CoronaMVC.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./src/Chess;../CoronaMVC/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../x64/Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CoronaMVC.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

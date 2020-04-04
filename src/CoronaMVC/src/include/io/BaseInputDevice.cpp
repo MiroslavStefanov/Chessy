@@ -1,0 +1,31 @@
+#include "pch.h"
+#include "BaseInputDevice.h"
+#include "event/Event.h"
+
+namespace mvc
+{
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	BaseInputDevice::BaseInputDevice() = default;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	BaseInputDevice::~BaseInputDevice() = default;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseInputDevice::VisitAndClearEvents(std::function<void(Event&)> eventVisitor)
+	{
+		while (!m_events.IsEmpty())
+		{
+			auto event = m_events.PopNextEntry();
+			if (event && eventVisitor)
+			{
+				eventVisitor(*event);
+			}
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseInputDevice::AddEvent(std::unique_ptr<Event>&& event)
+	{
+		m_events.AddEntry(std::move(event));
+	}
+}
