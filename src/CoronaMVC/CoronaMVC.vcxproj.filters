@@ -75,6 +75,9 @@
     <ClInclude Include="src\include\pch.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\StringHash.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventDispatcher.cpp">

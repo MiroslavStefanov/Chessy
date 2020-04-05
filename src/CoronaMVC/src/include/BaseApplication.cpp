@@ -56,12 +56,10 @@ namespace mvc
 		{
 			m_viewResolver->UpdateView(m_eventDispathcer->PopNextView());
 		}
-		m_viewResolver->RenderActiveView(*m_outputDevice);
+		m_viewResolver->RenderActiveView(m_outputDevice.get());
 
-		m_inputDevice->CollectInputEvents();
+		m_viewResolver->InputActiveView(m_inputDevice.get());
 		m_inputDevice->VisitAndClearEvents(std::bind(&EventDispatcher::DispatchEvent, m_eventDispathcer.get(), std::placeholders::_1));
-
-		m_outputDevice->Clear();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

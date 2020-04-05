@@ -3,6 +3,8 @@
 
 #include "mvc/ModelAndView.h"
 #include "mvc/View.h"
+#include "io/BaseInputDevice.h"
+#include "io/BaseOutputDevice.h"
 
 namespace mvc
 {
@@ -24,6 +26,16 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ViewResolver::InputActiveView(BaseInputDevice* inputDevice) const
+	{
+		auto it = m_views.find(m_activeViewId);
+		if (it != m_views.end() && it->second)
+		{
+			it->second->ProcessInput(inputDevice);
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::UpdateView(const ModelAndView& modelAndView)
 	{
 		auto it = m_views.find(modelAndView.GetViewId());
@@ -36,12 +48,12 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ViewResolver::RenderActiveView(BaseOutputDevice& outputDevice) const
+	void ViewResolver::RenderActiveView(BaseOutputDevice* outputDevice) const
 	{
 		auto it = m_views.find(m_activeViewId);
 		if (it != m_views.end() && it->second)
 		{
-			it->second->Render(outputDevice);
+			it->second->ProcessOutput(outputDevice);
 		}
 	}
 

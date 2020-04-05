@@ -8,10 +8,8 @@ namespace chess
 	{
 	public:
 		void Update(const mvc::ModelAndView& modelAndView) override;
-		void Render(mvc::BaseOutputDevice& outputDevice) override;
-
-	private:
-		std::string TurnStateToString(ETurnState turnState) const;
+		void ProcessInput(mvc::BaseInputDevice * inputDevice) override;
+		void ProcessOutput(mvc::BaseOutputDevice * outputDevice) override;
 
 	private:
 		ChessboardViewModel m_dataModel;

@@ -33,6 +33,7 @@
     <ClInclude Include="src\include\mvc\ModelAndView.h" />
     <ClInclude Include="src\include\mvc\View.h" />
     <ClInclude Include="src\include\pch.h" />
+    <ClInclude Include="src\include\StringHash.h" />
     <ClInclude Include="src\include\ViewId.h" />
     <ClInclude Include="src\SystemEventTypes.h" />
     <ClInclude Include="src\ViewResolver.h" />

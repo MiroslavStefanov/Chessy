@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "ChessboardView.h"
 #include "ChessBoard.h"
+#include "App/ConsoleChess/ConsoleChessInputDevice.h"
+#include "App/ConsoleChess/ConsoleChessOutputDevice.h"
+#include "Events/CellClickedEvent.h"
 #include "mvc/ModelAndView.h"
-#include "io/BaseOutputDevice.h"
 
 namespace chess
 {
@@ -17,31 +19,30 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::Render(mvc::BaseOutputDevice& outputDevice)
+	void ChessboardView::ProcessInput(mvc::BaseInputDevice* inputDevice)
 	{
-		if (m_dataModel.Chessboard)
-		{
-			m_dataModel.Chessboard->Draw();
-		}
-		outputDevice.RenderText(TurnStateToString(m_dataModel.TurnState) + "\n");
+		auto device = dynamic_cast<ConsoleChessInputDevice*>(inputDevice);
+		if (!device)
+			return;
+
+		TilePosition inputPosition = device->PollTilePosition();
+		device->AddEvent(std::make_unique<CellClickedEvent>(inputPosition));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::string ChessboardView::TurnStateToString(ETurnState turnState) const
+	void ChessboardView::ProcessOutput(mvc::BaseOutputDevice* outputDevice)
 	{
-		switch (turnState)
-		{
-		case chess::ETurnState::EndTurn:
-			return "EndTurn";
-		case chess::ETurnState::Select:
-			return "Select";
-		case chess::ETurnState::Unselect:
-			return "Unselect";
-		case chess::ETurnState::ErrorState:
-			return "ErrorState";
-		default:
-			return "";
-		}
-	}
+		auto device = dynamic_cast<ConsoleChessOutputDevice*>(outputDevice);
+		if (!device)
+			return;
 
+		device->ClearConsole();
+
+		if (m_dataModel.Chessboard)
+		{
+			device->RenderChessboard(*m_dataModel.Chessboard);
+		}
+
+		device->RenderTurnState(m_dataModel.TurnState);
+	}
 }

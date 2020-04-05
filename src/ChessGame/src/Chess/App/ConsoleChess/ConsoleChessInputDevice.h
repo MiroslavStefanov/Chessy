@@ -3,9 +3,11 @@
 
 namespace chess
 {
+	class TilePosition;
+
 	class ConsoleChessInputDevice : public mvc::BaseInputDevice
 	{
 	public:
-		void CollectInputEvents() override;
+		TilePosition PollTilePosition();
 	};
 }

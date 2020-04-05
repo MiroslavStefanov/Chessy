@@ -1,4 +1,5 @@
 #pragma once
+#include "StringHash.h"
 
 namespace mvc
 {
@@ -14,24 +15,26 @@ namespace mvc
 
 		bool	IsValid() const;
 		ViewId	GetViewId() const;
+		StringId GetModelId() const;
 
 		template<class ModelClass>
 		const ModelClass* GetModel() const;
 
-		void SetModel(std::unique_ptr<Model>&& dataModel);
+		void SetModel(StringId modelId, std::unique_ptr<Model>&& dataModel);
 
 	private:
 		explicit ModelAndView(ViewId viewId);
 
 	private:
 		const ViewId m_viewId;
-		std::unique_ptr<Model> m_dataModel;
+		StringId m_modelId;
+		std::unique_ptr<Model> m_model;
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	template<class ModelClass>
 	inline const ModelClass* ModelAndView::GetModel() const
 	{
-		return dynamic_cast<const ModelClass*>(m_dataModel.get());
+		return dynamic_cast<const ModelClass*>(m_model.get());
 	}
 }

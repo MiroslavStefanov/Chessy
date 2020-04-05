@@ -2,6 +2,7 @@
 #include "PlayerController.h"
 
 #include "mvc/ModelAndView.h"
+#include "StringHash.h"
 
 #include "ChessBoard.h"
 #include "ChessboardTile.h"
@@ -48,7 +49,7 @@ namespace chess
 		model->TurnState = turnState;
 
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(mvc::ViewId((int)ViewType::Chessboard));
-		modelAndView.SetModel(std::move(model));
+		modelAndView.SetModel(STRING_ID("chessboard"), std::move(model));
 		return modelAndView;
 	}
 }

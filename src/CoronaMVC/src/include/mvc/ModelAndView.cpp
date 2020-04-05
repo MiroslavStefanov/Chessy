@@ -26,7 +26,8 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ModelAndView::ModelAndView(ModelAndView&& other) noexcept
 		: m_viewId(other.m_viewId)
-		, m_dataModel(std::move(other.m_dataModel))
+		, m_modelId(other.m_modelId)
+		, m_model(std::move(other.m_model))
 	{
 	}
 
@@ -46,8 +47,15 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ModelAndView::SetModel(std::unique_ptr<Model>&& dataModel)
+	StringId ModelAndView::GetModelId() const
 	{
-		m_dataModel = std::move(dataModel);
+		return m_modelId;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ModelAndView::SetModel(StringId modelId, std::unique_ptr<Model>&& dataModel)
+	{
+		m_modelId = modelId;
+		m_model = std::move(dataModel);
 	}
 }

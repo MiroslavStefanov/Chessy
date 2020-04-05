@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "ConsoleChessInputDevice.h"
-#include "Events/CellClickedEvent.h"
+#include "Utils/Utils.h"
 
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessInputDevice::CollectInputEvents()
+	TilePosition ConsoleChessInputDevice::PollTilePosition()
 	{
 		int row, col;
 		std::cin >> row >> col;
-		AddEvent(std::make_unique<CellClickedEvent>(chess::TilePosition(chess::Position(row, col))));
+		return TilePosition(Position(row, col));
 	}
 }
