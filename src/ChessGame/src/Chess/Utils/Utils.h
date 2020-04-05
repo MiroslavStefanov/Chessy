@@ -3,7 +3,7 @@
 
 namespace chess
 {
-	class ChessPiece;
+	struct ChessPiece;
 
 	enum class EDirection
 	{
@@ -39,12 +39,14 @@ namespace chess
 
 	enum class EChessPieceType
 	{
-		PawnType = 1,
-		KnightType,
-		BishopType,
-		RookType,
-		QueenType,
-		KingType
+		None = -1,
+		Pawn = 0,
+		Knight,
+		Bishop,
+		Rook,
+		Queen,
+		King,
+		COUNT
 	};
 
 	enum class EChessboardSide
@@ -107,7 +109,12 @@ namespace chess
 	class TilePosition
 	{
 	public:
+		static const TilePosition& Invalid() { static const TilePosition invalid(Position(-1, -1)); return invalid; }
+
 		TilePosition(const Position& poisition) : position(poisition) { }
+
+		bool IsValid() const { return AsIndex() >= 0 && AsIndex() < CHESS_BOARD_SIDE * CHESS_BOARD_SIDE; }
+
 
 		std::int8_t AsIndex() const { return position.row * sChessBoardSide + position.col; }
 		const Position& AsPosition() const { return position; }
@@ -119,7 +126,13 @@ namespace chess
 		Position position;
 	};
 
+	struct TilePositionHash
+	{
+		std::size_t operator()(const TilePosition& position) const { return position.AsIndex(); }
+	};
+
 
 	EDirection GetOpositeDirection(EDirection direction);
 	int8_t GetKingPosition(EColor color);
+	EColor GetAlternateColor(EColor color);
 }

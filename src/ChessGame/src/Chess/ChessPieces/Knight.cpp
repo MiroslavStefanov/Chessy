@@ -4,16 +4,24 @@
 
 namespace chess
 {
-	Knight::Knight(EColor color)
-		:ChessPiece(EChessPieceType::KnightType, color)
+	namespace pieces
 	{
-		m_chessMoves.emplace_back(EDirection::ForwardLeft, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::Forward, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::ForwardRight, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::Right, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::BackwardRight, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::Backward, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::BackwardLeft, EMoveType::KnightMove);
-		m_chessMoves.emplace_back(EDirection::Left, EMoveType::KnightMove);
+		const ChessPiece Knight =
+		{
+			2
+			, 'k'
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 1), TilePosition(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE - 2) }
+			, { TilePosition(1), TilePosition(CHESS_BOARD_SIDE - 2) }
+			, {
+				  { EDirection::ForwardLeft, EMoveType::KnightMove }
+				, { EDirection::Forward, EMoveType::KnightMove }
+				, { EDirection::ForwardRight, EMoveType::KnightMove }
+				, { EDirection::Right, EMoveType::KnightMove }
+				, { EDirection::BackwardRight, EMoveType::KnightMove }
+				, { EDirection::Backward, EMoveType::KnightMove }
+				, { EDirection::BackwardLeft, EMoveType::KnightMove }
+				, { EDirection::Left, EMoveType::KnightMove }
+			}
+		};
 	}
 }

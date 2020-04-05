@@ -3,11 +3,8 @@
 
 namespace chess
 {
-	class Bishop :
-		virtual public ChessPiece
+	namespace pieces
 	{
-	public:
-		Bishop(EColor color);
-	};
+		extern const ChessPiece Bishop;
+	}
 }
-

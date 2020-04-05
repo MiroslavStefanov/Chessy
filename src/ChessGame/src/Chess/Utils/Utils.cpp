@@ -33,4 +33,17 @@ namespace chess
 	{
 		return color == EColor::White ? 4 : 5;
 	}
+
+	EColor GetAlternateColor(EColor color)
+	{
+		switch (color)
+		{
+		case EColor::White:
+			return EColor::Black;
+		case EColor::Black:
+		return EColor::White;
+		default:
+			return EColor::Colorless;
+		}
+	}
 }

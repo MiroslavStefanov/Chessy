@@ -7,4 +7,6 @@ namespace chess
 		Chessboard = 0,
 		COUNT
 	};
+
+	mvc::ViewId ViewTypeToId(ViewType viewType);
 }

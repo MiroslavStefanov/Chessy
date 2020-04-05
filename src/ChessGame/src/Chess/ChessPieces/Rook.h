@@ -3,10 +3,8 @@
 
 namespace chess
 {
-	class Rook :
-		virtual public ChessPiece
+	namespace pieces
 	{
-	public:
-		Rook(EColor color);
-	};
+		extern const ChessPiece Rook;
+	}
 }

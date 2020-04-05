@@ -28,6 +28,9 @@
     <Filter Include="Chess\Views">
       <UniqueIdentifier>{247bbd9f-4dfb-4755-8cfa-591940cfe935}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Chess\Services">
+      <UniqueIdentifier>{d87938a5-aff6-4dac-ac23-0ff7dc3fe6eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Chess\ChessPieces\Bishop.cpp">
@@ -50,15 +53,6 @@
     </ClCompile>
     <ClCompile Include="src\Chess\ChessPieces\Rook.cpp">
       <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessBoard.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessboardTile.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\Chessy.cpp">
-      <Filter>Chess</Filter>
     </ClCompile>
     <ClCompile Include="src\Chess\Utils\Logger.cpp">
       <Filter>Chess\Utils</Filter>
@@ -93,6 +87,39 @@
     <ClCompile Include="src\Chess\stdafx.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Controllers\BoardController.cpp">
+      <Filter>Chess\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Services\BoardService.cpp">
+      <Filter>Chess\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Utils\ChessPieceId.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\ChessboardViewModel.cpp">
+      <Filter>Chess\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\ChessTileViewModel.cpp">
+      <Filter>Chess\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\PlayerTurnViewModel.cpp">
+      <Filter>Chess\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\TilePositionViewModel.cpp">
+      <Filter>Chess\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ModelMapper.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Services\PlayerService.cpp">
+      <Filter>Chess\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Views\ChessViews.cpp">
+      <Filter>Chess\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\ChessPieceRegistry.cpp">
+      <Filter>Chess\ChessPieces</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\Bishop.h">
@@ -115,15 +142,6 @@
     </ClInclude>
     <ClInclude Include="src\Chess\ChessPieces\Rook.h">
       <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessBoard.h">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessboardTile.h">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\Chessy.h">
-      <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Utils\Logger.h">
       <Filter>Chess\Utils</Filter>
@@ -166,6 +184,33 @@
     </ClInclude>
     <ClInclude Include="src\Chess\stdafx.h">
       <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Controllers\BoardController.h">
+      <Filter>Chess\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Services\BoardService.h">
+      <Filter>Chess\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\ChessPieceId.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\ChessTileViewModel.h">
+      <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\PlayerTurnViewModel.h">
+      <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\TilePositionViewModel.h">
+      <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ModelMapper.h">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Services\PlayerService.h">
+      <Filter>Chess\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\ChessPieceRegistry.h">
+      <Filter>Chess\ChessPieces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

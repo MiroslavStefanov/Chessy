@@ -11,7 +11,7 @@ namespace mvc
 		void AddView(ViewId viewId, std::unique_ptr<View>&& view);
 
 		void InputActiveView(BaseInputDevice* inputDevice) const;
-		void UpdateView(const ModelAndView& modelAndView);
+		void UpdateView(ModelAndView&& modelAndView);
 		void RenderActiveView(BaseOutputDevice* outputDevice) const;
 
 	private:

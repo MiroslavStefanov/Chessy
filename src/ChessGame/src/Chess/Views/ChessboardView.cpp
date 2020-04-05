@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ChessboardView.h"
-#include "ChessBoard.h"
 #include "App/ConsoleChess/ConsoleChessInputDevice.h"
 #include "App/ConsoleChess/ConsoleChessOutputDevice.h"
 #include "Events/CellClickedEvent.h"
@@ -9,12 +8,20 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::Update(const mvc::ModelAndView& modelAndView)
+	void ChessboardView::Update(mvc::ModelAndView&& modelAndView)
 	{
-		auto chessboardViewModel = modelAndView.GetModel<ChessboardViewModel>();
-		if (chessboardViewModel)
+		const StringId modelId = modelAndView.GetModelId();
+		if (modelId == STRING_ID("chessboard"))
 		{
-			m_dataModel = *chessboardViewModel;
+			UpdateBoardModel(std::move(modelAndView));
+		}
+		else if (modelId == STRING_ID("playerTurn"))
+		{
+			UpdateTurnModel(std::move(modelAndView));
+		}
+		else
+		{
+			assert(false);
 		}
 	}
 
@@ -26,7 +33,15 @@ namespace chess
 			return;
 
 		TilePosition inputPosition = device->PollTilePosition();
-		device->AddEvent(std::make_unique<CellClickedEvent>(inputPosition));
+		if (inputPosition.IsValid())
+		{
+			auto& events = m_boardModel.Tiles[inputPosition.AsIndex()].OnClickEvents;
+			for (auto& event : events)
+			{
+				device->AddEvent(std::move(event));
+			}
+			events.clear();
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,12 +52,27 @@ namespace chess
 			return;
 
 		device->ClearConsole();
+		device->RenderChessboard(m_boardModel);
+		device->RenderPlayerTurn(m_turnModel);
+	}
 
-		if (m_dataModel.Chessboard)
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ChessboardView::UpdateBoardModel(mvc::ModelAndView&& modelAndView)
+	{
+		auto boardModel = modelAndView.GetModel<ChessboardViewModel>();
+		if (boardModel)
 		{
-			device->RenderChessboard(*m_dataModel.Chessboard);
+			m_boardModel = std::move(*boardModel);
 		}
+	}
 
-		device->RenderTurnState(m_dataModel.TurnState);
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ChessboardView::UpdateTurnModel(mvc::ModelAndView&& modelAndView)
+	{
+		auto turnModel = modelAndView.GetModel<PlayerTurnViewModel>();
+		if (turnModel)
+		{
+			m_turnModel = std::move(*turnModel);
+		}
 	}
 }

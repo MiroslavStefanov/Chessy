@@ -36,15 +36,14 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ViewResolver::UpdateView(const ModelAndView& modelAndView)
+	void ViewResolver::UpdateView(ModelAndView&& modelAndView)
 	{
+		m_activeViewId = modelAndView.GetViewId();
 		auto it = m_views.find(modelAndView.GetViewId());
 		if (it != m_views.end() && it->second)
 		{
-			it->second->Update(modelAndView);
+			it->second->Update(std::move(modelAndView));
 		}
-
-		m_activeViewId = modelAndView.GetViewId();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

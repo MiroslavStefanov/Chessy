@@ -1,14 +1,10 @@
 #pragma once
-#include "Rook.h"
-#include "Bishop.h"
+#include "ChessPiece.h"
 
 namespace chess
 {
-	class Queen :
-		public Rook,
-		public Bishop
+	namespace pieces
 	{
-	public:
-		Queen(EColor color);
-	};
+		extern const ChessPiece Queen;
+	}
 }

@@ -4,17 +4,25 @@
 
 namespace chess
 {
-	King::King(EColor color)
-		:ChessPiece(EChessPieceType::KingType, color)
+	namespace pieces
 	{
-		m_chessMoves.emplace_back(EDirection::ForwardLeft, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::Forward, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::ForwardRight, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::Right, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::BackwardRight, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::Backward, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::BackwardLeft, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::Left, EMoveType::KingMove);
-		m_chessMoves.emplace_back(EDirection::NoDirection, EMoveType::Castle);
+		const ChessPiece King =
+		{
+			1
+			, 'w'
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 3) }
+			, { TilePosition(3) }
+			, {
+				  { EDirection::ForwardLeft, EMoveType::KingMove }
+				, { EDirection::Forward, EMoveType::KingMove }
+				, { EDirection::ForwardRight, EMoveType::KingMove }
+				, { EDirection::Right, EMoveType::KingMove }
+				, { EDirection::BackwardRight, EMoveType::KingMove }
+				, { EDirection::Backward, EMoveType::KingMove }
+				, { EDirection::BackwardLeft, EMoveType::KingMove }
+				, { EDirection::Left, EMoveType::KingMove }
+				, { EDirection::NoDirection, EMoveType::Castle }
+			}
+		};
 	}
 }

@@ -1,21 +1,26 @@
 #pragma once
 #include "mvc/BaseController.h"
-#include "Chessy.h"
 
 namespace chess
 {
 	enum class ETurnState : int;
 
-	class PlayerController : public mvc::BaseController, private Chessy
+	class PlayerController : public mvc::BaseController
 	{
+	public:
+		PlayerController(class PlayerService& playerService);
+
 	protected:
 		void RegisterConsumers() override;
 		mvc::ModelAndView OnApplicationStartedEvent(mvc::ApplicationStartedEvent const& event) override;
 
 	private:
-		mvc::ModelAndView OnCellClickedEvent(class CellClickedEvent const& event);
+		//mvc::ModelAndView OnCellClickedEvent(class CellClickedEvent const& event);
 
 	private:
-		mvc::ModelAndView MakeChessboardView(ETurnState turnState) const;
+		std::unique_ptr<mvc::Model> CreatePlayerTurnViewModel(ETurnState turnState) const;
+
+	private:
+		PlayerService& m_playerService;
 	};
 }

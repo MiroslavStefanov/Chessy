@@ -4,12 +4,20 @@
 
 namespace chess
 {
-	Rook::Rook(EColor color)
-		:ChessPiece(EChessPieceType::RookType, color)
+	namespace pieces
 	{
-		m_chessMoves.emplace_back(EDirection::Forward, EMoveType::Multiple);
-		m_chessMoves.emplace_back(EDirection::Backward, EMoveType::Multiple);
-		m_chessMoves.emplace_back(EDirection::Left, EMoveType::Multiple);
-		m_chessMoves.emplace_back(EDirection::Right, EMoveType::Multiple);
+		const ChessPiece Rook =
+		{
+			2
+			, 'r'
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1)),  TilePosition(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE - 1) }
+			, { TilePosition(0), TilePosition(CHESS_BOARD_SIDE - 1) }
+			, {
+				  { EDirection::Forward, EMoveType::Multiple }
+				, { EDirection::Backward, EMoveType::Multiple }
+				, { EDirection::Left, EMoveType::Multiple }
+				, { EDirection::Right, EMoveType::Multiple }
+			}
+		};
 	}
 }

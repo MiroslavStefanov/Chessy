@@ -1,14 +1,11 @@
 #pragma once
 #include "mvc/Model.h"
-#include "Utils/Utils.h"
+#include "Models/ChessTileViewModel.h"
 
 namespace chess
 {
-	class ChessBoard;
-
 	struct ChessboardViewModel : public mvc::Model
 	{
-		ChessBoard* Chessboard;
-		ETurnState TurnState;
+		std::vector<ChessTileViewModel> Tiles;
 	};
 }

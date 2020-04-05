@@ -18,7 +18,7 @@ namespace mvc
 		StringId GetModelId() const;
 
 		template<class ModelClass>
-		const ModelClass* GetModel() const;
+		ModelClass* GetModel();
 
 		void SetModel(StringId modelId, std::unique_ptr<Model>&& dataModel);
 
@@ -33,8 +33,8 @@ namespace mvc
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	template<class ModelClass>
-	inline const ModelClass* ModelAndView::GetModel() const
+	inline ModelClass* ModelAndView::GetModel()
 	{
-		return dynamic_cast<const ModelClass*>(m_model.get());
+		return dynamic_cast<ModelClass*>(m_model.get());
 	}
 }

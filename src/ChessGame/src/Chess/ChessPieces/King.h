@@ -3,10 +3,8 @@
 
 namespace chess
 {
-	class King :
-		public ChessPiece
+	namespace pieces
 	{
-	public:
-		King(EColor color);
-	};
+		extern const ChessPiece King;
+	}
 }

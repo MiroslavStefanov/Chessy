@@ -12,6 +12,7 @@ namespace mvc
 		void Start();
 
 	protected:
+		virtual void PreInitialize();
 		virtual void PopulateControllers() = 0;
 		virtual void PopulateViews() = 0;
 
