@@ -1,11 +1,12 @@
 #pragma once
+#include "dependency/DependencyWrapper.h"
 
 namespace mvc
 {
 	class BaseApplication
 	{
 	public:
-		BaseApplication(std::unique_ptr<BaseInputDevice>&& inputDevice, std::unique_ptr<BaseOutputDevice>&& outputDevice);
+		BaseApplication();
 		virtual ~BaseApplication();
 
 		void Initialize();
@@ -16,18 +17,23 @@ namespace mvc
 		virtual void PopulateControllers() = 0;
 		virtual void PopulateViews() = 0;
 
-		void Stop();
 		void AddController(std::unique_ptr<BaseController>&& controller);
 		void AddView(ViewId viewId, std::unique_ptr<View>&& view);
 
-	private:
-		void SimulateFrame();
+		void SetInputDevice(std::unique_ptr<InputDevice>&& inputDevice);
+		void SetOutputDevice(std::unique_ptr<OutputDevice>&& outputDevice);
 
 	private:
-		std::unique_ptr<class EventDispatcher> m_eventDispathcer;
-		std::unique_ptr<class ViewResolver> m_viewResolver;
-		std::unique_ptr<BaseInputDevice> m_inputDevice;
-		std::unique_ptr<BaseOutputDevice> m_outputDevice;
+		void SimulateFrame();
+		void RegisterControllersForEvents();
+
+	private:
+		DependencyWrapper<class EventDispatcher> m_eventDispatcher;
+		DependencyWrapper<class ViewResolver> m_viewResolver;
+
+		std::unique_ptr<InputDevice> m_inputDevice;
+		std::unique_ptr<OutputDevice> m_outputDevice;
+
 		std::vector<std::unique_ptr<BaseController>> m_controllers;
 
 		bool m_isRunning;

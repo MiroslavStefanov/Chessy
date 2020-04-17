@@ -9,10 +9,10 @@ namespace mvc
 		~ViewResolver();
 
 		void AddView(ViewId viewId, std::unique_ptr<View>&& view);
+		void UpdateView(ModelAndView modelAndView);
 
-		void InputActiveView(BaseInputDevice* inputDevice) const;
-		void UpdateView(ModelAndView&& modelAndView);
-		void RenderActiveView(BaseOutputDevice* outputDevice) const;
+		void InputActiveView(InputDevice* inputDevice) const;
+		void RenderActiveView(OutputDevice* outputDevice) const;
 
 	private:
 		std::unordered_map<ViewId, std::unique_ptr<View>, ViewIdHash> m_views;

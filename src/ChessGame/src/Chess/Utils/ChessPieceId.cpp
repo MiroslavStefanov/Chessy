@@ -77,17 +77,20 @@ namespace chess
 			return std::numeric_limits<std::size_t>::max();
 		}
 
-		std::size_t hash = (std::size_t)id.GetType();
+		std::size_t hash = id.GetInstanceNumber();
+
+		hash = hash << 1;
+		hash |= (std::size_t)id.GetColor();
+
 		std::size_t remainingShifts = (std::size_t)EChessPieceType::COUNT;
 		while (remainingShifts > 0)
 		{
 			hash = hash << 1;
 			remainingShifts = remainingShifts >> 1;
 		}
+		hash |= (std::size_t)id.GetType();
 
-		hash |= (std::size_t)id.GetColor();
-		hash << 1;
-		hash |= id.GetInstanceNumber();
+		return hash;
 	}
 
 }

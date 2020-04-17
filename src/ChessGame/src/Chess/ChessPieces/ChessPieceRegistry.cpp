@@ -42,7 +42,7 @@ namespace chess
 		char visual = (char)228;
 		if (auto piece = GetPieceOfType(type))
 		{
-			char visual = piece->Visualization;
+			visual = piece->Visualization;
 			if (color == EColor::White)
 				visual = std::toupper(visual);
 		}

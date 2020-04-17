@@ -2,8 +2,8 @@
 #include "BaseApplication.h"
 #include "EventDispatcher.h"
 #include "ViewResolver.h"
-#include "io/BaseInputDevice.h"
-#include "io/BaseOutputDevice.h"
+#include "io/InputDevice.h"
+#include "io/OutputDevice.h"
 #include "mvc/BaseController.h"
 #include "mvc/View.h"
 #include "mvc/ModelAndView.h"
@@ -12,12 +12,7 @@
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	BaseApplication::BaseApplication(std::unique_ptr<BaseInputDevice>&& inputDevice, std::unique_ptr<BaseOutputDevice>&& outputDevice)
-		: m_eventDispathcer(new EventDispatcher())
-		, m_viewResolver(new ViewResolver())
-		, m_inputDevice(std::move(inputDevice))
-		, m_outputDevice(std::move(outputDevice))
-		, m_isRunning(false)
+	BaseApplication::BaseApplication() : m_isRunning(false)
 	{
 	}
 
@@ -30,10 +25,7 @@ namespace mvc
 		PreInitialize();
 
 		PopulateControllers();
-		for (auto& controller : m_controllers)
-		{
-			controller->RegisterToDispatcher(*m_eventDispathcer);
-		}
+		RegisterControllersForEvents();
 
 		PopulateViews();
 	}
@@ -42,8 +34,8 @@ namespace mvc
 	void BaseApplication::Start()
 	{
 		m_isRunning = true;
-		ApplicationStartedEvent startEvent;
-		m_eventDispathcer->DispatchEvent(startEvent);
+
+		m_eventDispatcher->DispatchEvent(ApplicationStartedEvent());
 
 		while (m_isRunning)
 		{
@@ -54,25 +46,6 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::PreInitialize()
 	{
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void BaseApplication::SimulateFrame()
-	{
-		while (m_eventDispathcer->HasPendingViews())
-		{
-			m_viewResolver->UpdateView(m_eventDispathcer->PopNextView());
-		}
-		m_viewResolver->RenderActiveView(m_outputDevice.get());
-
-		m_viewResolver->InputActiveView(m_inputDevice.get());
-		m_inputDevice->VisitAndClearEvents(std::bind(&EventDispatcher::DispatchEvent, m_eventDispathcer.get(), std::placeholders::_1));
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void BaseApplication::Stop()
-	{
-		m_isRunning = false;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,4 +60,35 @@ namespace mvc
 		m_viewResolver->AddView(viewId, std::move(view));
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetInputDevice(std::unique_ptr<InputDevice>&& inputDevice)
+	{
+		m_inputDevice = std::move(inputDevice);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetOutputDevice(std::unique_ptr<OutputDevice>&& outputDevice)
+	{
+		m_outputDevice = std::move(outputDevice);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SimulateFrame()
+	{
+		m_eventDispatcher->ProcessEventResponses(*m_viewResolver);
+		m_viewResolver->RenderActiveView(m_outputDevice.get());
+		m_viewResolver->InputActiveView(m_inputDevice.get());
+
+		m_outputDevice->Update();
+		m_inputDevice->Update();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::RegisterControllersForEvents()
+	{
+		for (auto& controller : m_controllers)
+		{
+			controller->RegisterToDispatcher(*m_eventDispatcher);
+		}
+	}
 }

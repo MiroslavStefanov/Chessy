@@ -1,22 +1,24 @@
 #pragma once
 #include "mvc/BaseController.h"
+#include "dependency/Depender.h"
 
 namespace chess
 {
-	class BoardController : public mvc::BaseController
+	class BoardService;
+	class PlayerService;
+
+	class BoardController : public mvc::BaseController, public mvc::Depender<BoardService, PlayerService>
 	{
 	public:
-		BoardController(class BoardService& boardService, class PlayerService& playerService);
+		BoardController();
 
 	protected:
 		void RegisterConsumers() override;
 		mvc::ModelAndView OnApplicationStartedEvent(mvc::ApplicationStartedEvent const& event) override;
 
 	private:
-		std::unique_ptr<mvc::Model> CreateChessboardViewModel() const;
+		mvc::ModelAndView OnCellClickedEvent(class CellClickedEvent const& event);
 
-	private:
-		BoardService& m_boardService;
-		PlayerService& m_playerService;
+		std::unique_ptr<mvc::Model> CreateChessboardViewModel() const;
 	};
 }

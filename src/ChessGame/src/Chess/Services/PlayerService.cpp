@@ -5,30 +5,35 @@
 namespace chess
 {
 	//////////////////////////////////////////////////////////////////////////////////////////
-	PlayerService::PlayerService(ChessPieceRegistry const& pieceRepository) : m_pieceRepository(pieceRepository)
+	PlayerService::PlayerService()
+		: m_pickedPiece(ChessPieceId::Invalid())
+		, m_activePlayerColor(EColor::Colorless)
+		, m_turnState(ETurnState::ErrorState)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	std::vector<TilePosition> PlayerService::GetPossibleMoves() const
 	{
-		return std::vector<TilePosition>();
+		return std::vector<TilePosition>(); //TODO: implement
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	bool PlayerService::IsPicked(ChessPieceId pieceId) const
+	ChessPieceId PlayerService::GetPickedPiece() const
 	{
-		auto it = m_pickedPieces.find(m_activePlayerColor);
-		if (it == m_pickedPieces.end())
-			return false;
-
-		return pieceId == it->second;
+		return m_pickedPiece;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	std::vector<std::unique_ptr<mvc::Event>> PlayerService::GenerateEventsForTile(const TilePosition& tilePosition, const ChessPieceId& tilePiece) const
+	ETurnState PlayerService::GetTurnState() const
 	{
-		return std::vector<std::unique_ptr<mvc::Event>>();
+		return m_turnState;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::StartGame()
+	{
+		m_activePlayerColor = EColor::White;
+		m_turnState = ETurnState::StartGame;
+	}
 }

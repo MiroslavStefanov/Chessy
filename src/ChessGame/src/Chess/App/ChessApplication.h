@@ -17,8 +17,8 @@ namespace chess
 
 	private:
 		const ChessFactory& m_chessFactory;
-		std::unique_ptr<class ChessPieceRegistry> m_pieceRepository;
-		std::unique_ptr<class BoardService> m_boardService;
-		std::unique_ptr<class PlayerService> m_playerService;
+		mvc::DependencyWrapper<class ChessPieceRegistry> m_pieceRegistry;
+		mvc::DependencyWrapper<class BoardService> m_boardService;
+		mvc::DependencyWrapper<class PlayerService> m_playerService;
 	};
 }

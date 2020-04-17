@@ -1,5 +1,5 @@
 #pragma once
-#include "StringHash.h"
+#include "mvc/Model.h"
 
 namespace mvc
 {
@@ -11,14 +11,12 @@ namespace mvc
 
 	public:
 		ModelAndView(ModelAndView&& other) noexcept;
-		~ModelAndView();
 
 		bool	IsValid() const;
+		bool	HasModel() const;
 		ViewId	GetViewId() const;
 		StringId GetModelId() const;
-
-		template<class ModelClass>
-		ModelClass* GetModel();
+		std::unique_ptr<Model> ReleaseModel();
 
 		void SetModel(StringId modelId, std::unique_ptr<Model>&& dataModel);
 
@@ -30,11 +28,4 @@ namespace mvc
 		StringId m_modelId;
 		std::unique_ptr<Model> m_model;
 	};
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	template<class ModelClass>
-	inline ModelClass* ModelAndView::GetModel()
-	{
-		return dynamic_cast<ModelClass*>(m_model.get());
-	}
 }

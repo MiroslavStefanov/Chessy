@@ -3,8 +3,8 @@
 namespace mvc
 {
 	class BaseApplication;
-	class BaseInputDevice;
-	class BaseOutputDevice;
+	class InputDevice;
+	class OutputDevice;
 	class BaseController;
 	struct Model;
 	class View;

@@ -1,22 +1,27 @@
 #pragma once
 #include "Utils/Utils.h"
+#include "dependency/Depender.h"
+#include "ChessPieces/ChessPieceRegistry.h"
 
 namespace chess
 {
-	class PlayerService
+	class ChessPieceRegistry;
+
+	class PlayerService : public mvc::Depender<ChessPieceRegistry>
 	{
 	public:
-		PlayerService(class ChessPieceRegistry const& pieceRepository);
+		PlayerService();
 
 		std::vector<TilePosition> GetPossibleMoves() const;
-		bool IsPicked(ChessPieceId pieceId) const;
+		ChessPieceId GetPickedPiece() const;
+		ETurnState GetTurnState() const;
 
-		std::vector<std::unique_ptr<mvc::Event>> GenerateEventsForTile(const TilePosition& tilePosition, const ChessPieceId& tilePiece) const;
+		void StartGame();
 
 	private:
-		const ChessPieceRegistry& m_pieceRepository;
-		std::unordered_map<EColor, ChessPieceId> m_pickedPieces;
+		ChessPieceId m_pickedPiece;
 		EColor m_activePlayerColor;
+		ETurnState m_turnState;
 	};
 }
 

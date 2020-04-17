@@ -16,7 +16,7 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	PlayerController::PlayerController(PlayerService& playerService) : m_playerService(playerService)
+	PlayerController::PlayerController()
 	{
 	}
 
@@ -24,14 +24,26 @@ namespace chess
 	void PlayerController::RegisterConsumers()
 	{
 		BaseController::RegisterConsumers();
-		//RegisterConsumer<CellClickedEvent>(std::bind(&PlayerController::OnCellClickedEvent, this, std::placeholders::_1));
+		RegisterConsumer<CellClickedEvent>(std::bind(&PlayerController::OnCellClickedEvent, this, std::placeholders::_1));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView PlayerController::OnApplicationStartedEvent(mvc::ApplicationStartedEvent const& event)
 	{
+		auto playerService = GetDependency<PlayerService>();
+		playerService->StartGame();
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
 		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel(ETurnState::StartGame));
+		return modelAndView;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	mvc::ModelAndView PlayerController::OnCellClickedEvent(const CellClickedEvent& event)
+	{
+		auto playerService = GetDependency<PlayerService>();
+		//TODO: remove this event and add concrete events (pick piece up, drop piece, move piece) and update player sevice accordingly
+		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
+		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel(playerService->GetTurnState()));
 		return modelAndView;
 	}
 
@@ -40,20 +52,8 @@ namespace chess
 	{
 		auto model = std::make_unique<PlayerTurnViewModel>();
 		model->TurnState = turnState;
-		auto possibleMoves = m_playerService.GetPossibleMoves();
+		auto possibleMoves = GetDependency<PlayerService>()->GetPossibleMoves();
 		std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), &ModelMapper::MapTilePositionView);
 		return model;
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	/*mvc::ModelAndView PlayerController::OnCellClickedEvent(const CellClickedEvent& event)
-	{
-		auto state = ChessyTurn(event.Position);
-		if (state == chess::ETurnState::EndTurn)
-		{
-			OnEndTurn();
-		}
-
-		return MakeChessboardView(state);
-	}*/
 }

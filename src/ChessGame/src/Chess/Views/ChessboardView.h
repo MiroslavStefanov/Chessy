@@ -8,13 +8,13 @@ namespace chess
 	class ChessboardView : public mvc::View
 	{
 	public:
-		void Update(mvc::ModelAndView&& modelAndView) override;
-		void ProcessInput(mvc::BaseInputDevice* inputDevice) override;
-		void ProcessOutput(mvc::BaseOutputDevice* outputDevice) override;
+		void SetModel(StringId modelId, std::unique_ptr<mvc::Model>&& model) override;
+		void ProcessInput(mvc::InputDevice* inputDevice) override;
+		void ProcessOutput(mvc::OutputDevice* outputDevice) override;
 
 	private:
-		void UpdateBoardModel(mvc::ModelAndView&& modelAndView);
-		void UpdateTurnModel(mvc::ModelAndView&& modelAndView);
+		void UpdateBoardModel(ChessboardViewModel* viewModel);
+		void UpdateTurnModel(PlayerTurnViewModel* viewModel);
 
 	private:
 		ChessboardViewModel m_boardModel;

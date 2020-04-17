@@ -6,24 +6,49 @@
 
 namespace chess
 {
+	static constexpr auto PICKED_TILE_CHAR = '+';
+	static constexpr auto WHITE_TILE_CHAR = '.';
+	static constexpr auto BLACK_TILE_CHAR = ' ';
+	static constexpr char INVALID_TILE_CHAR = (char)227;
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::ClearConsole()
+	char GetColorChar(EColor color)
 	{
-		system("CLS");
+		switch (color)
+		{
+		case chess::EColor::White:
+			return WHITE_TILE_CHAR;
+		case chess::EColor::Black:
+			return BLACK_TILE_CHAR;
+		default:
+			return INVALID_TILE_CHAR;
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::Update()
+	{
+		ClearConsole();
+		std::cout << m_frameBuffer.str();
+		m_frameBuffer.clear();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::RenderChessboard(const ChessboardViewModel& chessboard)
 	{
 		const size_t boardTiles = CHESS_BOARD_SIDE * CHESS_BOARD_SIDE;
-		for (std::size_t i = 0; i < boardTiles; ++i)
+		if (boardTiles != chessboard.Tiles.size())
 		{
-			auto& tile = chessboard.Tiles[i];
-			RenderChessTile(tile);
-			if (i % CHESS_BOARD_SIDE == CHESS_BOARD_SIDE - 1)
-			{
-				std::cout << std::endl;
-			}
+			assert(false);
+			return;
+		}
+
+		for (int i = 0; i < CHESS_BOARD_SIDE; ++i)
+		{
+			const auto rowIndexOffset = i * CHESS_BOARD_SIDE;
+			auto rowBegin = chessboard.Tiles.cbegin() + rowIndexOffset;
+			auto rowEnd = rowBegin + CHESS_BOARD_SIDE;
+			RenderChessboardRow(rowBegin, rowEnd);
 		}
 	}
 
@@ -32,51 +57,43 @@ namespace chess
 	{
 		if (!playerTurn.PossibleMoves.empty())
 		{
-			std::cout << "Can Move To:";
+			m_frameBuffer << "Can Move To:";
 			for (auto& position : playerTurn.PossibleMoves)
 			{
-				std::cout << position.Row << "," << position.Column << ";";
+				m_frameBuffer << position.Row << "," << position.Column << ";";
 			}
 		}
-		std::cout << std::endl;
+		m_frameBuffer << std::endl;
 
 		RenderTurnState(playerTurn.TurnState);
-		std::cout << std::endl;
+		m_frameBuffer << std::endl;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::SetChessPieceRegistry(const ChessPieceRegistry* registry)
+	void ConsoleChessOutputDevice::ClearConsole()
 	{
-		m_pieceRegistry = registry;
+		system("CLS");
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::RenderChessTile(const ChessTileViewModel& tile)
 	{
-		static constexpr auto pickedTileChar = ' ';
-		static constexpr auto whiteTileChar = '=';
-		static constexpr auto blackTileChar = '#';
-		static constexpr char invalidTileChar = (char)227;
-
-		char tileChar = invalidTileChar;
+		auto pieceRegistry = GetDependency<ChessPieceRegistry>();
+		char tileChar = INVALID_TILE_CHAR;
 		if (tile.IsPicked)
 		{
-			tileChar = pickedTileChar;
+			tileChar = PICKED_TILE_CHAR;
 		}
-		else if (tile.Piece.IsValid() && m_pieceRegistry)
+		else if (tile.Piece.IsValid() && pieceRegistry)
 		{
-			tileChar = m_pieceRegistry->GetVisualRepresentation(tile.Piece.GetType(), tile.Piece.GetColor());
+			tileChar = pieceRegistry->GetVisualRepresentation(tile.Piece.GetType(), tile.Piece.GetColor());
 		}
-		else if (tile.Color == EColor::White)
+		else
 		{
-			tileChar = whiteTileChar;
-		}
-		else if (tile.Color == EColor::Black)
-		{
-			tileChar = blackTileChar;
+			tileChar = GetColorChar(tile.Color);
 		}
 
-		std::cout << tileChar;
+		m_frameBuffer << tileChar;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,17 +102,43 @@ namespace chess
 		switch (turnState)
 		{
 		case chess::ETurnState::EndTurn:
-			std::cout<<"EndTurn";
+			m_frameBuffer << "EndTurn";
 			break;
 		case chess::ETurnState::Select:
-			std::cout << "Select";
+			m_frameBuffer << "Select";
 			break;
 		case chess::ETurnState::Unselect:
-			std::cout << "Unselect";
+			m_frameBuffer << "Unselect";
 			break;
 		case chess::ETurnState::ErrorState:
-			std::cout << "ErrorState";
+			m_frameBuffer << "ErrorState";
 			break;
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, std::vector<ChessTileViewModel>::const_iterator rowEnd)
+	{
+		static constexpr int CELL_SYMBOL_SIZE = 3;
+
+		for (int row = 0; row < CELL_SYMBOL_SIZE; ++row)
+		{
+			for (auto tileIt = rowBegin; tileIt != rowEnd; ++tileIt)
+			{
+				for (int column = 0; column < CELL_SYMBOL_SIZE; ++column)
+				{
+					const bool shouldDrawBackground = (row == 0 || row == CELL_SYMBOL_SIZE - 1) || (column == 0 || column == CELL_SYMBOL_SIZE - 1);
+					if (shouldDrawBackground)
+					{
+						m_frameBuffer << GetColorChar(tileIt->Color);
+					}
+					else
+					{
+						RenderChessTile(*tileIt);
+					}
+				}
+			}
+			m_frameBuffer << std::endl;
 		}
 	}
 }

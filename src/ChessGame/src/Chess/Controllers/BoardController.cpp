@@ -15,9 +15,7 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	BoardController::BoardController(BoardService& boardService, PlayerService& playerService)
-		: m_boardService(boardService)
-		, m_playerService(playerService)
+	BoardController::BoardController()
 	{
 	}
 
@@ -25,7 +23,7 @@ namespace chess
 	void BoardController::RegisterConsumers()
 	{
 		BaseController::RegisterConsumers();
-		//RegisterConsumer<CellClickedEvent>(std::bind(&BoardController::OnCellClickedEvent, this, std::placeholders::_1));
+		RegisterConsumer<CellClickedEvent>(std::bind(&BoardController::OnCellClickedEvent, this, std::placeholders::_1));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,25 +35,46 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	mvc::ModelAndView BoardController::OnCellClickedEvent(CellClickedEvent const& event)
+	{
+		//TODO: remove this event and add concrete events (pick piece up, drop piece, move piece) and update board sevice accordingly
+		auto playerService = GetDependency<PlayerService>();
+		auto pickedPieceId = playerService->GetPickedPiece();
+		if (!pickedPieceId.IsValid())
+		{
+			return mvc::ModelAndView::Invalid();
+		}
+
+		auto boardService = GetDependency<BoardService>();
+		boardService->MoveChessPiece(pickedPieceId, event.Position);
+		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(mvc::ViewId((int)ViewType::Chessboard));
+		modelAndView.SetModel(STRING_ID("chessboard"), CreateChessboardViewModel());
+		return modelAndView;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	std::unique_ptr<mvc::Model> BoardController::CreateChessboardViewModel() const
 	{
 		int tileIndex = 0;
-		EColor tileColor = EColor::Black;
-		auto tileViewModelTransform = [&tileColor, &tileIndex, this](ChessPieceId pieceId) -> ChessTileViewModel
+		EColor tileColor = EColor::White;
+		const ChessPieceId pickedPieceId = GetDependency<PlayerService>()->GetPickedPiece();
+		auto tileViewModelTransform = [&tileColor, &pickedPieceId, &tileIndex](ChessPieceId pieceId) -> ChessTileViewModel
 		{
+			if (tileIndex++ % 8 != 0)
+			{
+				tileColor = GetAlternateColor(tileColor);
+			}
+
 			ChessTileViewModel viewModel;
 			viewModel.Color = tileColor;
 			viewModel.Piece = pieceId;
-			viewModel.IsPicked = m_playerService.IsPicked(pieceId);
-			viewModel.OnClickEvents = m_playerService.GenerateEventsForTile(TilePosition(Position(tileIndex)), pieceId);
+			viewModel.IsPicked = pieceId.IsValid() && pieceId == pickedPieceId;
 
-			tileColor = GetAlternateColor(tileColor);
-			++tileIndex;
 			return viewModel;
 		};
 
 		auto model = std::make_unique<ChessboardViewModel>();
-		auto boardState = m_boardService.GetBoardState();
+		auto boardState = GetDependency<BoardService>()->GetBoardState();
 		std::transform(boardState.begin(), boardState.end(), std::back_inserter(model->Tiles), tileViewModelTransform);
 		return model;
 	}

@@ -5,20 +5,20 @@
 namespace chess
 {
 	//////////////////////////////////////////////////////////////////////////////////////////
-	BoardService::BoardService(const ChessPieceRegistry& pieceRepository) : m_pieceRepository(pieceRepository)
+	BoardService::BoardService()
 	{
-		InitializePiecesPositions();
+		InitializePieces();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	std::vector<ChessPieceId> BoardService::GetBoardState() const
 	{
 		std::vector<ChessPieceId> board(CHESS_BOARD_SIDE*CHESS_BOARD_SIDE, ChessPieceId::Invalid());
-		for (auto& pieceToTile : m_pieces)
+		for (const auto& [pieceId, tilePosition] : m_pieces)
 		{
-			if (pieceToTile.second.IsValid())
+			if (tilePosition.IsValid())
 			{
-				board[pieceToTile.second.AsIndex()] = pieceToTile.first;
+				board[tilePosition.AsIndex()] = pieceId;
 			}
 		}
 
@@ -26,16 +26,23 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	void BoardService::InitializePiecesPositions()
+	void BoardService::MoveChessPiece(ChessPieceId chessPiece, const TilePosition& newPosition)
 	{
+		//TODO: implement
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void BoardService::InitializePieces()
+	{
+		auto pieceRegistry = GetDependency<ChessPieceRegistry>();
 		for (int pieceType = 0; pieceType < (int)EChessPieceType::COUNT; ++pieceType)
 		{
 			const EChessPieceType type = (EChessPieceType)pieceType;
-			const std::size_t instancesCount = m_pieceRepository.GetInstancesCount(type);
+			const std::size_t instancesCount = pieceRegistry->GetInstancesCount(type);
 			for (int instace = 0; instace < instancesCount; ++instace)
 			{
-				m_pieces.emplace(ChessPieceId(type, EColor::White, instace), m_pieceRepository.GetInitialPosition(type, EColor::White, instace));
-				m_pieces.emplace(ChessPieceId(type, EColor::Black, instace), m_pieceRepository.GetInitialPosition(type, EColor::Black, instace));
+				m_pieces.emplace(ChessPieceId(type, EColor::White, instace), pieceRegistry->GetInitialPosition(type, EColor::White, instace));
+				m_pieces.emplace(ChessPieceId(type, EColor::Black, instace), pieceRegistry->GetInitialPosition(type, EColor::Black, instace));
 			}
 		}
 	}

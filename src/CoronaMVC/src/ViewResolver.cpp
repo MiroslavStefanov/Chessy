@@ -3,8 +3,8 @@
 
 #include "mvc/ModelAndView.h"
 #include "mvc/View.h"
-#include "io/BaseInputDevice.h"
-#include "io/BaseOutputDevice.h"
+#include "io/InputDevice.h"
+#include "io/OutputDevice.h"
 
 namespace mvc
 {
@@ -19,38 +19,41 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::AddView(ViewId viewId, std::unique_ptr<View>&& view)
 	{
-		if (viewId.IsValid())
+		if (!viewId.IsValid() || !view)
 		{
-			m_views[viewId] = std::move(view);
+			assert(false);
+			return;
+		}
+
+		m_views[viewId] = std::move(view);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ViewResolver::UpdateView(ModelAndView modelAndView)
+	{
+		m_activeViewId = modelAndView.GetViewId();
+		auto it = m_views.find(m_activeViewId);
+		if (it != m_views.end() && modelAndView.HasModel())
+		{
+			it->second->SetModel(modelAndView.GetModelId(), modelAndView.ReleaseModel());
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ViewResolver::InputActiveView(BaseInputDevice* inputDevice) const
+	void ViewResolver::InputActiveView(InputDevice* inputDevice) const
 	{
 		auto it = m_views.find(m_activeViewId);
-		if (it != m_views.end() && it->second)
+		if (it != m_views.end())
 		{
 			it->second->ProcessInput(inputDevice);
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ViewResolver::UpdateView(ModelAndView&& modelAndView)
-	{
-		m_activeViewId = modelAndView.GetViewId();
-		auto it = m_views.find(modelAndView.GetViewId());
-		if (it != m_views.end() && it->second)
-		{
-			it->second->Update(std::move(modelAndView));
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ViewResolver::RenderActiveView(BaseOutputDevice* outputDevice) const
+	void ViewResolver::RenderActiveView(OutputDevice* outputDevice) const
 	{
 		auto it = m_views.find(m_activeViewId);
-		if (it != m_views.end() && it->second)
+		if (it != m_views.end())
 		{
 			it->second->ProcessOutput(outputDevice);
 		}

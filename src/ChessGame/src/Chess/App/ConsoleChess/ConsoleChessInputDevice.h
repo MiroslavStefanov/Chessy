@@ -1,13 +1,21 @@
 #pragma once
-#include "io/BaseInputDevice.h"
+#include "io/InputDevice.h"
+#include "Utils/Utils.h"
 
 namespace chess
 {
 	class TilePosition;
 
-	class ConsoleChessInputDevice : public mvc::BaseInputDevice
+	class ConsoleChessInputDevice : public mvc::InputDevice
 	{
 	public:
-		TilePosition PollTilePosition();
+		ConsoleChessInputDevice();
+
+		void Update() override;
+
+		const TilePosition& GetInputTilePosition();
+
+	private:
+		TilePosition m_inputPosition;
 	};
 }

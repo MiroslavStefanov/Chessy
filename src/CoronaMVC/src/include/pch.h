@@ -10,6 +10,7 @@
 // add headers that you want to pre-compile here
 #include "EventTypeInfo.h"
 #include "ViewId.h"
+#include "StringHash.h"
 #include "ForwardDeclarations.h"
 #include <unordered_map>
 #include <string>
@@ -17,5 +18,6 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include <cassert>
 
 #endif //PCH_H

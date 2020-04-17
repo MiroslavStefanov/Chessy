@@ -8,16 +8,16 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::Update(mvc::ModelAndView&& modelAndView)
+	void ChessboardView::SetModel(StringId modelId, std::unique_ptr<mvc::Model>&& model)
 	{
-		const StringId modelId = modelAndView.GetModelId();
+		std::unique_ptr<mvc::Model> localModel = std::move(model);
 		if (modelId == STRING_ID("chessboard"))
 		{
-			UpdateBoardModel(std::move(modelAndView));
+			UpdateBoardModel(dynamic_cast<ChessboardViewModel*>(localModel.get()));
 		}
 		else if (modelId == STRING_ID("playerTurn"))
 		{
-			UpdateTurnModel(std::move(modelAndView));
+			UpdateTurnModel(dynamic_cast<PlayerTurnViewModel*>(localModel.get()));
 		}
 		else
 		{
@@ -26,53 +26,51 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::ProcessInput(mvc::BaseInputDevice* inputDevice)
+	void ChessboardView::ProcessInput(mvc::InputDevice* inputDevice)
 	{
 		auto device = dynamic_cast<ConsoleChessInputDevice*>(inputDevice);
 		if (!device)
 			return;
 
-		TilePosition inputPosition = device->PollTilePosition();
-		if (inputPosition.IsValid())
+		auto& inputPosition = device->GetInputTilePosition();
+		if (!inputPosition.IsValid())
 		{
-			auto& events = m_boardModel.Tiles[inputPosition.AsIndex()].OnClickEvents;
-			for (auto& event : events)
-			{
-				device->AddEvent(std::move(event));
-			}
-			events.clear();
+			return;
 		}
+
+		RaiseEvent(CellClickedEvent(inputPosition));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::ProcessOutput(mvc::BaseOutputDevice* outputDevice)
+	void ChessboardView::ProcessOutput(mvc::OutputDevice* outputDevice)
 	{
 		auto device = dynamic_cast<ConsoleChessOutputDevice*>(outputDevice);
 		if (!device)
 			return;
 
-		device->ClearConsole();
 		device->RenderChessboard(m_boardModel);
 		device->RenderPlayerTurn(m_turnModel);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::UpdateBoardModel(mvc::ModelAndView&& modelAndView)
+	void ChessboardView::UpdateBoardModel(ChessboardViewModel* viewModel)
 	{
-		auto boardModel = modelAndView.GetModel<ChessboardViewModel>();
-		if (boardModel)
+		if (!viewModel)
 		{
-			m_boardModel = std::move(*boardModel);
+			assert(false);
+			return;
 		}
+		m_boardModel = std::move(*viewModel);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::UpdateTurnModel(mvc::ModelAndView&& modelAndView)
+	void ChessboardView::UpdateTurnModel(PlayerTurnViewModel* viewModel)
 	{
-		auto turnModel = modelAndView.GetModel<PlayerTurnViewModel>();
-		if (turnModel)
+		if (!viewModel)
 		{
-			m_turnModel = std::move(*turnModel);
+			assert(false);
+			return;
 		}
+		m_turnModel = std::move(*viewModel);
 	}
 }

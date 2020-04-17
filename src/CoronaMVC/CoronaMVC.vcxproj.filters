@@ -22,6 +22,9 @@
     <Filter Include="Source Files\mvc">
       <UniqueIdentifier>{2910db85-1e77-4b85-a652-f93f8bd4510b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dependency">
+      <UniqueIdentifier>{6875c6bd-a3aa-43c0-bded-59498cbd03df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EventDispatcher.h">
@@ -38,12 +41,6 @@
     </ClInclude>
     <ClInclude Include="src\include\event\Event.h">
       <Filter>Source Files\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\include\io\BaseInputDevice.h">
-      <Filter>Source Files\io</Filter>
-    </ClInclude>
-    <ClInclude Include="src\include\io\BaseOutputDevice.h">
-      <Filter>Source Files\io</Filter>
     </ClInclude>
     <ClInclude Include="src\include\mvc\BaseController.h">
       <Filter>Source Files\mvc</Filter>
@@ -69,14 +66,23 @@
     <ClInclude Include="src\include\ViewId.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\BufferQueue.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\include\pch.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\StringHash.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\dependency\Depender.h">
+      <Filter>Source Files\dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\dependency\DependencyWrapper.h">
+      <Filter>Source Files\dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\io\InputDevice.h">
+      <Filter>Source Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\io\OutputDevice.h">
+      <Filter>Source Files\io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -92,9 +98,6 @@
     <ClCompile Include="src\include\event\ApplicationStartedEvent.cpp">
       <Filter>Source Files\event</Filter>
     </ClCompile>
-    <ClCompile Include="src\include\io\BaseInputDevice.cpp">
-      <Filter>Source Files\io</Filter>
-    </ClCompile>
     <ClCompile Include="src\include\mvc\BaseController.cpp">
       <Filter>Source Files\mvc</Filter>
     </ClCompile>
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="src\include\pch.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\mvc\View.cpp">
+      <Filter>Source Files\mvc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

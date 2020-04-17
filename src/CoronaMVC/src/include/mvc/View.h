@@ -1,13 +1,19 @@
 #pragma once
+#include "dependency/Depender.h"
 
 namespace mvc
 {
-	class View
+	class View : private Depender<class EventDispatcher>
 	{
 	public:
-		virtual ~View() = default;
-		virtual void Update(ModelAndView&& modelAndView) = 0;
-		virtual void ProcessInput(BaseInputDevice* inputDevice) = 0;
-		virtual void ProcessOutput(BaseOutputDevice* outputDevice) = 0;
+		View();
+		virtual ~View();
+		virtual void SetModel(StringId modelId, std::unique_ptr<Model>&& model) = 0;
+		virtual void ProcessInput(InputDevice* inputDevice) = 0;
+		virtual void ProcessOutput(OutputDevice* outputDevice) = 0;
+
+	protected:
+		void RaiseEvent(const Event& event);
+
 	};
 }

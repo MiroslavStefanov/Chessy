@@ -21,13 +21,14 @@
   <ItemGroup>
     <ClInclude Include="src\EventDispatcher.h" />
     <ClInclude Include="src\include\BaseApplication.h" />
-    <ClInclude Include="src\include\BufferQueue.h" />
+    <ClInclude Include="src\include\dependency\DependencyWrapper.h" />
+    <ClInclude Include="src\include\dependency\Depender.h" />
     <ClInclude Include="src\include\EventTypeInfo.h" />
     <ClInclude Include="src\include\event\ApplicationStartedEvent.h" />
     <ClInclude Include="src\include\event\Event.h" />
     <ClInclude Include="src\include\ForwardDeclarations.h" />
-    <ClInclude Include="src\include\io\BaseInputDevice.h" />
-    <ClInclude Include="src\include\io\BaseOutputDevice.h" />
+    <ClInclude Include="src\include\io\InputDevice.h" />
+    <ClInclude Include="src\include\io\OutputDevice.h" />
     <ClInclude Include="src\include\mvc\BaseController.h" />
     <ClInclude Include="src\include\mvc\Model.h" />
     <ClInclude Include="src\include\mvc\ModelAndView.h" />
@@ -42,9 +43,9 @@
     <ClCompile Include="src\EventDispatcher.cpp" />
     <ClCompile Include="src\include\BaseApplication.cpp" />
     <ClCompile Include="src\include\event\ApplicationStartedEvent.cpp" />
-    <ClCompile Include="src\include\io\BaseInputDevice.cpp" />
     <ClCompile Include="src\include\mvc\BaseController.cpp" />
     <ClCompile Include="src\include\mvc\ModelAndView.cpp" />
+    <ClCompile Include="src\include\mvc\View.cpp" />
     <ClCompile Include="src\include\pch.cpp" />
     <ClCompile Include="src\include\ViewId.cpp" />
     <ClCompile Include="src\ViewResolver.cpp" />

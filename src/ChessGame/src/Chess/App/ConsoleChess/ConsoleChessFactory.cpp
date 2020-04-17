@@ -8,13 +8,13 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::unique_ptr<mvc::BaseInputDevice> ConsoleChessFactory::CreateInputDevice() const
+	std::unique_ptr<mvc::InputDevice> ConsoleChessFactory::CreateInputDevice() const
 	{
 		return std::make_unique<ConsoleChessInputDevice>();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::unique_ptr<mvc::BaseOutputDevice> ConsoleChessFactory::CreateOutputDevice() const
+	std::unique_ptr<mvc::OutputDevice> ConsoleChessFactory::CreateOutputDevice() const
 	{
 		return std::make_unique<ConsoleChessOutputDevice>();
 	}

@@ -1,14 +1,24 @@
 #include "stdafx.h"
 #include "ConsoleChessInputDevice.h"
-#include "Utils/Utils.h"
 
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	TilePosition ConsoleChessInputDevice::PollTilePosition()
+	ConsoleChessInputDevice::ConsoleChessInputDevice() : m_inputPosition(TilePosition::Invalid())
+	{
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessInputDevice::Update()
 	{
 		int row, col;
 		std::cin >> row >> col;
-		return TilePosition(Position(row, col));
+		m_inputPosition = TilePosition(Position(row, col));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	const TilePosition& ConsoleChessInputDevice::GetInputTilePosition()
+	{
+		return m_inputPosition;
 	}
 }
