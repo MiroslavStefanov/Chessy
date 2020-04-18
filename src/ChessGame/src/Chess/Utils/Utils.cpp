@@ -46,4 +46,12 @@ namespace chess
 			return EColor::Colorless;
 		}
 	}
+
+	bool TilePosition::IsValid() const
+	{
+		const auto position = AsPosition();
+		const bool validRow = position.row >= 0 && position.row < CHESS_BOARD_SIDE;
+		const bool validColumn = position.col >= 0 && position.row < CHESS_BOARD_SIDE;
+		return validRow && validColumn;
+	}
 }

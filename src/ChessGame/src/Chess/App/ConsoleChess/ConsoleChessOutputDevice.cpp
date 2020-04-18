@@ -3,34 +3,16 @@
 #include "Models/ChessboardViewModel.h"
 #include "Models/PlayerTurnViewModel.h"
 #include "ChessPieces/ChessPieceRegistry.h"
+#include "ConsoleChessVisuals.h"
 
 namespace chess
 {
-	static constexpr auto PICKED_TILE_CHAR = '+';
-	static constexpr auto WHITE_TILE_CHAR = '.';
-	static constexpr auto BLACK_TILE_CHAR = ' ';
-	static constexpr char INVALID_TILE_CHAR = (char)227;
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	char GetColorChar(EColor color)
-	{
-		switch (color)
-		{
-		case chess::EColor::White:
-			return WHITE_TILE_CHAR;
-		case chess::EColor::Black:
-			return BLACK_TILE_CHAR;
-		default:
-			return INVALID_TILE_CHAR;
-		}
-	}
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::Update()
 	{
 		ClearConsole();
 		std::cout << m_frameBuffer.str();
-		m_frameBuffer.clear();
+		std::stringstream().swap(m_frameBuffer);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,30 +25,52 @@ namespace chess
 			return;
 		}
 
+		RenderLettersRow();
+		RenderBorderRow();
 		for (int i = 0; i < CHESS_BOARD_SIDE; ++i)
 		{
 			const auto rowIndexOffset = i * CHESS_BOARD_SIDE;
 			auto rowBegin = chessboard.Tiles.cbegin() + rowIndexOffset;
-			auto rowEnd = rowBegin + CHESS_BOARD_SIDE;
-			RenderChessboardRow(rowBegin, rowEnd);
+			RenderChessboardRow(rowBegin, i);
 		}
+		RenderBorderRow();
+		RenderLettersRow();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::RenderPlayerTurn(const PlayerTurnViewModel& playerTurn)
 	{
+		m_frameBuffer 
+			<< ConsoleChessVisuals::ACTIVE_PLAYER_TEXT
+			<< ConsoleChessVisuals::DEFAULT_PLAYER_NAME_TEXT_TABLE[playerTurn.ActivePlayerColor] 
+			<< std::endl;
+
+		if (playerTurn.PickedPieceId.IsValid())
+		{
+			auto pieceRegistry = GetDependency<ChessPieceRegistry>();
+			m_frameBuffer 
+				<< ConsoleChessVisuals::PICKED_PIECE_TEXT 
+				<< pieceRegistry->GetVisualRepresentation(playerTurn.PickedPieceId.GetType(), playerTurn.PickedPieceId.GetColor())
+				<< std::endl;
+		}
+
 		if (!playerTurn.PossibleMoves.empty())
 		{
-			m_frameBuffer << "Can Move To:";
-			for (auto& position : playerTurn.PossibleMoves)
+			const auto possibleMovesSize = playerTurn.PossibleMoves.size();
+			m_frameBuffer << ConsoleChessVisuals::POSSIBLE_MOVES_TEXT;
+			for (std::size_t i = 0; i < possibleMovesSize; ++i)
 			{
-				m_frameBuffer << position.Row << "," << position.Column << ";";
+				const auto& position = playerTurn.PossibleMoves[i];
+				m_frameBuffer << ConsoleChessVisuals::ColumnVisualFromIndex(position.Column) << ConsoleChessVisuals::RowVisualFromIndex(position.Row);
+				if (i < possibleMovesSize - 1)
+				{
+					m_frameBuffer << ", ";
+				}
 			}
+			m_frameBuffer << std::endl;
 		}
-		m_frameBuffer << std::endl;
 
-		RenderTurnState(playerTurn.TurnState);
-		m_frameBuffer << std::endl;
+		m_frameBuffer << ConsoleChessVisuals::TURN_STATE_NAME_TEXT_TABLE[playerTurn.TurnState] << std::endl;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,69 +80,77 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::RenderChessTile(const ChessTileViewModel& tile)
+	void ConsoleChessOutputDevice::RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, int rowNumber)
 	{
-		auto pieceRegistry = GetDependency<ChessPieceRegistry>();
-		char tileChar = INVALID_TILE_CHAR;
-		if (tile.IsPicked)
+		const auto rowEnd = rowBegin + CHESS_BOARD_SIDE;
+		for (int row = 0; row < ConsoleChessVisuals::CELL_SYMBOL_HEIGHT; ++row)
 		{
-			tileChar = PICKED_TILE_CHAR;
-		}
-		else if (tile.Piece.IsValid() && pieceRegistry)
-		{
-			tileChar = pieceRegistry->GetVisualRepresentation(tile.Piece.GetType(), tile.Piece.GetColor());
-		}
-		else
-		{
-			tileChar = GetColorChar(tile.Color);
-		}
+			const bool shoudRenderRowNumber = row == ConsoleChessVisuals::CELL_SYMBOL_HEIGHT / 2;
+			const char rowNumberSymbol = shoudRenderRowNumber ? ConsoleChessVisuals::RowVisualFromIndex(rowNumber) : ConsoleChessVisuals::EMPTY_OFFSET_VISUAL;
 
-		m_frameBuffer << tileChar;
-	}
+			m_frameBuffer << rowNumberSymbol;
+			m_frameBuffer << ConsoleChessVisuals::VERTICAL_BORDER_VISUAL;
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::RenderTurnState(ETurnState turnState)
-	{
-		switch (turnState)
-		{
-		case chess::ETurnState::EndTurn:
-			m_frameBuffer << "EndTurn";
-			break;
-		case chess::ETurnState::Select:
-			m_frameBuffer << "Select";
-			break;
-		case chess::ETurnState::Unselect:
-			m_frameBuffer << "Unselect";
-			break;
-		case chess::ETurnState::ErrorState:
-			m_frameBuffer << "ErrorState";
-			break;
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, std::vector<ChessTileViewModel>::const_iterator rowEnd)
-	{
-		static constexpr int CELL_SYMBOL_SIZE = 3;
-
-		for (int row = 0; row < CELL_SYMBOL_SIZE; ++row)
-		{
 			for (auto tileIt = rowBegin; tileIt != rowEnd; ++tileIt)
 			{
-				for (int column = 0; column < CELL_SYMBOL_SIZE; ++column)
+				for (int column = 0; column < ConsoleChessVisuals::CELL_SYMBOL_WIDTH; ++column)
 				{
-					const bool shouldDrawBackground = (row == 0 || row == CELL_SYMBOL_SIZE - 1) || (column == 0 || column == CELL_SYMBOL_SIZE - 1);
-					if (shouldDrawBackground)
-					{
-						m_frameBuffer << GetColorChar(tileIt->Color);
-					}
-					else
-					{
-						RenderChessTile(*tileIt);
-					}
+					const bool shouldRenderBackground = row != ConsoleChessVisuals::CELL_SYMBOL_HEIGHT/2 || column != ConsoleChessVisuals::CELL_SYMBOL_WIDTH/2;
+					m_frameBuffer << (shouldRenderBackground ? ConsoleChessVisuals::TILE_COLOR_VISUAL_TABLE[tileIt->Color] : GetTileCenterVisual(*tileIt));
 				}
 			}
+
+			m_frameBuffer << ConsoleChessVisuals::VERTICAL_BORDER_VISUAL;
+			m_frameBuffer << rowNumberSymbol;
 			m_frameBuffer << std::endl;
 		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderBorderRow()
+	{
+		m_frameBuffer << ConsoleChessVisuals::EMPTY_OFFSET_VISUAL;
+
+		for (int i = 0; i < ConsoleChessVisuals::CELL_SYMBOL_WIDTH * CHESS_BOARD_SIDE + 2; ++i)
+		{
+			m_frameBuffer << ConsoleChessVisuals::HORIZONTAL_BORDER_VISUAL;
+		}
+
+		m_frameBuffer << std::endl;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderLettersRow()
+	{
+		m_frameBuffer << ConsoleChessVisuals::EMPTY_OFFSET_VISUAL << ConsoleChessVisuals::EMPTY_OFFSET_VISUAL;
+
+		for (int column = 0; column < CHESS_BOARD_SIDE; ++column)
+		{
+			for (int symbolIndex = 0; symbolIndex < ConsoleChessVisuals::CELL_SYMBOL_WIDTH; ++symbolIndex)
+			{
+				const bool shouldRenderLetter = symbolIndex == ConsoleChessVisuals::CELL_SYMBOL_WIDTH / 2;
+				m_frameBuffer << (shouldRenderLetter ? ConsoleChessVisuals::ColumnVisualFromIndex(column) : ConsoleChessVisuals::EMPTY_OFFSET_VISUAL);
+			}
+		}
+
+		m_frameBuffer << std::endl;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	char ConsoleChessOutputDevice::GetTileCenterVisual(const ChessTileViewModel& tile) const
+	{
+		char result = ConsoleChessVisuals::TILE_COLOR_VISUAL_TABLE[tile.Color];
+
+		if (tile.IsPicked)
+		{
+			result = ConsoleChessVisuals::PICKED_TILE_VISUAL;
+		}
+		else if (tile.Piece.IsValid())
+		{
+			auto pieceRegistry = GetDependency<ChessPieceRegistry>();
+			result = pieceRegistry->GetVisualRepresentation(tile.Piece.GetType(), tile.Piece.GetColor());
+		}
+
+		return result;
 	}
 }

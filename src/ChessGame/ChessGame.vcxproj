@@ -23,6 +23,7 @@
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.cpp" />
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.cpp" />
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.cpp" />
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.cpp" />
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsolseChessMain.cpp" />
     <ClCompile Include="src\Chess\ChessPieces\Bishop.cpp" />
     <ClCompile Include="src\Chess\ChessPieces\ChessPiece.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.h" />
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.h" />
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.h" />
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.h" />
     <ClInclude Include="src\Chess\ChessPieces\Bishop.h" />
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h" />
     <ClInclude Include="src\Chess\ChessPieces\ChessPieceRegistry.h" />

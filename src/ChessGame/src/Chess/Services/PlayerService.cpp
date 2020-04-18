@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerService.h"
 #include "event/Event.h"
+#include "ChessPieces/ChessPieceRegistry.h"
 
 namespace chess
 {
@@ -13,12 +14,6 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	std::vector<TilePosition> PlayerService::GetPossibleMoves() const
-	{
-		return std::vector<TilePosition>(); //TODO: implement
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
 	ChessPieceId PlayerService::GetPickedPiece() const
 	{
 		return m_pickedPiece;
@@ -28,6 +23,12 @@ namespace chess
 	ETurnState PlayerService::GetTurnState() const
 	{
 		return m_turnState;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	EColor PlayerService::GetActivePlayerColor() const
+	{
+		return m_activePlayerColor;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

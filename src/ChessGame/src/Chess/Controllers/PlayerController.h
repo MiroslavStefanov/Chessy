@@ -6,8 +6,9 @@ namespace chess
 {
 	enum class ETurnState : int;
 	class PlayerService;
+	class BoardService;
 
-	class PlayerController : public mvc::BaseController, public mvc::Depender<PlayerService>
+	class PlayerController : public mvc::BaseController, public mvc::Depender<PlayerService, BoardService>
 	{
 	public:
 		PlayerController();
@@ -19,6 +20,6 @@ namespace chess
 	private:
 		mvc::ModelAndView OnCellClickedEvent(class CellClickedEvent const& event);
 
-		std::unique_ptr<mvc::Model> CreatePlayerTurnViewModel(ETurnState turnState) const;
+		std::unique_ptr<mvc::Model> CreatePlayerTurnViewModel() const;
 	};
 }

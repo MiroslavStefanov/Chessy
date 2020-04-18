@@ -23,10 +23,12 @@ namespace chess
 
 	private:
 		void ClearConsole();
-		void RenderChessTile(const ChessTileViewModel& tile);
-		void RenderTurnState(ETurnState state);
 
-		void RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, std::vector<ChessTileViewModel>::const_iterator rowEnd);
+		void RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, int rowNumber);
+		void RenderBorderRow();
+		void RenderLettersRow();
+
+		char GetTileCenterVisual(const ChessTileViewModel& tile) const;
 
 	private:
 		std::stringstream m_frameBuffer;

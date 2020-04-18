@@ -12,6 +12,7 @@
 #include "Views/ChessViews.h"
 #include "Models/PlayerTurnViewModel.h"
 #include "Services/PlayerService.h"
+#include "Services/BoardService.h"
 
 namespace chess
 {
@@ -33,7 +34,7 @@ namespace chess
 		auto playerService = GetDependency<PlayerService>();
 		playerService->StartGame();
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel(ETurnState::StartGame));
+		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel());
 		return modelAndView;
 	}
 
@@ -43,17 +44,20 @@ namespace chess
 		auto playerService = GetDependency<PlayerService>();
 		//TODO: remove this event and add concrete events (pick piece up, drop piece, move piece) and update player sevice accordingly
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel(playerService->GetTurnState()));
+		modelAndView.SetModel(STRING_ID("playerTurn"), CreatePlayerTurnViewModel());
 		return modelAndView;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::unique_ptr<mvc::Model> PlayerController::CreatePlayerTurnViewModel(ETurnState turnState) const
+	std::unique_ptr<mvc::Model> PlayerController::CreatePlayerTurnViewModel() const
 	{
+		auto playerService = GetDependency<PlayerService>();
 		auto model = std::make_unique<PlayerTurnViewModel>();
-		model->TurnState = turnState;
-		auto possibleMoves = GetDependency<PlayerService>()->GetPossibleMoves();
-		std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), &ModelMapper::MapTilePositionView);
+		model->TurnState = playerService->GetTurnState();
+		model->ActivePlayerColor = playerService->GetActivePlayerColor();
+		model->PickedPieceId = playerService->GetPickedPiece();
+		//TODO: add possible game moves
+		
 		return model;
 	}
 }

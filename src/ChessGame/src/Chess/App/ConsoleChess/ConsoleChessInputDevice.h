@@ -16,6 +16,11 @@ namespace chess
 		const TilePosition& GetInputTilePosition();
 
 	private:
+		TilePosition ParseTilePosition(const std::string& input) const;
+		bool IsValidRow(char row) const;
+		bool IsValidColumn(char column) const;
+
+	private:
 		TilePosition m_inputPosition;
 	};
 }

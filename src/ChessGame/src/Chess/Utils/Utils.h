@@ -91,7 +91,7 @@ namespace chess
 
 		bool operator==(const Position& pos) const { return pos.row == row && pos.col == col; }
 
-		const Position operator+(const Position& other)	{ return Position(row + other.row, col + other.col); }
+		Position operator+(const Position& other)	{ return Position(row + other.row, col + other.col); }
 		void operator+=(const Position& other) { *this = *this + other; }
 
 		Position(int8_t index = 0) : row(index / sChessBoardSide), col(index % sChessBoardSide) { }
@@ -113,7 +113,7 @@ namespace chess
 
 		TilePosition(const Position& poisition) : position(poisition) { }
 
-		bool IsValid() const { return AsIndex() >= 0 && AsIndex() < CHESS_BOARD_SIDE * CHESS_BOARD_SIDE; }
+		bool IsValid() const;
 
 
 		std::int8_t AsIndex() const { return position.row * sChessBoardSide + position.col; }
@@ -121,6 +121,7 @@ namespace chess
 		Position& AsMutablePosition() { return position; }
 
 		bool operator==(const TilePosition& pos) const { return position == pos.position; }
+		bool operator!=(const TilePosition& pos) const { return !((*this) == pos); }
 
 	private:
 		Position position;
@@ -135,4 +136,22 @@ namespace chess
 	EDirection GetOpositeDirection(EDirection direction);
 	int8_t GetKingPosition(EColor color);
 	EColor GetAlternateColor(EColor color);
+
+	template<class Key, class Value, class KeyEqual = std::equal_to<Key>> 
+	class VectorMap
+	{
+	public:
+		using value_type = std::pair<const Key, Value>;
+	public:
+		VectorMap() = default;
+		VectorMap(std::initializer_list<value_type> initializerList) : m_entries(initializerList) {}
+
+		const Value& operator[](const Key& key) const
+		{
+			return std::find_if(m_entries.begin(), m_entries.end(), [&key](const value_type& val) {return KeyEqual{}(key, val.first); })->second;
+		}
+
+	private:
+		std::vector<value_type> m_entries;
+	};
 }

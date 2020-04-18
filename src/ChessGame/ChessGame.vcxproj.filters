@@ -120,6 +120,9 @@
     <ClCompile Include="src\Chess\ChessPieces\ChessPieceRegistry.cpp">
       <Filter>Chess\ChessPieces</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.cpp">
+      <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\Bishop.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="src\Chess\ChessPieces\ChessPieceRegistry.h">
       <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.h">
+      <Filter>Chess\App\ConsoleChess</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
