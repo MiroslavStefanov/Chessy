@@ -77,10 +77,9 @@ namespace mvc
 	{
 		m_eventDispatcher->ProcessEventResponses(*m_viewResolver);
 		m_viewResolver->RenderActiveView(m_outputDevice.get());
-		m_viewResolver->InputActiveView(m_inputDevice.get());
-
 		m_outputDevice->Update();
 		m_inputDevice->Update();
+		m_viewResolver->InputActiveView(m_inputDevice.get());
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
