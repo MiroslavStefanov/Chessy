@@ -32,9 +32,54 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
+	bool PlayerService::CanPickChessPiece(ChessPieceId pieceId) const
+	{
+		return !m_pickedPiece.IsValid() && pieceId.IsValid() && pieceId.GetColor() == m_activePlayerColor;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	bool PlayerService::CanDropChessPiece() const
+	{
+		return m_pickedPiece.IsValid() && m_pickedPiece.GetColor() == m_activePlayerColor;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
 	void PlayerService::StartGame()
 	{
 		m_activePlayerColor = EColor::White;
 		m_turnState = ETurnState::StartGame;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::PickChessPiece(ChessPieceId pieceId)
+	{
+		assert(!m_pickedPiece.IsValid() && pieceId.IsValid());
+
+		m_pickedPiece = pieceId;
+		m_turnState = ETurnState::Select;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::DropChessPiece()
+	{
+		assert(m_pickedPiece.IsValid());
+
+		m_pickedPiece = ChessPieceId::Invalid();
+		m_turnState = ETurnState::Unselect;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::OnChessPieceMovedToPosition(ChessPieceId pieceId, const TilePosition& position)
+	{
+		//TODO: implement pawn promotion
+		EndTurn();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::EndTurn()
+	{
+		m_pickedPiece = ChessPieceId::Invalid();
+		m_activePlayerColor = GetAlternateColor(m_activePlayerColor);
+		m_turnState = ETurnState::EndTurn;
 	}
 }

@@ -6,7 +6,9 @@ namespace chess
 	{
 		enum EEventType
 		{
-			CellClicked
+			ChessPiecePicked,
+			ChessPieceDropped,
+			ChessPieceMoved
 		};
 	}
 }

@@ -8,23 +8,26 @@
 namespace chess
 {
 	enum class ETurnState;
-	struct ChessboardViewModel;
-	struct ChessTileViewModel;
-	struct PlayerTurnViewModel;
+	enum class EColor;
 	class ChessPieceRegistry;
+	struct ChessTileViewModel;
+	struct TilePositionViewModel;
 
 	class ConsoleChessOutputDevice : public mvc::OutputDevice, public mvc::Depender<ChessPieceRegistry>
 	{
 	public:
 		void Update() override;
 
-		void RenderChessboard(const ChessboardViewModel& chessboard);
-		void RenderPlayerTurn(const PlayerTurnViewModel& playerTurn);
+		void RenderChessboard(const std::vector<ChessTileViewModel>& chessBoardTiles);
+		void RenderPossibleMoves(const std::vector<TilePositionViewModel>& possibleMoves);
+		void RenderPickedChessPiece(ChessPieceId chessPieceId);
+		void RenderActivePlayer(EColor activePlayerColor);
+		void RenderTurnState(ETurnState turnState);
 
 	private:
 		void ClearConsole();
 
-		void RenderChessboardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, int rowNumber);
+		void RenderChessBoardRow(std::vector<ChessTileViewModel>::const_iterator rowBegin, int rowNumber);
 		void RenderBorderRow();
 		void RenderLettersRow();
 

@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "CellClickedEvent.h"
+#include "ChessPiecePickedEvent.h"
 
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	CellClickedEvent::CellClickedEvent(const TilePosition& position) : Position(position)
+	ChessPiecePickedEvent::ChessPiecePickedEvent(ChessPieceId pieceId) : PieceId(pieceId)
 	{
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	EventType CellClickedEvent::GetType() const
+	EventType ChessPiecePickedEvent::GetType() const
 	{
-		return EventTypeInfo<CellClickedEvent>::Type;
+		return EventTypeInfo<ChessPiecePickedEvent>::Type;
 	}
 }
 

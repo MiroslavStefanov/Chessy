@@ -50,6 +50,17 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	const std::vector<ChessPieceMove>& ChessPieceRegistry::GetGameMoves(EChessPieceType type) const
+	{
+		static const std::vector<ChessPieceMove> empty;
+		if (auto piece = GetPieceOfType(type))
+		{
+			return piece->RelativeMoves;
+		}
+		return empty;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	const ChessPiece* ChessPieceRegistry::GetPieceOfType(EChessPieceType type) const
 	{
 		switch (type)

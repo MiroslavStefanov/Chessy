@@ -60,9 +60,6 @@
     <ClCompile Include="src\Chess\Utils\Utils.cpp">
       <Filter>Chess\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Chess\Controllers\PlayerController.cpp">
-      <Filter>Chess\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chess\App\ChessApplication.cpp">
       <Filter>Chess\App</Filter>
     </ClCompile>
@@ -71,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsolseChessMain.cpp">
       <Filter>Chess\App\ConsoleChess</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\Events\CellClickedEvent.cpp">
-      <Filter>Chess\Events</Filter>
     </ClCompile>
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.cpp">
       <Filter>Chess\App\ConsoleChess</Filter>
@@ -87,22 +81,13 @@
     <ClCompile Include="src\Chess\stdafx.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
-    <ClCompile Include="src\Chess\Controllers\BoardController.cpp">
-      <Filter>Chess\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chess\Services\BoardService.cpp">
       <Filter>Chess\Services</Filter>
     </ClCompile>
     <ClCompile Include="src\Chess\Utils\ChessPieceId.cpp">
       <Filter>Chess\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Chess\Models\ChessboardViewModel.cpp">
-      <Filter>Chess\Models</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chess\Models\ChessTileViewModel.cpp">
-      <Filter>Chess\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\Models\PlayerTurnViewModel.cpp">
       <Filter>Chess\Models</Filter>
     </ClCompile>
     <ClCompile Include="src\Chess\Models\TilePositionViewModel.cpp">
@@ -120,8 +105,23 @@
     <ClCompile Include="src\Chess\ChessPieces\ChessPieceRegistry.cpp">
       <Filter>Chess\ChessPieces</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Events\ChessPieceDroppedEvent.cpp">
+      <Filter>Chess\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Events\ChessPieceMovedEvent.cpp">
+      <Filter>Chess\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Events\ChessPiecePickedEvent.cpp">
+      <Filter>Chess\Events</Filter>
+    </ClCompile>
     <ClCompile Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.cpp">
       <Filter>Chess\App\ConsoleChess</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Controllers\ChessGameController.cpp">
+      <Filter>Chess\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\ChessGameViewModel.cpp">
+      <Filter>Chess\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +152,6 @@
     <ClInclude Include="src\Chess\Utils\Utils.h">
       <Filter>Chess\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Chess\Controllers\PlayerController.h">
-      <Filter>Chess\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chess\Events\EventTypes.h">
       <Filter>Chess\Events</Filter>
     </ClInclude>
@@ -167,17 +164,11 @@
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessFactory.h">
       <Filter>Chess\App\ConsoleChess</Filter>
     </ClInclude>
-    <ClInclude Include="src\Chess\Events\CellClickedEvent.h">
-      <Filter>Chess\Events</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessInputDevice.h">
       <Filter>Chess\App\ConsoleChess</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessOutputDevice.h">
       <Filter>Chess\App\ConsoleChess</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\Models\ChessboardViewModel.h">
-      <Filter>Chess\Models</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Views\ChessboardView.h">
       <Filter>Chess\Views</Filter>
@@ -188,9 +179,6 @@
     <ClInclude Include="src\Chess\stdafx.h">
       <Filter>Chess</Filter>
     </ClInclude>
-    <ClInclude Include="src\Chess\Controllers\BoardController.h">
-      <Filter>Chess\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chess\Services\BoardService.h">
       <Filter>Chess\Services</Filter>
     </ClInclude>
@@ -198,9 +186,6 @@
       <Filter>Chess\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Models\ChessTileViewModel.h">
-      <Filter>Chess\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\Models\PlayerTurnViewModel.h">
       <Filter>Chess\Models</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Models\TilePositionViewModel.h">
@@ -215,8 +200,23 @@
     <ClInclude Include="src\Chess\ChessPieces\ChessPieceRegistry.h">
       <Filter>Chess\ChessPieces</Filter>
     </ClInclude>
+    <ClInclude Include="src\Chess\Events\ChessPieceDroppedEvent.h">
+      <Filter>Chess\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Events\ChessPieceMovedEvent.h">
+      <Filter>Chess\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Events\ChessPiecePickedEvent.h">
+      <Filter>Chess\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Chess\App\ConsoleChess\ConsoleChessVisuals.h">
       <Filter>Chess\App\ConsoleChess</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Controllers\ChessGameController.h">
+      <Filter>Chess\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\ChessGameViewModel.h">
+      <Filter>Chess\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,9 +26,35 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	void BoardService::MoveChessPiece(ChessPieceId chessPiece, const TilePosition& newPosition)
+	std::list<TilePosition> BoardService::GetPossibleMovesForChessPiece(ChessPieceId pieceId) const
 	{
-		//TODO: implement
+		return std::list<TilePosition>(); //TODO: implement
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	bool BoardService::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
+	{
+		return true; //TODO: implement
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	bool BoardService::IsChessPieceOnBoard(ChessPieceId chessPieceId) const
+	{
+		auto it = m_pieces.find(chessPieceId);
+		return it != m_pieces.end() && it->second.IsValid();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void BoardService::MoveChessPieceToPosition(ChessPieceId chessPiece, const TilePosition& position)
+	{
+		//TODO: implement more profound moves (castle, en passant)
+		auto pieceToRemove = GetChessPieceOnPosition(position);
+		m_pieces.at(chessPiece) = position;
+		if (pieceToRemove.IsValid())
+		{
+			assert(pieceToRemove.GetColor() != chessPiece.GetColor());
+			m_pieces.at(pieceToRemove) = TilePosition::Invalid();
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -45,5 +71,19 @@ namespace chess
 				m_pieces.emplace(ChessPieceId(type, EColor::Black, instace), pieceRegistry->GetInitialPosition(type, EColor::Black, instace));
 			}
 		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	ChessPieceId BoardService::GetChessPieceOnPosition(const TilePosition& position) const
+	{
+		for (const auto& [pieceId, piecePosition] : m_pieces)
+		{
+			if (piecePosition == position)
+			{
+				return pieceId;
+			}
+		}
+
+		return ChessPieceId::Invalid();
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
-#include "Models/ChessboardViewModel.h"
-#include "Models/PlayerTurnViewModel.h"
 #include "mvc/View.h"
+#include "Models/ChessGameViewModel.h"
 
 namespace chess
 {
@@ -13,11 +12,6 @@ namespace chess
 		void ProcessOutput(mvc::OutputDevice* outputDevice) override;
 
 	private:
-		void UpdateBoardModel(ChessboardViewModel* viewModel);
-		void UpdateTurnModel(PlayerTurnViewModel* viewModel);
-
-	private:
-		ChessboardViewModel m_boardModel;
-		PlayerTurnViewModel m_turnModel;
+		ChessGameViewModel m_model;
 	};
 }

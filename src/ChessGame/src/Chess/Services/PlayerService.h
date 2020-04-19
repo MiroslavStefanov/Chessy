@@ -15,7 +15,16 @@ namespace chess
 		ETurnState GetTurnState() const;
 		EColor GetActivePlayerColor() const;
 
+		bool CanPickChessPiece(ChessPieceId pieceId) const;
+		bool CanDropChessPiece() const;
+
 		void StartGame();
+		void PickChessPiece(ChessPieceId pieceId);
+		void DropChessPiece();
+		void OnChessPieceMovedToPosition(ChessPieceId pieceId, const TilePosition& position);
+
+	private:
+		void EndTurn();
 
 	private:
 		ChessPieceId m_pickedPiece;

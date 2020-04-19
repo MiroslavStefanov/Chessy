@@ -3,8 +3,7 @@
 #include "ChessFactory.h"
 
 #include "Views/ChessViews.h"
-#include "Controllers/PlayerController.h"
-#include "Controllers/BoardController.h"
+#include "Controllers/ChessGameController.h"
 
 #include "ChessPieces/ChessPieceRegistry.h"
 #include "Services/BoardService.h"
@@ -34,8 +33,7 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ChessApplication::PopulateControllers()
 	{
-		AddController(std::make_unique<BoardController>());
-		AddController(std::make_unique<PlayerController>());
+		AddController(std::make_unique<ChessGameController>());
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

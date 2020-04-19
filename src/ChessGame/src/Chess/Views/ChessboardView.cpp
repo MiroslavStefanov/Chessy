@@ -2,7 +2,9 @@
 #include "ChessboardView.h"
 #include "App/ConsoleChess/ConsoleChessInputDevice.h"
 #include "App/ConsoleChess/ConsoleChessOutputDevice.h"
-#include "Events/CellClickedEvent.h"
+#include "Events/ChessPieceDroppedEvent.h"
+#include "Events/ChessPiecePickedEvent.h"
+#include "Events/ChessPieceMovedEvent.h"
 #include "mvc/ModelAndView.h"
 
 namespace chess
@@ -11,18 +13,14 @@ namespace chess
 	void ChessboardView::SetModel(StringId modelId, std::unique_ptr<mvc::Model>&& model)
 	{
 		std::unique_ptr<mvc::Model> localModel = std::move(model);
-		if (modelId == STRING_ID("chessboard"))
-		{
-			UpdateBoardModel(dynamic_cast<ChessboardViewModel*>(localModel.get()));
-		}
-		else if (modelId == STRING_ID("playerTurn"))
-		{
-			UpdateTurnModel(dynamic_cast<PlayerTurnViewModel*>(localModel.get()));
-		}
-		else
+		auto chessGameViewModel = dynamic_cast<ChessGameViewModel*>(localModel.get());
+		if (!chessGameViewModel)
 		{
 			assert(false);
+			return;
 		}
+
+		m_model = std::move(*chessGameViewModel);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +36,19 @@ namespace chess
 			return;
 		}
 
-		RaiseEvent(CellClickedEvent(inputPosition));
+		const auto& inputTile = m_model.ChessBoard[inputPosition.AsIndex()];
+		if (inputTile.IsPicked)
+		{
+			RaiseEvent(ChessPieceDroppedEvent());
+		}
+		else if (!m_model.PickedPieceId.IsValid() && inputTile.Piece.IsValid() && inputTile.Piece.GetColor() == m_model.ActivePlayerColor)
+		{
+			RaiseEvent(ChessPiecePickedEvent(inputTile.Piece));
+		}
+		else if (m_model.PickedPieceId.IsValid())
+		{
+			RaiseEvent(ChessPieceMovedEvent(m_model.PickedPieceId, inputPosition));
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,29 +58,16 @@ namespace chess
 		if (!device)
 			return;
 
-		device->RenderChessboard(m_boardModel);
-		device->RenderPlayerTurn(m_turnModel);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::UpdateBoardModel(ChessboardViewModel* viewModel)
-	{
-		if (!viewModel)
+		device->RenderChessboard(m_model.ChessBoard);
+		device->RenderActivePlayer(m_model.ActivePlayerColor);
+		if (m_model.PickedPieceId.IsValid())
 		{
-			assert(false);
-			return;
+			device->RenderPickedChessPiece(m_model.PickedPieceId);
 		}
-		m_boardModel = std::move(*viewModel);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::UpdateTurnModel(PlayerTurnViewModel* viewModel)
-	{
-		if (!viewModel)
+		if (!m_model.PossibleMoves.empty())
 		{
-			assert(false);
-			return;
+			device->RenderPossibleMoves(m_model.PossibleMoves);
 		}
-		m_turnModel = std::move(*viewModel);
+		device->RenderTurnState(m_model.TurnState);
 	}
 }
