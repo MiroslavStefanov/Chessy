@@ -1,22 +1,22 @@
 #pragma once
-#include "ChessPieces/ChessPiece.h"
+#include "Utils/Utils.h"
 
 namespace chess
 {
 	enum class EChessPieceType;
 	enum class EColor;
 	class TilePosition;
+	struct ChessPiece;
 
 	class ChessPieceRegistry
 	{
 	public:
-		std::size_t							GetInstancesCount(EChessPieceType type) const;
-		const TilePosition&					GetInitialPosition(EChessPieceType type, EColor color, std::size_t instanceNumber) const;
-		char								GetVisualRepresentation(EChessPieceType type, EColor color) const;
-		const std::vector<ChessPieceMove>&	GetGameMoves(EChessPieceType type) const;
+		static std::size_t GetInstancesCount(EChessPieceType type);
+		static const TilePosition& GetInitialPosition(EChessPieceType type, EColor color, std::size_t instanceNumber);
+		static const std::vector<ChessPieceMove>& GetGameMoves(EChessPieceType type);
 
 	private:
-		const ChessPiece* GetPieceOfType(EChessPieceType type) const;
+		static const std::unordered_map<EChessPieceType, const ChessPiece*> CHESS_PIECES_TABLE;
 	};
 }
 

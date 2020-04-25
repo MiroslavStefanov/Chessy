@@ -1,7 +1,5 @@
 #pragma once
 #include "io/OutputDevice.h"
-#include "dependency/Depender.h"
-#include "ChessPieces/ChessPieceRegistry.h"
 
 #include <sstream>
 
@@ -9,11 +7,10 @@ namespace chess
 {
 	enum class ETurnState;
 	enum class EColor;
-	class ChessPieceRegistry;
 	struct ChessTileViewModel;
 	struct TilePositionViewModel;
 
-	class ConsoleChessOutputDevice : public mvc::OutputDevice, public mvc::Depender<ChessPieceRegistry>
+	class ConsoleChessOutputDevice : public mvc::OutputDevice
 	{
 	public:
 		void Update() override;

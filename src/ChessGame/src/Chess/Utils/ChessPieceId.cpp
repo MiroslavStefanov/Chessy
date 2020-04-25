@@ -2,6 +2,7 @@
 #include "ChessPieceId.h"
 
 #include "Utils/Utils.h"
+#include "ChessPieces/ChessPieceTypes.h"
 #include <numeric>
 
 namespace chess
@@ -9,7 +10,7 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	const ChessPieceId& ChessPieceId::Invalid()
 	{
-		static const ChessPieceId invalid(EChessPieceType::None, EColor::Colorless, std::numeric_limits<std::size_t>::max());
+		static const ChessPieceId invalid(EChessPieceType::COUNT, EColor::Colorless, std::numeric_limits<std::size_t>::max());
 		return invalid;
 	}
 
@@ -26,7 +27,7 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessPieceId::IsValid() const
 	{
-		return m_type != EChessPieceType::None && m_type != EChessPieceType::COUNT && m_color != EColor::Colorless;
+		return m_type != EChessPieceType::COUNT && m_color != EColor::Colorless;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

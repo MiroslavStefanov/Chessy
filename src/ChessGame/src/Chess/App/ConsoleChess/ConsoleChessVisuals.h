@@ -6,6 +6,15 @@ namespace chess
 	class ConsoleChessVisuals
 	{
 	public:
+		static int ColumnIndexFromVisual(char column);
+		static char ColumnVisualFromIndex(int column);
+
+		static int RowIndexFromVisual(char row);
+		static char RowVisualFromIndex(int row);
+
+		static char GetChessPieceVisual(EChessPieceType chessPieceType, EColor chessPieceColor);
+
+	public:
 		//Tiles visualization
 		static constexpr char PICKED_TILE_VISUAL = '+';
 
@@ -26,11 +35,8 @@ namespace chess
 		static const VectorMap<EColor, const char*> DEFAULT_PLAYER_NAME_TEXT_TABLE;
 		static const VectorMap<ETurnState, const char*> TURN_STATE_NAME_TEXT_TABLE;
 
-	public:
-		static int ColumnIndexFromVisual(char column);
-		static char ColumnVisualFromIndex(int column);
-
-		static int RowIndexFromVisual(char row);
-		static char RowVisualFromIndex(int row);
+	private:
+		static constexpr char INVALID_VISUAL = (char)227;
+		static const VectorMap<EChessPieceType, char> CHESS_PIECE_VISUAL_TABLE;
 	};
 }

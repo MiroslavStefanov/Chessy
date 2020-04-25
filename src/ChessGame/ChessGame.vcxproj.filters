@@ -31,27 +31,12 @@
     <Filter Include="Chess\Services">
       <UniqueIdentifier>{d87938a5-aff6-4dac-ac23-0ff7dc3fe6eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Chess\ChessPieces\Movement">
+      <UniqueIdentifier>{e1cd4bce-99ee-4ac9-9abd-91163ad20cc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Chess\ChessPieces\Bishop.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
     <ClCompile Include="src\Chess\ChessPieces\ChessPiece.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessPieces\King.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessPieces\Knight.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessPieces\Pawn.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessPieces\Queen.cpp">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Chess\ChessPieces\Rook.cpp">
       <Filter>Chess\ChessPieces</Filter>
     </ClCompile>
     <ClCompile Include="src\Chess\Utils\Logger.cpp">
@@ -123,27 +108,24 @@
     <ClCompile Include="src\Chess\Models\ChessGameViewModel.cpp">
       <Filter>Chess\Models</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Utils\PawnJumpValidator.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Movement\ChessPieceMovementIterator.cpp">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Movement\KingMovementIterator.cpp">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ChessPieces\Movement\PawnMovementIterator.cpp">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Utils\EnPassantCache.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Chess\ChessPieces\Bishop.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessPieces\King.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessPieces\Knight.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessPieces\Pawn.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessPieces\Queen.h">
-      <Filter>Chess\ChessPieces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Chess\ChessPieces\Rook.h">
       <Filter>Chess\ChessPieces</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Utils\Logger.h">
@@ -217,6 +199,24 @@
     </ClInclude>
     <ClInclude Include="src\Chess\Models\ChessGameViewModel.h">
       <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\PawnJumpValidator.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Movement\ChessPieceMovementIterator.h">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Movement\KingMovementIterator.h">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\Movement\PawnMovementIterator.h">
+      <Filter>Chess\ChessPieces\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\EnPassantCache.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ChessPieces\ChessPieceTypes.h">
+      <Filter>Chess\ChessPieces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

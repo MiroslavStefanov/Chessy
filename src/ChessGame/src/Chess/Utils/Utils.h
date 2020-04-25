@@ -37,24 +37,6 @@ namespace chess
 		Colorless
 	};
 
-	enum class EChessPieceType
-	{
-		None = -1,
-		Pawn = 0,
-		Knight,
-		Bishop,
-		Rook,
-		Queen,
-		King,
-		COUNT
-	};
-
-	enum class EChessboardSide
-	{
-		Top,
-		Bottom
-	};
-
 	enum class ETurnState
 	{
 		StartGame,
@@ -65,15 +47,20 @@ namespace chess
 		Checkmate
 	};
 
-	const static std::int8_t sChessBoardSide = 8;
-	const static std::int8_t sChessBoardSize = sChessBoardSide * sChessBoardSide;
-
-	struct ChessPieceMove
+	class ChessPieceMove
 	{
-		EDirection direction = EDirection::NoDirection;
-		EMoveType type = EMoveType::Error;
+	public:
+		static const ChessPieceMove& Invalid();
 
-		ChessPieceMove(EDirection _direction, EMoveType _type) : direction(_direction), type(_type) { }
+		ChessPieceMove(EDirection direction, EMoveType type);
+		bool IsValid() const;
+
+		EDirection GetDirection() const;
+		EMoveType GetMoveType() const;
+
+	private:
+		EDirection m_direction = EDirection::NoDirection;
+		EMoveType m_type = EMoveType::Error;
 	};
 
 	struct TileHit
@@ -91,19 +78,14 @@ namespace chess
 
 		bool operator==(const Position& pos) const { return pos.row == row && pos.col == col; }
 
-		Position operator+(const Position& other)	{ return Position(row + other.row, col + other.col); }
+		Position operator+(const Position& other) const	{ return Position(row + other.row, col + other.col); }
+		Position operator-(const Position& other) const { return *this + (other * -1); }
+		Position operator*(int multiplier) const { Position ret(*this); ret *= multiplier; return ret; }
 		void operator+=(const Position& other) { *this = *this + other; }
+		void operator*=(int multiplier) { row *= multiplier; col *= multiplier; }
 
-		Position(int8_t index = 0) : row(index / sChessBoardSide), col(index % sChessBoardSide) { }
+		Position(int8_t index = 0) : row(index / CHESS_BOARD_SIDE), col(index % CHESS_BOARD_SIDE) { }
 		Position(int8_t _row, int8_t _col) : row(_row), col(_col) { }
-	};
-
-	struct Jump
-	{
-		Position sneakyTakePosition;
-		const ChessPiece* piece;
-
-		Jump(const Position& position = Position(0), const ChessPiece* chessPiece = nullptr) : sneakyTakePosition(position), piece(chessPiece) {}
 	};
 
 	class TilePosition
@@ -116,9 +98,8 @@ namespace chess
 		bool IsValid() const;
 
 
-		std::int8_t AsIndex() const { return position.row * sChessBoardSide + position.col; }
+		std::int8_t AsIndex() const { return position.row * CHESS_BOARD_SIDE + position.col; }
 		const Position& AsPosition() const { return position; }
-		Position& AsMutablePosition() { return position; }
 
 		bool operator==(const TilePosition& pos) const { return position == pos.position; }
 		bool operator!=(const TilePosition& pos) const { return !((*this) == pos); }

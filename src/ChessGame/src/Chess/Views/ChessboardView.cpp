@@ -45,9 +45,21 @@ namespace chess
 		{
 			RaiseEvent(ChessPiecePickedEvent(inputTile.Piece));
 		}
-		else if (m_model.PickedPieceId.IsValid())
+		else
 		{
-			RaiseEvent(ChessPieceMovedEvent(m_model.PickedPieceId, inputPosition));
+			const bool isPossibleMove = std::any_of(
+				m_model.PossibleMoves.cbegin(),
+				m_model.PossibleMoves.cend(),
+				[&inputPosition](const TilePositionViewModel& position) -> bool
+				{
+					return Position(position.Row, position.Column) == inputPosition.AsPosition();
+				}
+			);
+
+			if (isPossibleMove)
+			{
+				RaiseEvent(ChessPieceMovedEvent(m_model.PickedPieceId, inputPosition));
+			}
 		}
 	}
 

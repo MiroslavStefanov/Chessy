@@ -5,7 +5,6 @@
 #include "Views/ChessViews.h"
 #include "Controllers/ChessGameController.h"
 
-#include "ChessPieces/ChessPieceRegistry.h"
 #include "Services/BoardService.h"
 #include "Services/PlayerService.h"
 

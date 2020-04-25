@@ -54,4 +54,31 @@ namespace chess
 		const bool validColumn = position.col >= 0 && position.row < CHESS_BOARD_SIDE;
 		return validRow && validColumn;
 	}
+
+	const ChessPieceMove& ChessPieceMove::Invalid()
+	{
+		static const ChessPieceMove invalidMove(EDirection::NoDirection, EMoveType::Error);
+		return invalidMove;
+	}
+
+	ChessPieceMove::ChessPieceMove(EDirection direction, EMoveType type)
+		: m_direction(direction)
+		, m_type(type)
+	{
+	}
+
+	bool ChessPieceMove::IsValid() const
+	{
+		return m_direction != EDirection::NoDirection && m_type != EMoveType::Error;
+	}
+
+	EDirection ChessPieceMove::GetDirection() const
+	{
+		return m_direction;
+	}
+
+	EMoveType ChessPieceMove::GetMoveType() const
+	{
+		return m_type;
+	}
 }

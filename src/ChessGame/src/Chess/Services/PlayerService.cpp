@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PlayerService.h"
 #include "event/Event.h"
-#include "ChessPieces/ChessPieceRegistry.h"
 
 namespace chess
 {

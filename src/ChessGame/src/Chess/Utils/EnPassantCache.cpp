@@ -1,0 +1,36 @@
+#include "stdafx.h"
+#include "EnPassantCache.h"
+
+namespace chess
+{
+	//////////////////////////////////////////////////////////////////////////////////////////
+	bool EnPassantCache::IsValid() const
+	{
+		return m_pawnPosition.IsValid() && m_enPassantPosition.IsValid();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	const TilePosition& EnPassantCache::GetEnPassantPosition() const
+	{
+		return m_enPassantPosition;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	const TilePosition& EnPassantCache::GetPawnPosition() const
+	{
+		return m_pawnPosition;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void EnPassantCache::Set(const TilePosition& enPassantPosition, const TilePosition& pawnPosition)
+	{
+		m_enPassantPosition = enPassantPosition;
+		m_pawnPosition = pawnPosition;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void EnPassantCache::Reset()
+	{
+		Set(TilePosition::Invalid(), TilePosition::Invalid());
+	}
+}

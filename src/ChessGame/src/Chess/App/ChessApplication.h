@@ -17,7 +17,6 @@ namespace chess
 
 	private:
 		const ChessFactory& m_chessFactory;
-		mvc::DependencyWrapper<class ChessPieceRegistry> m_pieceRegistry;
 		mvc::DependencyWrapper<class BoardService> m_boardService;
 		mvc::DependencyWrapper<class PlayerService> m_playerService;
 	};

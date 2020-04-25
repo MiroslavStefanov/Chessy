@@ -16,6 +16,8 @@
 #include "Services/PlayerService.h"
 #include "Services/BoardService.h"
 
+#include "ChessPieces/Movement/ChessPieceMovementIterator.h"
+
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,18 +94,23 @@ namespace chess
 	{
 		auto playerService = GetDependency<PlayerService>();
 		auto boardService = GetDependency<BoardService>();
+
 		auto model = std::make_unique<ChessGameViewModel>();
 		model->TurnState = playerService->GetTurnState();
 		model->ActivePlayerColor = playerService->GetActivePlayerColor();
+		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService->GetBoardState(), playerService->GetPickedPiece());
 		model->PickedPieceId = playerService->GetPickedPiece();
 
 		if (model->PickedPieceId.IsValid())
 		{
-			auto possibleMoves = boardService->GetPossibleMovesForChessPiece(model->PickedPieceId);
-			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), &ModelMapper::MapTilePositionView);
+			auto possibleMovesIterator = boardService->CreatePossibleMovesIterator(model->PickedPieceId);
+			while (possibleMovesIterator && !possibleMovesIterator->IsDone())
+			{
+				model->PossibleMoves.push_back(ModelMapper::MapTilePositionView(possibleMovesIterator->GetTilePosition()));
+				possibleMovesIterator->Advance();
+			}
 		}
 
-		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService->GetBoardState(), playerService->GetPickedPiece());
 		return model;
 	}
 
@@ -124,6 +131,7 @@ namespace chess
 	bool ChessGameController::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
 	{
 		return GetDependency<PlayerService>()->GetPickedPiece() == chessPieceId
+			&& GetDependency<BoardService>()->IsChessPieceOnBoard(chessPieceId)
 			&& GetDependency<BoardService>()->CanMoveChessPieceToPosition(chessPieceId, position);
 	}
 }

@@ -1,89 +1,137 @@
 #include "stdafx.h"
 #include "BoardService.h"
 #include "ChessPieces/ChessPieceRegistry.h"
+#include "ChessPieces/ChessPiece.h"
+#include "ChessPieces/Movement/ChessPieceMovementIterator.h"
+#include "ChessPieces/Movement/PawnMovementIterator.h"
+#include "ChessPieces/Movement/KingMovementIterator.h"
+#include "Utils/PawnJumpValidator.h"
+#include "ChessPieces/ChessPieceTypes.h"
 
 namespace chess
 {
 	//////////////////////////////////////////////////////////////////////////////////////////
 	BoardService::BoardService()
 	{
-		InitializePieces();
+		m_piecesPositions = GetInitialChessPiecesPositions();
+		RefreshBoardState(m_piecesPositions);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	std::vector<ChessPieceId> BoardService::GetBoardState() const
+	const std::vector<ChessPieceId>& BoardService::GetBoardState() const
 	{
-		std::vector<ChessPieceId> board(CHESS_BOARD_SIDE*CHESS_BOARD_SIDE, ChessPieceId::Invalid());
-		for (const auto& [pieceId, tilePosition] : m_pieces)
+		return m_cachedBoardState;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	std::unique_ptr<ChessPieceMovementIterator> BoardService::CreatePossibleMovesIterator(ChessPieceId pieceId) const
+	{
+		assert(IsChessPieceOnBoard(pieceId));
+
+		const auto& piecePosition = m_piecesPositions.at(pieceId);
+		switch (pieceId.GetType())
 		{
-			if (tilePosition.IsValid())
-			{
-				board[tilePosition.AsIndex()] = pieceId;
-			}
+		case EChessPieceType::Pawn:
+			return std::make_unique<PawnMovementIterator>(m_cachedBoardState, piecePosition, m_enPassantCache.GetEnPassantPosition());
+		case EChessPieceType::King:
+			return std::make_unique<KingMovementIterator>(m_cachedBoardState, piecePosition);
+		default:
+			return std::make_unique<ChessPieceMovementIterator>(m_cachedBoardState, piecePosition);
 		}
-
-		return board;
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	std::list<TilePosition> BoardService::GetPossibleMovesForChessPiece(ChessPieceId pieceId) const
-	{
-		return std::list<TilePosition>(); //TODO: implement
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	bool BoardService::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
 	{
-		return true; //TODO: implement
+		auto possibleMovesIterator = CreatePossibleMovesIterator(chessPieceId);
+		assert(possibleMovesIterator);
+
+		while (!possibleMovesIterator->IsDone())
+		{
+			if (possibleMovesIterator->GetTilePosition() == position)
+			{
+				return true;
+			}
+
+			possibleMovesIterator->Advance();
+		}
+
+		return false;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	bool BoardService::IsChessPieceOnBoard(ChessPieceId chessPieceId) const
 	{
-		auto it = m_pieces.find(chessPieceId);
-		return it != m_pieces.end() && it->second.IsValid();
+		auto it = m_piecesPositions.find(chessPieceId);
+		return it != m_piecesPositions.end() && it->second.IsValid();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void BoardService::MoveChessPieceToPosition(ChessPieceId chessPiece, const TilePosition& position)
 	{
-		//TODO: implement more profound moves (castle, en passant)
-		auto pieceToRemove = GetChessPieceOnPosition(position);
-		m_pieces.at(chessPiece) = position;
-		if (pieceToRemove.IsValid())
+		assert(chessPiece.IsValid() && position.IsValid() && IsChessPieceOnBoard(chessPiece));
+
+		const bool isEnPassant = m_enPassantCache.IsValid() 
+			&& m_enPassantCache.GetEnPassantPosition() == position 
+			&& chessPiece.GetType() == EChessPieceType::Pawn;
+
+		RemoveChessPieceOnPosition(isEnPassant ? m_enPassantCache.GetPawnPosition() : position);
+
+		auto oldPosition = m_piecesPositions.at(chessPiece);
+		m_piecesPositions.at(chessPiece) = position;
+		RefreshBoardState(m_piecesPositions);
+
+		auto jumpValidator = PawnJumpValidator::CreateFromMovedChessPiece(chessPiece, oldPosition, position);
+		if (jumpValidator.IsValidJump())
 		{
-			assert(pieceToRemove.GetColor() != chessPiece.GetColor());
-			m_pieces.at(pieceToRemove) = TilePosition::Invalid();
+			m_enPassantCache.Set(jumpValidator.GetEnPassantPosition(), position);
+		}
+		else
+		{
+			m_enPassantCache.Reset();
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	void BoardService::InitializePieces()
+	BoardService::ChessPicesPositions BoardService::GetInitialChessPiecesPositions() const
 	{
-		auto pieceRegistry = GetDependency<ChessPieceRegistry>();
+		ChessPicesPositions result;
 		for (int pieceType = 0; pieceType < (int)EChessPieceType::COUNT; ++pieceType)
 		{
 			const EChessPieceType type = (EChessPieceType)pieceType;
-			const std::size_t instancesCount = pieceRegistry->GetInstancesCount(type);
+			const std::size_t instancesCount = ChessPieceRegistry::GetInstancesCount(type);
 			for (int instace = 0; instace < instancesCount; ++instace)
 			{
-				m_pieces.emplace(ChessPieceId(type, EColor::White, instace), pieceRegistry->GetInitialPosition(type, EColor::White, instace));
-				m_pieces.emplace(ChessPieceId(type, EColor::Black, instace), pieceRegistry->GetInitialPosition(type, EColor::Black, instace));
+				result.emplace(ChessPieceId(type, EColor::White, instace), ChessPieceRegistry::GetInitialPosition(type, EColor::White, instace));
+				result.emplace(ChessPieceId(type, EColor::Black, instace), ChessPieceRegistry::GetInitialPosition(type, EColor::Black, instace));
+			}
+		}
+
+		return result;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void BoardService::RefreshBoardState(const ChessPicesPositions& chessPiecesPositions)
+	{
+		std::vector<ChessPieceId> emptyBoard(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE, ChessPieceId::Invalid());
+		m_cachedBoardState.swap(emptyBoard);
+
+		for (const auto& [pieceId, tilePosition] : chessPiecesPositions)
+		{
+			if (tilePosition.IsValid())
+			{
+				m_cachedBoardState[tilePosition.AsIndex()] = pieceId;
 			}
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	ChessPieceId BoardService::GetChessPieceOnPosition(const TilePosition& position) const
+	void BoardService::RemoveChessPieceOnPosition(const TilePosition& position)
 	{
-		for (const auto& [pieceId, piecePosition] : m_pieces)
+		auto pieceToRemove = m_cachedBoardState[position.AsIndex()];
+		if (pieceToRemove.IsValid())
 		{
-			if (piecePosition == position)
-			{
-				return pieceId;
-			}
+			m_piecesPositions.at(pieceToRemove) = TilePosition::Invalid();
 		}
-
-		return ChessPieceId::Invalid();
 	}
 }

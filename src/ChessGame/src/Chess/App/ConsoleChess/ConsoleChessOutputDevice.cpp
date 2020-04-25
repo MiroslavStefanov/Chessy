@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ConsoleChessOutputDevice.h"
-#include "ChessPieces/ChessPieceRegistry.h"
 #include "Models/TilePositionViewModel.h"
 #include "Models/ChessTileViewModel.h"
 #include "ConsoleChessVisuals.h"
@@ -57,10 +56,9 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::RenderPickedChessPiece(ChessPieceId chessPieceId)
 	{
-		auto pieceRegistry = GetDependency<ChessPieceRegistry>();
 		m_frameBuffer
 			<< ConsoleChessVisuals::PICKED_PIECE_TEXT
-			<< pieceRegistry->GetVisualRepresentation(chessPieceId.GetType(), chessPieceId.GetColor())
+			<< ConsoleChessVisuals::GetChessPieceVisual(chessPieceId.GetType(), chessPieceId.GetColor())
 			<< std::endl;
 	}
 
@@ -155,8 +153,7 @@ namespace chess
 		}
 		else if (tile.Piece.IsValid())
 		{
-			auto pieceRegistry = GetDependency<ChessPieceRegistry>();
-			result = pieceRegistry->GetVisualRepresentation(tile.Piece.GetType(), tile.Piece.GetColor());
+			result = ConsoleChessVisuals::GetChessPieceVisual(tile.Piece.GetType(), tile.Piece.GetColor());
 		}
 
 		return result;

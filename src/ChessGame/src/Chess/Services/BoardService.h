@@ -1,18 +1,18 @@
 #pragma once
 #include "Utils/Utils.h"
-#include "dependency/Depender.h"
+#include "Utils/EnPassantCache.h"
 
 namespace chess
 {
-	class ChessPieceRegistry;
+	class ChessPieceMovementIterator;
 
-	class BoardService : public mvc::Depender<ChessPieceRegistry>
+	class BoardService
 	{
 	public:
 		BoardService();
 
-		std::vector<ChessPieceId>	GetBoardState() const;
-		std::list<TilePosition>		GetPossibleMovesForChessPiece(ChessPieceId pieceId) const;
+		const std::vector<ChessPieceId>& GetBoardState() const;
+		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
 
 		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
 		bool IsChessPieceOnBoard(ChessPieceId chessPieceId) const;
@@ -20,12 +20,17 @@ namespace chess
 		void MoveChessPieceToPosition(ChessPieceId chessPiece, const TilePosition& position);
 
 	private:
-		void InitializePieces();
-		ChessPieceId GetChessPieceOnPosition(const TilePosition& position) const;
+		using ChessPicesPositions = std::unordered_map<ChessPieceId, TilePosition, ChessPieceIdHash>;
 
 	private:
-		std::unordered_map<ChessPieceId, TilePosition, ChessPieceIdHash> m_pieces;
+		ChessPicesPositions GetInitialChessPiecesPositions() const;
+		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
+		void RemoveChessPieceOnPosition(const TilePosition& position);
 
+	private:
+		ChessPicesPositions m_piecesPositions;
+		std::vector<ChessPieceId> m_cachedBoardState;
+		EnPassantCache m_enPassantCache;
 	};
 }
 

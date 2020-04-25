@@ -1,12 +1,9 @@
 #pragma once
 #include "Utils/Utils.h"
-#include "dependency/Depender.h"
 
 namespace chess
 {
-	class ChessPieceRegistry;
-
-	class PlayerService : public mvc::Depender<ChessPieceRegistry>
+	class PlayerService
 	{
 	public:
 		PlayerService();

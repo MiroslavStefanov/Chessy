@@ -1,75 +1,115 @@
 #include "stdafx.h"
 #include "ChessPiece.h"
 
+#define BLACK_PAWN_POSITION(i) TilePosition(CHESS_BOARD_SIDE + i)
+#define WHITE_PAWN_POSITION(i) TilePosition((CHESS_BOARD_SIDE - 2) * CHESS_BOARD_SIDE + i)
+
+#define ITERATE_1(macro) macro(1), macro(0)
+#define ITERATE_2(macro) macro(2), ITERATE_1(macro)
+#define ITERATE_3(macro) macro(3), ITERATE_2(macro)
+#define ITERATE_4(macro) macro(4), ITERATE_3(macro)
+#define ITERATE_5(macro) macro(5), ITERATE_4(macro)
+#define ITERATE_6(macro) macro(6), ITERATE_5(macro)
+#define ITERATE_7(macro) macro(7), ITERATE_6(macro)
+
 namespace chess
 {
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//ChessPiece::ChessPiece(EChessPieceType type) :
-	//	m_type(type), m_ownerTilePosition(TilePosition(0)), m_hasMoved(false)
-	//{
+	namespace pieces
+	{
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		const ChessPiece Bishop =
+		{
+			2
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 2), TilePosition(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE - 3) }
+			, { TilePosition(2), TilePosition(CHESS_BOARD_SIDE - 3) }
+			, {
+				  { EDirection::ForwardLeft, EMoveType::Multiple }
+				, { EDirection::ForwardRight, EMoveType::Multiple }
+				, { EDirection::BackwardLeft, EMoveType::Multiple }
+				, { EDirection::BackwardRight, EMoveType::Multiple }
+			}
+		};
 
-	//}
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		const ChessPiece King =
+		{
+			1
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 3) }
+			, { TilePosition(3) }
+			, {
+				  { EDirection::ForwardLeft, EMoveType::KingMove }
+				, { EDirection::Forward, EMoveType::KingMove }
+				, { EDirection::ForwardRight, EMoveType::KingMove }
+				, { EDirection::Right, EMoveType::KingMove }
+				, { EDirection::BackwardRight, EMoveType::KingMove }
+				, { EDirection::Backward, EMoveType::KingMove }
+				, { EDirection::BackwardLeft, EMoveType::KingMove }
+				, { EDirection::Left, EMoveType::KingMove }
+				, { EDirection::NoDirection, EMoveType::Castle }
+			}
+		};
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//void ChessPiece::SetOwnerTilePosition(const TilePosition& ownerTilePosition, bool isInit)
-	//{
-	//	m_ownerTilePosition = ownerTilePosition;
-	//	if (isInit == false)
-	//	{
-	//		m_hasMoved = true;
-	//	}
-	//}
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		const ChessPiece Knight =
+		{
+			2
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 1), TilePosition(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE - 2) }
+			, { TilePosition(1), TilePosition(CHESS_BOARD_SIDE - 2) }
+			, {
+				  { EDirection::ForwardLeft, EMoveType::KnightMove }
+				, { EDirection::Forward, EMoveType::KnightMove }
+				, { EDirection::ForwardRight, EMoveType::KnightMove }
+				, { EDirection::Right, EMoveType::KnightMove }
+				, { EDirection::BackwardRight, EMoveType::KnightMove }
+				, { EDirection::Backward, EMoveType::KnightMove }
+				, { EDirection::BackwardLeft, EMoveType::KnightMove }
+				, { EDirection::Left, EMoveType::KnightMove }
+			}
+		};
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//void ChessPiece::SetPossibleGameMoves(const std::vector<TilePosition>& possibleGameMoves)
-	//{
-	//	m_possibleMoves.clear();
-	//	m_possibleMoves = possibleGameMoves;
-	//}
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		const ChessPiece Pawn =
+		{
+			8
+			, { ITERATE_7(WHITE_PAWN_POSITION) }
+			, { ITERATE_7(BLACK_PAWN_POSITION) }
+			, {
+				  { EDirection::Forward, EMoveType::PawnMove }
+				, { EDirection::Forward, EMoveType::PawnJump }
+				, { EDirection::ForwardLeft, EMoveType::PawnHit }
+				, { EDirection::ForwardRight, EMoveType::PawnHit }
+			}
+		};
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//EChessPieceType ChessPiece::GetType() const
-	//{
-	//	return m_type;
-	//}
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		const ChessPiece Queen =
+		{
+			1
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 4) }
+			, { TilePosition(4) }
+			, {
+				  { EDirection::Forward, EMoveType::Multiple }
+				, { EDirection::Backward, EMoveType::Multiple }
+				, { EDirection::Left, EMoveType::Multiple }
+				, { EDirection::Right, EMoveType::Multiple }
+				, { EDirection::ForwardLeft, EMoveType::Multiple }
+				, { EDirection::ForwardRight, EMoveType::Multiple }
+				, { EDirection::BackwardLeft, EMoveType::Multiple }
+				, { EDirection::BackwardRight, EMoveType::Multiple }
+			}
+		};
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//const std::vector<TilePosition>& ChessPiece::GetPossibleGameMoves() const
-	//{
-	//	return m_possibleMoves;
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//bool ChessPiece::IsPossibleMove(const TilePosition& position) const
-	//{
-	//	auto it = std::find_if(m_possibleMoves.begin(), m_possibleMoves.end(), [&position](const TilePosition& pos) {
-	//		return pos == position;
-	//		});
-	//	return it != m_possibleMoves.end();
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//const std::vector<ChessPieceMove>& ChessPiece::GetChessPieceMoves() const
-	//{
-	//	return m_chessMoves;
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//const TilePosition& ChessPiece::GetOnwerTilePosition() const
-	//{
-	//	return m_ownerTilePosition;
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//bool ChessPiece::HasMoved() const
-	//{
-	//	return m_hasMoved;
-	//}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//std::string ChessPiece::GetDrawString()
-	//{
-	//	char drawChar = '0' + (int)m_type;
-	//	return std::string() + drawChar;
-	//}
+		const ChessPiece Rook =
+		{
+			2
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1)),  TilePosition(CHESS_BOARD_SIDE * CHESS_BOARD_SIDE - 1) }
+			, { TilePosition(0), TilePosition(CHESS_BOARD_SIDE - 1) }
+			, {
+				  { EDirection::Forward, EMoveType::Multiple }
+				, { EDirection::Backward, EMoveType::Multiple }
+				, { EDirection::Left, EMoveType::Multiple }
+				, { EDirection::Right, EMoveType::Multiple }
+			}
+		};
+	}
 }

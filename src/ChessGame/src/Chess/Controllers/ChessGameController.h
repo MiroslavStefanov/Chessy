@@ -9,7 +9,7 @@ namespace chess
 	class BoardService;
 	class TilePosition;
 
-	class ChessGameController : public mvc::BaseController, public mvc::Depender<PlayerService, BoardService>
+	class ChessGameController : public mvc::BaseController, private mvc::Depender<PlayerService, BoardService>
 	{
 	protected:
 		void RegisterConsumers() override;
