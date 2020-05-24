@@ -123,6 +123,9 @@
     <ClCompile Include="src\Chess\Utils\EnPassantCache.cpp">
       <Filter>Chess\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Events\PawnPromotedEvent.cpp">
+      <Filter>Chess\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="src\Chess\ChessPieces\ChessPieceTypes.h">
       <Filter>Chess\ChessPieces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Events\PawnPromotedEvent.h">
+      <Filter>Chess\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

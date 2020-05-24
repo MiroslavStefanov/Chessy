@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerService.h"
-#include "event/Event.h"
+#include "ChessPieces/ChessPieceTypes.h"
+#include "Utils/Utils.h"
 
 namespace chess
 {
@@ -70,7 +71,19 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void PlayerService::OnChessPieceMovedToPosition(ChessPieceId pieceId, const TilePosition& position)
 	{
-		//TODO: implement pawn promotion
+		if (pieceId.GetType() == EChessPieceType::Pawn && IsPawnPromotionPosition(pieceId.GetColor(), position))
+		{
+			m_turnState = ETurnState::PawnPromotion;
+		}
+		else
+		{
+			EndTurn();
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::OnPawnPromoted()
+	{
 		EndTurn();
 	}
 

@@ -44,7 +44,8 @@ namespace chess
 		Select,
 		Unselect,
 		ErrorState,
-		Checkmate
+		Checkmate,
+		PawnPromotion
 	};
 
 	class ChessPieceMove
@@ -117,6 +118,7 @@ namespace chess
 	EDirection GetOpositeDirection(EDirection direction);
 	int8_t GetKingPosition(EColor color);
 	EColor GetAlternateColor(EColor color);
+	bool IsPawnPromotionPosition(EColor pawnColor, const TilePosition& position);
 
 	template<class Key, class Value, class KeyEqual = std::equal_to<Key>> 
 	class VectorMap

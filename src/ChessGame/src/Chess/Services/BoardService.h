@@ -15,9 +15,11 @@ namespace chess
 		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
 
 		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
+		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
 		bool IsChessPieceOnBoard(ChessPieceId chessPieceId) const;
 
 		void MoveChessPieceToPosition(ChessPieceId chessPiece, const TilePosition& position);
+		void PromotePawn(ChessPieceId pawnId, EChessPieceType promotionType);
 
 	private:
 		using ChessPicesPositions = std::unordered_map<ChessPieceId, TilePosition, ChessPieceIdHash>;

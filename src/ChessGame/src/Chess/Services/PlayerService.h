@@ -19,6 +19,7 @@ namespace chess
 		void PickChessPiece(ChessPieceId pieceId);
 		void DropChessPiece();
 		void OnChessPieceMovedToPosition(ChessPieceId pieceId, const TilePosition& position);
+		void OnPawnPromoted();
 
 	private:
 		void EndTurn();

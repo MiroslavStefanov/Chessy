@@ -34,6 +34,7 @@
     <ClCompile Include="src\Chess\Events\ChessPieceDroppedEvent.cpp" />
     <ClCompile Include="src\Chess\Events\ChessPieceMovedEvent.cpp" />
     <ClCompile Include="src\Chess\Events\ChessPiecePickedEvent.cpp" />
+    <ClCompile Include="src\Chess\Events\PawnPromotedEvent.cpp" />
     <ClCompile Include="src\Chess\ModelMapper.cpp" />
     <ClCompile Include="src\Chess\Models\ChessGameViewModel.cpp" />
     <ClCompile Include="src\Chess\Models\ChessTileViewModel.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="src\Chess\Events\ChessPieceMovedEvent.h" />
     <ClInclude Include="src\Chess\Events\ChessPiecePickedEvent.h" />
     <ClInclude Include="src\Chess\Events\EventTypes.h" />
+    <ClInclude Include="src\Chess\Events\PawnPromotedEvent.h" />
     <ClInclude Include="src\Chess\ModelMapper.h" />
     <ClInclude Include="src\Chess\Models\ChessGameViewModel.h" />
     <ClInclude Include="src\Chess\Models\ChessTileViewModel.h" />

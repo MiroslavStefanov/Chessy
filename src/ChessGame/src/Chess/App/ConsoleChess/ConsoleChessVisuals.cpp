@@ -70,12 +70,13 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	const VectorMap<ETurnState, const char*> ConsoleChessVisuals::TURN_STATE_NAME_TEXT_TABLE =
 	{
-		{ETurnState::StartGame	, "StartGame"},
-		{ETurnState::EndTurn	, "EndTurn"},
-		{ETurnState::Select		, "Select"},
-		{ETurnState::Unselect	, "Unselect"},
-		{ETurnState::ErrorState	, "ErrorState"},
-		{ETurnState::Checkmate	, "Checkmate"}
+		{ETurnState::StartGame, "StartGame"},
+		{ETurnState::EndTurn, "EndTurn"},
+		{ETurnState::Select, "Select"},
+		{ETurnState::Unselect, "Unselect"},
+		{ETurnState::ErrorState, "ErrorState"},
+		{ETurnState::Checkmate, "Checkmate"},
+		{ETurnState::PawnPromotion, "PawnPromotion"}
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

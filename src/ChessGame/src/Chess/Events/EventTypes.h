@@ -8,7 +8,8 @@ namespace chess
 		{
 			ChessPiecePicked,
 			ChessPieceDropped,
-			ChessPieceMoved
+			ChessPieceMoved,
+			PawnPromoted
 		};
 	}
 }

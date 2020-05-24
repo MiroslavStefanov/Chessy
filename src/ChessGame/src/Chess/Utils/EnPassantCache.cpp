@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EnPassantCache.h"
+#include "Utils/PawnJumpValidator.h"
 
 namespace chess
 {
@@ -19,6 +20,20 @@ namespace chess
 	const TilePosition& EnPassantCache::GetPawnPosition() const
 	{
 		return m_pawnPosition;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void EnPassantCache::UpdateOnChessPieceMove(ChessPieceId chessPieceId, const TilePosition& oldPosition, const TilePosition& newPosition)
+	{
+		auto jumpValidator = PawnJumpValidator::CreateFromMovedChessPiece(chessPieceId, oldPosition, newPosition);
+		if (jumpValidator.IsValidJump())
+		{
+			Set(jumpValidator.GetEnPassantPosition(), newPosition);
+		}
+		else
+		{
+			Reset();
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,10 @@ namespace chess
 		bool IsValid() const;
 		const TilePosition& GetEnPassantPosition() const;
 		const TilePosition& GetPawnPosition() const;
+
+		void UpdateOnChessPieceMove(ChessPieceId chessPieceId, const TilePosition& oldPosition, const TilePosition& newPosition);
+
+	private:
 		void Set(const TilePosition& enPassantPosition, const TilePosition& pawnPosition);
 		void Reset();
 

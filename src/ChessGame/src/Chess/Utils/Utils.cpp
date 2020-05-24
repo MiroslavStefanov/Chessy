@@ -47,11 +47,25 @@ namespace chess
 		}
 	}
 
+	bool IsPawnPromotionPosition(EColor pawnColor, const TilePosition& position)
+	{
+		switch (pawnColor)
+		{
+		case chess::EColor::White:
+			return position.AsPosition().row == 0;
+		case chess::EColor::Black:
+			return position.AsPosition().row == CHESS_BOARD_SIDE - 1;
+		case chess::EColor::Colorless:
+			assert(false);
+			return false;
+		}
+	}
+
 	bool TilePosition::IsValid() const
 	{
 		const auto position = AsPosition();
 		const bool validRow = position.row >= 0 && position.row < CHESS_BOARD_SIDE;
-		const bool validColumn = position.col >= 0 && position.row < CHESS_BOARD_SIDE;
+		const bool validColumn = position.col >= 0 && position.col < CHESS_BOARD_SIDE;
 		return validRow && validColumn;
 	}
 

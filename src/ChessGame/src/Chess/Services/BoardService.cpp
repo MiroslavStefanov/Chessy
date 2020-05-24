@@ -5,7 +5,6 @@
 #include "ChessPieces/Movement/ChessPieceMovementIterator.h"
 #include "ChessPieces/Movement/PawnMovementIterator.h"
 #include "ChessPieces/Movement/KingMovementIterator.h"
-#include "Utils/PawnJumpValidator.h"
 #include "ChessPieces/ChessPieceTypes.h"
 
 namespace chess
@@ -60,6 +59,23 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
+	bool BoardService::CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const
+	{
+		if (!pawnId.IsValid() || pawnId.GetType() != EChessPieceType::Pawn)
+		{
+			return false;
+		}
+
+		auto it = m_piecesPositions.find(pawnId);
+		if (it == m_piecesPositions.end())
+		{
+			return false;
+		}
+
+		return IsPawnPromotionPosition(pawnId.GetColor(), it->second);
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
 	bool BoardService::IsChessPieceOnBoard(ChessPieceId chessPieceId) const
 	{
 		auto it = m_piecesPositions.find(chessPieceId);
@@ -76,20 +92,29 @@ namespace chess
 			&& chessPiece.GetType() == EChessPieceType::Pawn;
 
 		RemoveChessPieceOnPosition(isEnPassant ? m_enPassantCache.GetPawnPosition() : position);
-
 		auto oldPosition = m_piecesPositions.at(chessPiece);
 		m_piecesPositions.at(chessPiece) = position;
-		RefreshBoardState(m_piecesPositions);
 
-		auto jumpValidator = PawnJumpValidator::CreateFromMovedChessPiece(chessPiece, oldPosition, position);
-		if (jumpValidator.IsValidJump())
-		{
-			m_enPassantCache.Set(jumpValidator.GetEnPassantPosition(), position);
-		}
-		else
-		{
-			m_enPassantCache.Reset();
-		}
+		RefreshBoardState(m_piecesPositions);
+		m_enPassantCache.UpdateOnChessPieceMove(chessPiece, oldPosition, position);
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void BoardService::PromotePawn(ChessPieceId pawnId, EChessPieceType promotionType)
+	{
+		assert(pawnId.GetType() == EChessPieceType::Pawn && promotionType != EChessPieceType::Pawn && promotionType != EChessPieceType::COUNT);
+
+		auto pawnPosition = m_piecesPositions.at(pawnId);
+		m_piecesPositions.erase(pawnId);
+		
+		ChessPieceId promotedPieceId = ChessPieceId(
+			promotionType,
+			pawnId.GetColor(),
+			ChessPieceRegistry::GetInstancesCount(promotionType) + pawnId.GetInstanceNumber()
+		);
+		m_piecesPositions.emplace(promotedPieceId, pawnPosition);
+
+		RefreshBoardState(m_piecesPositions);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
