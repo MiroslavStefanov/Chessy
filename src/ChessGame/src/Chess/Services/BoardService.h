@@ -1,6 +1,8 @@
 #pragma once
 #include "Utils/Utils.h"
 #include "Utils/EnPassantCache.h"
+#include "Utils/PlayerCastleCache.h"
+#include "Utils/PlayerPossibleMoves.h"
 
 namespace chess
 {
@@ -12,7 +14,7 @@ namespace chess
 		BoardService();
 
 		const std::vector<ChessPieceId>& GetBoardState() const;
-		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
+		const std::vector<TilePosition>& GetChessPiecePossibleMoves(ChessPieceId pieceId) const;
 
 		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
 		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
@@ -26,12 +28,23 @@ namespace chess
 
 	private:
 		ChessPicesPositions GetInitialChessPiecesPositions() const;
-		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
+		void OnBoardChanged(const ChessPicesPositions& newBoard);
+
+		EDirection GetCastleDirection(ChessPieceId movedPieceId, const TilePosition& movedToPosition) const;
+		void OnCastle(EColor playerColor, EDirection castleDirection);
+
+		TilePosition GetRemovalPosition(EChessPieceType movedPieceType, const TilePosition& movedToPosition) const;
 		void RemoveChessPieceOnPosition(const TilePosition& position);
+		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
+		void RecalculatePossibleMoves(const ChessPicesPositions& chessPiecesPositions);
+
+		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
 
 	private:
 		ChessPicesPositions m_piecesPositions;
 		std::vector<ChessPieceId> m_cachedBoardState;
+		VectorMap<EColor, PlayerPossibleMoves> m_playerPossibleMoves;
+		VectorMap<EColor, PlayerCastleCache> m_playerCastleCache;
 		EnPassantCache m_enPassantCache;
 	};
 }

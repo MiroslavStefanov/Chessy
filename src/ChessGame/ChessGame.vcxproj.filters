@@ -126,6 +126,12 @@
     <ClCompile Include="src\Chess\Events\PawnPromotedEvent.cpp">
       <Filter>Chess\Events</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Utils\PlayerCastleCache.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Utils\PlayerPossibleMoves.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
@@ -223,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="src\Chess\Events\PawnPromotedEvent.h">
       <Filter>Chess\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\PlayerCastleCache.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\PlayerPossibleMoves.h">
+      <Filter>Chess\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

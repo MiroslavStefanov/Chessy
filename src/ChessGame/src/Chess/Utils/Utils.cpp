@@ -25,7 +25,7 @@ namespace chess
 		case chess::EDirection::Left:
 			return EDirection::Right;
 		default:
-			return EDirection::NoDirection;
+			return EDirection::COUNT;
 		}
 	}
 
@@ -61,6 +61,11 @@ namespace chess
 		}
 	}
 
+	bool IsValidCastleDirection(EDirection direction)
+	{
+		return direction == EDirection::Left || direction == EDirection::Right;
+	}
+
 	bool TilePosition::IsValid() const
 	{
 		const auto position = AsPosition();
@@ -71,7 +76,7 @@ namespace chess
 
 	const ChessPieceMove& ChessPieceMove::Invalid()
 	{
-		static const ChessPieceMove invalidMove(EDirection::NoDirection, EMoveType::Error);
+		static const ChessPieceMove invalidMove(EDirection::COUNT, EMoveType::Error);
 		return invalidMove;
 	}
 
@@ -83,7 +88,7 @@ namespace chess
 
 	bool ChessPieceMove::IsValid() const
 	{
-		return m_direction != EDirection::NoDirection && m_type != EMoveType::Error;
+		return m_direction != EDirection::COUNT && m_type != EMoveType::Error;
 	}
 
 	EDirection ChessPieceMove::GetDirection() const

@@ -17,8 +17,6 @@
 #include "Services/PlayerService.h"
 #include "Services/BoardService.h"
 
-#include "ChessPieces/Movement/ChessPieceMovementIterator.h"
-
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,9 +34,8 @@ namespace chess
 	{
 		auto playerService = GetDependency<PlayerService>();
 		playerService->StartGame();
-		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
-		return modelAndView;
+
+		return CreateChessboardModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,9 +49,8 @@ namespace chess
 
 		auto playerService = GetDependency<PlayerService>();
 		playerService->PickChessPiece(event.PieceId);
-		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
-		return modelAndView;
+
+		return CreateChessboardModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,9 +64,8 @@ namespace chess
 
 		auto playerService = GetDependency<PlayerService>();
 		playerService->DropChessPiece();
-		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
-		return modelAndView;
+
+		return CreateChessboardModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,13 +77,13 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto playerService = GetDependency<PlayerService>();
 		auto boardService = GetDependency<BoardService>();
 		boardService->MoveChessPieceToPosition(event.PieceId, event.NewPosition);
+
+		auto playerService = GetDependency<PlayerService>();
 		playerService->OnChessPieceMovedToPosition(event.PieceId, event.NewPosition);
-		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
-		return modelAndView;
+
+		return CreateChessboardModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,10 +95,18 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto playerService = GetDependency<PlayerService>();
 		auto boardService = GetDependency<BoardService>();
 		boardService->PromotePawn(event.PawnId, event.PromotedToPiece);
+
+		auto playerService = GetDependency<PlayerService>();
 		playerService->OnPawnPromoted();
+
+		return CreateChessboardModelAndView();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	mvc::ModelAndView ChessGameController::CreateChessboardModelAndView() const
+	{
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
 		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
 		return modelAndView;
@@ -123,12 +126,8 @@ namespace chess
 
 		if (model->PickedPieceId.IsValid())
 		{
-			auto possibleMovesIterator = boardService->CreatePossibleMovesIterator(model->PickedPieceId);
-			while (possibleMovesIterator && !possibleMovesIterator->IsDone())
-			{
-				model->PossibleMoves.push_back(ModelMapper::MapTilePositionView(possibleMovesIterator->GetTilePosition()));
-				possibleMovesIterator->Advance();
-			}
+			const auto& possibleMoves = boardService->GetChessPiecePossibleMoves(model->PickedPieceId);
+			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), ModelMapper::MapTilePositionView);
 		}
 
 		return model;

@@ -45,7 +45,8 @@ namespace chess
 				, { EDirection::Backward, EMoveType::KingMove }
 				, { EDirection::BackwardLeft, EMoveType::KingMove }
 				, { EDirection::Left, EMoveType::KingMove }
-				, { EDirection::NoDirection, EMoveType::Castle }
+				, { EDirection::Left, EMoveType::Castle }
+				, { EDirection::Right, EMoveType::Castle }
 			}
 		};
 

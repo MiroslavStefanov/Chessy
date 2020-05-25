@@ -15,7 +15,7 @@ namespace chess
 		Backward,
 		BackwardLeft,
 		Left,
-		NoDirection
+		COUNT
 	};
 
 	enum class EMoveType
@@ -60,16 +60,8 @@ namespace chess
 		EMoveType GetMoveType() const;
 
 	private:
-		EDirection m_direction = EDirection::NoDirection;
+		EDirection m_direction = EDirection::COUNT;
 		EMoveType m_type = EMoveType::Error;
-	};
-
-	struct TileHit
-	{
-		EMoveType type;
-		const ChessPiece* hitter;
-
-		TileHit(EMoveType _type = EMoveType::Error, const ChessPiece* _hitter = nullptr) : type(_type), hitter(_hitter) { }
 	};
 
 	struct Position
@@ -78,6 +70,7 @@ namespace chess
 		std::int8_t col;
 
 		bool operator==(const Position& pos) const { return pos.row == row && pos.col == col; }
+		bool operator!=(const Position& pos) const { return !((*this) == pos); }
 
 		Position operator+(const Position& other) const	{ return Position(row + other.row, col + other.col); }
 		Position operator-(const Position& other) const { return *this + (other * -1); }
@@ -111,14 +104,24 @@ namespace chess
 
 	struct TilePositionHash
 	{
-		std::size_t operator()(const TilePosition& position) const { return position.AsIndex(); }
+		std::size_t operator()(const TilePosition& tilePosition) const 
+		{ 
+			if (!tilePosition.IsValid())
+			{
+				return std::numeric_limits<std::size_t>::max();
+			}
+
+			return tilePosition.AsIndex();
+		}
 	};
+	using TilePositionSet = std::unordered_set<TilePosition, TilePositionHash>;
 
 
 	EDirection GetOpositeDirection(EDirection direction);
 	int8_t GetKingPosition(EColor color);
 	EColor GetAlternateColor(EColor color);
 	bool IsPawnPromotionPosition(EColor pawnColor, const TilePosition& position);
+	bool IsValidCastleDirection(EDirection direction);
 
 	template<class Key, class Value, class KeyEqual = std::equal_to<Key>> 
 	class VectorMap
@@ -131,7 +134,25 @@ namespace chess
 
 		const Value& operator[](const Key& key) const
 		{
-			return std::find_if(m_entries.begin(), m_entries.end(), [&key](const value_type& val) {return KeyEqual{}(key, val.first); })->second;
+			return Find(key)->second;
+			return const_cast<VectorMap*>(this)->Find(key)->second;
+		}
+
+		Value& operator[](const Key& key)
+		{
+			auto constIterator = Find(key);
+			return const_cast<Value&>(constIterator->second);
+		}
+
+		bool HasKey(const Key& key) const
+		{
+			return Find(key) != m_entries.cend();
+		}
+
+	private:
+		typename std::vector<value_type>::const_iterator Find(const Key& key) const
+		{
+			return std::find_if(m_entries.cbegin(), m_entries.cend(), [&key](const value_type& val) {return KeyEqual{}(key, val.first); });
 		}
 
 	private:
