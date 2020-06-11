@@ -38,6 +38,15 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
+	PlayerCheckStateResolver BoardService::CreatePlayerCheckStateResolver(EColor playerColor) const
+	{
+		const auto kingId = m_playerCastleCache[playerColor].GetKingId();
+		const auto& kingPosition = m_piecesPositions.at(kingId);
+		const auto& possibleMoves = m_playerPossibleMoves[playerColor];
+		return PlayerCheckStateResolver(GetKingHitters(playerColor), kingPosition, possibleMoves.GetPlayerPossibleMoves());
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
 	bool BoardService::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
 	{
 		if (!chessPieceId.IsValid())
@@ -218,6 +227,29 @@ namespace chess
 				playerMoves.RemoveChessPiecePossibleMoves(chessPieceId);
 			}
 		}
+		
+		m_playerPossibleMoves[EColor::White].InvalidatePlayerPossibleMovesCache();
+		m_playerPossibleMoves[EColor::Black].InvalidatePlayerPossibleMovesCache();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	PlayerCheckStateResolver::KingHitters BoardService::GetKingHitters(EColor kingColor) const
+	{
+		const auto kingId = m_playerCastleCache[kingColor].GetKingId();
+		assert(IsChessPieceOnBoard(kingId));
+
+		const auto& kingPosition = m_piecesPositions.at(kingId);
+		const auto enemyPlayerColor = GetAlternateColor(kingColor);
+
+		const auto& kingHittersIds = m_playerPossibleMoves[enemyPlayerColor].GetTilePositionHitters(kingPosition);
+		PlayerCheckStateResolver::KingHitters kingHitters;
+		std::transform(kingHittersIds.cbegin(), kingHittersIds.cend(), std::back_inserter(kingHitters), [this](ChessPieceId hitterId)
+			{
+				return std::make_pair(hitterId, m_piecesPositions.at(hitterId));
+			}
+		);
+
+		return kingHitters;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

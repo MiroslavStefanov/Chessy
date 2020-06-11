@@ -3,6 +3,7 @@
 #include "Utils/EnPassantCache.h"
 #include "Utils/PlayerCastleCache.h"
 #include "Utils/PlayerPossibleMoves.h"
+#include "Utils/PlayerCheckStateResolver.h"
 
 namespace chess
 {
@@ -15,6 +16,7 @@ namespace chess
 
 		const std::vector<ChessPieceId>& GetBoardState() const;
 		const std::vector<TilePosition>& GetChessPiecePossibleMoves(ChessPieceId pieceId) const;
+		PlayerCheckStateResolver CreatePlayerCheckStateResolver(EColor playerColor) const;
 
 		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
 		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
@@ -38,6 +40,7 @@ namespace chess
 		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
 		void RecalculatePossibleMoves(const ChessPicesPositions& chessPiecesPositions);
 
+		PlayerCheckStateResolver::KingHitters GetKingHitters(EColor kingColor) const;
 		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
 
 	private:

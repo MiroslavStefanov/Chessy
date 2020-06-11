@@ -29,5 +29,7 @@ namespace chess
 		bool CanDropChessPiece() const;
 		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
 		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
+
+		void UpdateCheckState();
 	};
 }

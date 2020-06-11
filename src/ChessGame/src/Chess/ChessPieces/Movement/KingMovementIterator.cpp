@@ -7,7 +7,7 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	KingMovementIterator::KingMovementIterator(const std::vector<ChessPieceId>& boardState, const TilePosition& initialPosition, TilePositionSet&& checkPositions, const PlayerCastleCache& castleCache)
+	KingMovementIterator::KingMovementIterator(const std::vector<ChessPieceId>& boardState, const TilePosition& initialPosition, TilePositionSet checkPositions, const PlayerCastleCache& castleCache)
 		: ChessPieceMovementIterator(boardState, initialPosition)
 		, m_checkPositions(std::move(checkPositions))
 		, m_castleCache(castleCache)
@@ -28,13 +28,17 @@ namespace chess
 		}
 
 		const TilePosition nextPositionCandidate = CalculateMovePosition(move);
-		if (!nextPositionCandidate.IsValid() || m_boardState[nextPositionCandidate.AsIndex()].GetColor() == m_chessPieceId.GetColor())
+		const bool canMoveToNextPosition = nextPositionCandidate.IsValid()
+			&& m_boardState[nextPositionCandidate.AsIndex()].GetColor() != m_chessPieceId.GetColor();
+
+		if (!canMoveToNextPosition)
 		{
 			StartNextGameMove();
 			return;
 		}
 
-		if (m_checkPositions.find(nextPositionCandidate) != m_checkPositions.end())
+		const bool isNextPositionInCheck = m_checkPositions.find(nextPositionCandidate) != m_checkPositions.end();
+		if (isNextPositionInCheck)
 		{
 			StartNextGameMove();
 			return;
@@ -53,9 +57,12 @@ namespace chess
 			return;
 		}
 
-		const auto kingToRookDirection = m_castleCache.GetKingPositionForCastle(direction).AsPosition() - m_castleCache.GetRookPositionForCastle(direction).AsPosition();
+		const auto kingToRookDirection = m_castleCache.GetKingPositionForCastle(direction).AsPosition() - 
+			m_castleCache.GetRookPositionForCastle(direction).AsPosition();
+
 		const auto rookId = m_castleCache.GetRookIdForDirection(direction);
 		const auto rookInitialPosition = ChessPieceRegistry::GetInitialPosition(rookId.GetType(), rookId.GetColor(), rookId.GetInstanceNumber()).AsPosition();
+
 		for (Position intermediatePosition = m_initialPosition.AsPosition() + kingToRookDirection; intermediatePosition != rookInitialPosition; intermediatePosition += kingToRookDirection)
 		{
 			const TilePosition intermediateTile = TilePosition(intermediatePosition);

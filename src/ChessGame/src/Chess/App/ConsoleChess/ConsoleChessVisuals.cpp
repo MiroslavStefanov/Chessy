@@ -75,7 +75,7 @@ namespace chess
 		{ETurnState::Select, "Select"},
 		{ETurnState::Unselect, "Unselect"},
 		{ETurnState::ErrorState, "ErrorState"},
-		{ETurnState::Checkmate, "Checkmate"},
+		{ETurnState::GameOver, "GameOver"},
 		{ETurnState::PawnPromotion, "PawnPromotion"}
 	};
 

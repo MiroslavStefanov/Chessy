@@ -10,6 +10,10 @@ namespace chess
 		: m_pickedPiece(ChessPieceId::Invalid())
 		, m_activePlayerColor(EColor::Colorless)
 		, m_turnState(ETurnState::ErrorState)
+		, m_playerCheckStates{
+			{EColor::White, EPlayerCheckState::Clear},
+			{EColor::Black, EPlayerCheckState::Clear}
+		}
 	{
 	}
 
@@ -29,6 +33,20 @@ namespace chess
 	EColor PlayerService::GetActivePlayerColor() const
 	{
 		return m_activePlayerColor;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	bool PlayerService::IsActivePlayerInCheck() const
+	{
+		assert(m_playerCheckStates.HasKey(m_activePlayerColor));
+		return m_playerCheckStates[m_activePlayerColor] == EPlayerCheckState::Check;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	void PlayerService::SetActivePlayerCheckState(EPlayerCheckState checkState)
+	{
+		assert(m_playerCheckStates.HasKey(m_activePlayerColor));
+		m_playerCheckStates[m_activePlayerColor] = checkState;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

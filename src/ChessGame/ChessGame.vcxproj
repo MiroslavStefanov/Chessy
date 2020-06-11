@@ -44,6 +44,7 @@
     <ClCompile Include="src\Chess\stdafx.cpp" />
     <ClCompile Include="src\Chess\Utils\PlayerCastleCache.cpp" />
     <ClCompile Include="src\Chess\Utils\ChessPieceId.cpp" />
+    <ClCompile Include="src\Chess\Utils\PlayerCheckStateResolver.cpp" />
     <ClCompile Include="src\Chess\Utils\PlayerPossibleMoves.cpp" />
     <ClCompile Include="src\Chess\Utils\EnPassantCache.cpp" />
     <ClCompile Include="src\Chess\Utils\Logger.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="src\Chess\stdafx.h" />
     <ClInclude Include="src\Chess\Utils\PlayerCastleCache.h" />
     <ClInclude Include="src\Chess\Utils\ChessPieceId.h" />
+    <ClInclude Include="src\Chess\Utils\PlayerCheckStateResolver.h" />
     <ClInclude Include="src\Chess\Utils\PlayerPossibleMoves.h" />
     <ClInclude Include="src\Chess\Utils\EnPassantCache.h" />
     <ClInclude Include="src\Chess\Utils\Logger.h" />

@@ -132,6 +132,9 @@
     <ClCompile Include="src\Chess\Utils\PlayerPossibleMoves.cpp">
       <Filter>Chess\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Utils\PlayerCheckStateResolver.cpp">
+      <Filter>Chess\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
@@ -234,6 +237,9 @@
       <Filter>Chess\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Chess\Utils\PlayerPossibleMoves.h">
+      <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Utils\PlayerCheckStateResolver.h">
       <Filter>Chess\Utils</Filter>
     </ClInclude>
   </ItemGroup>

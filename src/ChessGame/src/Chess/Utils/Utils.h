@@ -44,8 +44,15 @@ namespace chess
 		Select,
 		Unselect,
 		ErrorState,
-		Checkmate,
+		GameOver,
 		PawnPromotion
+	};
+
+	enum class EPlayerCheckState
+	{
+		Clear,
+		Check,
+		Checkmate
 	};
 
 	class ChessPieceMove
@@ -75,6 +82,7 @@ namespace chess
 		Position operator+(const Position& other) const	{ return Position(row + other.row, col + other.col); }
 		Position operator-(const Position& other) const { return *this + (other * -1); }
 		Position operator*(int multiplier) const { Position ret(*this); ret *= multiplier; return ret; }
+		Position operator/(int delimiter) const { return Position(row / delimiter, col / delimiter); }
 		void operator+=(const Position& other) { *this = *this + other; }
 		void operator*=(int multiplier) { row *= multiplier; col *= multiplier; }
 
@@ -117,8 +125,6 @@ namespace chess
 	using TilePositionSet = std::unordered_set<TilePosition, TilePositionHash>;
 
 
-	EDirection GetOpositeDirection(EDirection direction);
-	int8_t GetKingPosition(EColor color);
 	EColor GetAlternateColor(EColor color);
 	bool IsPawnPromotionPosition(EColor pawnColor, const TilePosition& position);
 	bool IsValidCastleDirection(EDirection direction);

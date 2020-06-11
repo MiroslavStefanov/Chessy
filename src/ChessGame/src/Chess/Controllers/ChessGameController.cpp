@@ -83,6 +83,7 @@ namespace chess
 		auto playerService = GetDependency<PlayerService>();
 		playerService->OnChessPieceMovedToPosition(event.PieceId, event.NewPosition);
 
+		UpdateCheckState();
 		return CreateChessboardModelAndView();
 	}
 
@@ -101,6 +102,7 @@ namespace chess
 		auto playerService = GetDependency<PlayerService>();
 		playerService->OnPawnPromoted();
 
+		UpdateCheckState();
 		return CreateChessboardModelAndView();
 	}
 
@@ -158,5 +160,15 @@ namespace chess
 	{
 		return GetDependency<PlayerService>()->GetPickedPiece() == pawnId
 			&& GetDependency<BoardService>()->CanPromotePawn(pawnId, promotedToPiece);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ChessGameController::UpdateCheckState()
+	{
+		auto playerService = GetDependency<PlayerService>();
+		const auto activePlayerColor = playerService->GetActivePlayerColor();
+
+		auto playerCheckStateResolver = GetDependency<BoardService>()->CreatePlayerCheckStateResolver(activePlayerColor);
+		playerService->SetActivePlayerCheckState(playerCheckStateResolver.ResolvePlayerCheckState());
 	}
 }

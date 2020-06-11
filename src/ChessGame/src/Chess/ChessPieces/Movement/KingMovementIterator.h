@@ -7,7 +7,7 @@ namespace chess
 	class KingMovementIterator : public ChessPieceMovementIterator
 	{
 	public:
-		KingMovementIterator(const std::vector<ChessPieceId>& boardState, const TilePosition& initialPosition, TilePositionSet&& checkPositions, const PlayerCastleCache& castleCache);
+		KingMovementIterator(const std::vector<ChessPieceId>& boardState, const TilePosition& initialPosition, TilePositionSet checkPositions, const PlayerCastleCache& castleCache);
 
 	protected:
 		void TryMove(const ChessPieceMove& move) override;

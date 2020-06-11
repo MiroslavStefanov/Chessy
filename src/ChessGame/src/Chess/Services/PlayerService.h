@@ -12,6 +12,9 @@ namespace chess
 		ETurnState GetTurnState() const;
 		EColor GetActivePlayerColor() const;
 
+		bool IsActivePlayerInCheck() const;
+		void SetActivePlayerCheckState(EPlayerCheckState checkState);
+
 		bool CanPickChessPiece(ChessPieceId pieceId) const;
 		bool CanDropChessPiece() const;
 
@@ -28,6 +31,7 @@ namespace chess
 		ChessPieceId m_pickedPiece;
 		EColor m_activePlayerColor;
 		ETurnState m_turnState;
+		VectorMap<EColor, EPlayerCheckState> m_playerCheckStates;
 	};
 }
 
