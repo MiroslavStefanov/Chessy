@@ -80,6 +80,8 @@ namespace mvc
 		m_outputDevice->Update();
 		m_inputDevice->Update();
 		m_viewResolver->InputActiveView(m_inputDevice.get());
+
+		m_isRunning = !m_eventDispatcher->IsApplicationStopRequested();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

@@ -84,6 +84,9 @@
     <ClInclude Include="src\include\io\OutputDevice.h">
       <Filter>Source Files\io</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\event\ApplicationStopRequestedEvent.h">
+      <Filter>Source Files\event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventDispatcher.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="src\include\mvc\View.cpp">
       <Filter>Source Files\mvc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\event\ApplicationStopRequestedEvent.cpp">
+      <Filter>Source Files\event</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

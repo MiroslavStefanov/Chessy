@@ -24,6 +24,7 @@
     <ClInclude Include="src\include\dependency\DependencyWrapper.h" />
     <ClInclude Include="src\include\dependency\Depender.h" />
     <ClInclude Include="src\include\EventTypeInfo.h" />
+    <ClInclude Include="src\include\event\ApplicationStopRequestedEvent.h" />
     <ClInclude Include="src\include\event\ApplicationStartedEvent.h" />
     <ClInclude Include="src\include\event\Event.h" />
     <ClInclude Include="src\include\ForwardDeclarations.h" />
@@ -42,6 +43,7 @@
   <ItemGroup>
     <ClCompile Include="src\EventDispatcher.cpp" />
     <ClCompile Include="src\include\BaseApplication.cpp" />
+    <ClCompile Include="src\include\event\ApplicationStopRequestedEvent.cpp" />
     <ClCompile Include="src\include\event\ApplicationStartedEvent.cpp" />
     <ClCompile Include="src\include\mvc\BaseController.cpp" />
     <ClCompile Include="src\include\mvc\ModelAndView.cpp" />

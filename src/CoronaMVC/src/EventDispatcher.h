@@ -14,8 +14,15 @@ namespace mvc
 		void DispatchEvent(const Event& event);
 
 		void ProcessEventResponses(ViewResolver& viewResolver);
+		bool IsApplicationStopRequested() const;
+
 	private:
-		std::unordered_map<EventType, const BaseController*> m_controllers;
+		void CheckApplicationStopRequested(const Event& event);
+
+	private:
+		std::unordered_map<EventType, std::vector<const BaseController*>> m_controllers;
 		std::vector<ModelAndView> m_modelAndViewResponses;
+
+		bool m_applicationStopRequested = false;
 	};
 }

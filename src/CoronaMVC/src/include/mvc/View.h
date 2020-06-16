@@ -14,6 +14,6 @@ namespace mvc
 
 	protected:
 		void RaiseEvent(const Event& event);
-
+		void StopApplication();
 	};
 }

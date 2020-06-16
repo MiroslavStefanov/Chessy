@@ -4,6 +4,7 @@
 #include "mvc/ModelAndView.h"
 #include "event/Event.h"
 #include "event/ApplicationStartedEvent.h"
+#include "event/ApplicationStopRequestedEvent.h"
 
 namespace mvc
 {
@@ -34,10 +35,17 @@ namespace mvc
 	void BaseController::RegisterConsumers()
 	{
 		RegisterConsumer<ApplicationStartedEvent>(std::bind(&BaseController::OnApplicationStartedEvent, this, std::placeholders::_1));
+		RegisterConsumer<ApplicationStopRequestedEvent>(std::bind(&BaseController::OnApplicationStopRequestedEvent, this, std::placeholders::_1));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ModelAndView BaseController::OnApplicationStartedEvent(ApplicationStartedEvent const& event)
+	{
+		return ModelAndView::Invalid();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	ModelAndView BaseController::OnApplicationStopRequestedEvent(ApplicationStopRequestedEvent const& event)
 	{
 		return ModelAndView::Invalid();
 	}

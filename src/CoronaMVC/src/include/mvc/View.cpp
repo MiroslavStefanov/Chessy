@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "View.h"
 #include "EventDispatcher.h"
+#include "event/ApplicationStopRequestedEvent.h"
 
 namespace mvc
 {
@@ -15,5 +16,10 @@ namespace mvc
 	{
 		auto& eventDispatcher = GetDependency<EventDispatcher>();
 		eventDispatcher.DispatchEvent(event);
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void View::StopApplication()
+	{
+		RaiseEvent(ApplicationStopRequestedEvent());
 	}
 }

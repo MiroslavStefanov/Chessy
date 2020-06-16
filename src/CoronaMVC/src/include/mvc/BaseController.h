@@ -3,6 +3,7 @@
 namespace mvc
 {
 	class ApplicationStartedEvent;
+	class ApplicationStopRequestedEvent;
 
 	class BaseController
 	{
@@ -15,6 +16,7 @@ namespace mvc
 	protected:
 		virtual void			RegisterConsumers();
 		virtual ModelAndView	OnApplicationStartedEvent(ApplicationStartedEvent const& event);
+		virtual ModelAndView	OnApplicationStopRequestedEvent(ApplicationStopRequestedEvent const& event);
 
 		template<class EventClass> 
 		void RegisterConsumer(std::function<ModelAndView(const EventClass&)> consumer);

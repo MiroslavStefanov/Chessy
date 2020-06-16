@@ -5,6 +5,8 @@
 #include "event/Event.h"
 #include "ViewResolver.h"
 
+#include "SystemEventTypes.h"
+
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,13 +18,14 @@ namespace mvc
 			return;
 		}
 
-		const auto [iterator, success] = m_controllers.emplace(eventType, controller);
-		assert(success && "There already is a controller for this event type");
+		m_controllers[eventType].push_back(controller);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void EventDispatcher::DispatchEvent(const Event& event)
 	{
+		CheckApplicationStopRequested(event);
+
 		auto it = m_controllers.find(event.GetType());
 		if (it == m_controllers.end())
 		{
@@ -30,12 +33,16 @@ namespace mvc
 			return;
 		}
 
-		auto modelAndView = it->second->ConsumeEvent(event);
-		if (modelAndView.IsValid())
+		for (auto controller : it->second)
 		{
-			m_modelAndViewResponses.push_back(std::move(modelAndView));
+			auto modelAndView = controller->ConsumeEvent(event);
+			if (modelAndView.IsValid())
+			{
+				m_modelAndViewResponses.push_back(std::move(modelAndView));
+			}
 		}
 	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void EventDispatcher::ProcessEventResponses(ViewResolver& viewResolver)
 	{
@@ -45,5 +52,18 @@ namespace mvc
 		}
 
 		m_modelAndViewResponses.clear();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	bool EventDispatcher::IsApplicationStopRequested() const
+	{
+		return m_applicationStopRequested;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void EventDispatcher::CheckApplicationStopRequested(const Event& event)
+	{
+		static constexpr EventType STOP_EVENT_TYPE = event_types::ESystemEventType::ApplicationStopRequested;
+		m_applicationStopRequested = event.GetType() == STOP_EVENT_TYPE;
 	}
 }
