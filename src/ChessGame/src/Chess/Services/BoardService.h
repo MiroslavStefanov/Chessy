@@ -38,11 +38,13 @@ namespace chess
 		TilePosition GetRemovalPosition(EChessPieceType movedPieceType, const TilePosition& movedToPosition) const;
 		void RemoveChessPieceOnPosition(const TilePosition& position);
 		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
-		void RecalculatePossibleMoves(const ChessPicesPositions& chessPiecesPositions);
+		void RecalculatePossibleMoves(const ChessPicesPositions& chessPiecesPositions, EColor currentTurnColor);
 		PlayerCheckStateResolver CreatePlayerCheckStateResolver(EColor playerColor) const;
 
-		PlayerCheckStateResolver::KingHitters GetKingHitters(EColor kingColor) const;
 		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
+		void CalculateInitialPossibleMoves(const ChessPicesPositions& chessPiecesPositions);
+		void RecalculatePossibleMovesForPlayer(const ChessPicesPositions& chessPiecesPositions, EColor playerColor);
+		PlayerCheckStateResolver::KingHitters GetKingHitters(EColor kingColor) const;
 
 	private:
 		ChessPicesPositions m_piecesPositions;

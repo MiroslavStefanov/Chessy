@@ -26,14 +26,18 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void PlayerPossibleMoves::RemoveChessPiecePossibleMoves(ChessPieceId pieceId)
 	{
-		const auto& possibleMoves = m_possibleMoves.at(pieceId);
+		auto it = m_possibleMoves.find(pieceId);
+		if (it == m_possibleMoves.end())
+		{
+			return;
+		}
 
-		for (const auto& position : possibleMoves)
+		for (const auto& position : it->second)
 		{
 			RemoveHitterFromPosition(pieceId, position);
 		}
 
-		m_possibleMoves.erase(pieceId);
+		m_possibleMoves.erase(it);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
