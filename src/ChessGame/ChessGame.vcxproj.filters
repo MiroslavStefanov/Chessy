@@ -135,6 +135,12 @@
     <ClCompile Include="src\Chess\Utils\PlayerCheckStateResolver.cpp">
       <Filter>Chess\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Chess\Views\GameOverView.cpp">
+      <Filter>Chess\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\Models\GameOverViewModel.cpp">
+      <Filter>Chess\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Chess\ChessPieces\ChessPiece.h">
@@ -241,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="src\Chess\Utils\PlayerCheckStateResolver.h">
       <Filter>Chess\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Views\GameOverView.h">
+      <Filter>Chess\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\Models\GameOverViewModel.h">
+      <Filter>Chess\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

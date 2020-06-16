@@ -21,8 +21,9 @@ namespace chess
 		mvc::ModelAndView OnChessPieceMovedEvent(class ChessPieceMovedEvent const& event);
 		mvc::ModelAndView OnPawnPromotedEvent(class PawnPromotedEvent const& event);
 
-		mvc::ModelAndView CreateChessboardModelAndView() const;
+		mvc::ModelAndView CreateModelAndView() const;
 		std::unique_ptr<mvc::Model> CreateChessGameViewModel() const;
+		std::unique_ptr<mvc::Model> CreateGameOverViewModel() const;
 
 	private:
 		bool CanPickChessPiece(ChessPieceId chessPieceId) const;
@@ -31,5 +32,8 @@ namespace chess
 		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
 
 		void UpdateCheckState();
+
+	private:
+		bool m_gameOver = false;
 	};
 }

@@ -86,6 +86,16 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderGameOverMessage(EColor winnerColor)
+	{
+		m_frameBuffer
+			<< ConsoleChessVisuals::TURN_STATE_NAME_TEXT_TABLE[ETurnState::GameOver]
+			<< std::endl
+			<< ConsoleChessVisuals::WINNER_TEXT
+			<< ConsoleChessVisuals::DEFAULT_PLAYER_NAME_TEXT_TABLE[winnerColor];
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::ClearConsole()
 	{
 		system("CLS");

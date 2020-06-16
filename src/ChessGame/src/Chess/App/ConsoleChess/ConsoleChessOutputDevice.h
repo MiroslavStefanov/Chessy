@@ -20,6 +20,7 @@ namespace chess
 		void RenderPickedChessPiece(ChessPieceId chessPieceId);
 		void RenderActivePlayer(EColor activePlayerColor, bool isInCheck);
 		void RenderTurnState(ETurnState turnState);
+		void RenderGameOverMessage(EColor winnerColor);
 
 	private:
 		void ClearConsole();

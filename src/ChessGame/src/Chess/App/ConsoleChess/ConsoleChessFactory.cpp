@@ -4,6 +4,7 @@
 #include "ConsoleChessOutputDevice.h"
 #include "Views/ChessViews.h"
 #include "Views/ChessboardView.h"
+#include "Views/GameOverView.h"
 
 namespace chess
 {
@@ -26,6 +27,10 @@ namespace chess
 		{
 		case ViewType::Chessboard:
 			return std::make_unique<ChessboardView>();
+		case ViewType::GameOver:
+			return std::make_unique<GameOverView>();
+		default:
+			assert(!"Unknown view type in ConsoleChessFactory::CreateView");
 		}
 
 		return nullptr;

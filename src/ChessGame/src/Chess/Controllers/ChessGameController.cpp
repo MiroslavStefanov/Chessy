@@ -14,6 +14,7 @@
 
 #include "Views/ChessViews.h"
 #include "Models/ChessGameViewModel.h"
+#include "Models/GameOverViewModel.h"
 #include "Services/PlayerService.h"
 #include "Services/BoardService.h"
 
@@ -33,7 +34,7 @@ namespace chess
 	mvc::ModelAndView ChessGameController::OnApplicationStartedEvent(mvc::ApplicationStartedEvent const& event)
 	{
 		GetDependency<PlayerService>().StartGame();
-		return CreateChessboardModelAndView();
+		return CreateModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +47,7 @@ namespace chess
 		}
 
 		GetDependency<PlayerService>().PickChessPiece(event.PieceId);
-		return CreateChessboardModelAndView();
+		return CreateModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ namespace chess
 		}
 
 		GetDependency<PlayerService>().DropChessPiece();
-		return CreateChessboardModelAndView();
+		return CreateModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +76,7 @@ namespace chess
 		GetDependency<PlayerService>().OnChessPieceMovedToPosition(event.PieceId, event.NewPosition);
 
 		UpdateCheckState();
-		return CreateChessboardModelAndView();
+		return CreateModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,12 +92,19 @@ namespace chess
 		GetDependency<PlayerService>().OnPawnPromoted();
 
 		UpdateCheckState();
-		return CreateChessboardModelAndView();
+		return CreateModelAndView();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	mvc::ModelAndView ChessGameController::CreateChessboardModelAndView() const
+	mvc::ModelAndView ChessGameController::CreateModelAndView() const
 	{
+		if (m_gameOver)
+		{
+			mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::GameOver));
+			modelAndView.SetModel(STRING_ID("playerTurn"), CreateGameOverViewModel());
+			return modelAndView;
+		}
+
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
 		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
 		return modelAndView;
@@ -121,6 +129,19 @@ namespace chess
 			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), ModelMapper::MapTilePositionView);
 		}
 
+		return model;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	std::unique_ptr<mvc::Model> ChessGameController::CreateGameOverViewModel() const
+	{
+		auto& playerService = GetDependency<PlayerService>();
+		auto& boardService = GetDependency<BoardService>();
+
+		auto model = std::make_unique<GameOverViewModel>();
+		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService.GetBoardState(), playerService.GetPickedPiece());
+		model->WinnerColor = playerService.GetActivePlayerColor();
+		
 		return model;
 	}
 
@@ -161,5 +182,6 @@ namespace chess
 		const auto activePlayerColor = playerService.GetActivePlayerColor();
 
 		playerService.SetActivePlayerCheckState(GetDependency<BoardService>().GetPlayerCheckState(activePlayerColor));
+		m_gameOver = playerService.GetTurnState() == ETurnState::GameOver;
 	}
 }

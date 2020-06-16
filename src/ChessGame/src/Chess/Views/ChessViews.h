@@ -5,6 +5,7 @@ namespace chess
 	enum class ViewType
 	{
 		Chessboard = 0,
+		GameOver = 1,
 		COUNT
 	};
 
