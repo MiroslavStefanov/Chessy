@@ -8,7 +8,7 @@ namespace mvc
 	public:
 		View();
 		virtual ~View();
-		virtual void SetModel(StringId modelId, std::unique_ptr<Model>&& model) = 0;
+		virtual void SetModel(std::unique_ptr<Model>&& model) = 0;
 		virtual void ProcessInput(InputDevice* inputDevice) = 0;
 		virtual void ProcessOutput(OutputDevice* outputDevice) = 0;
 

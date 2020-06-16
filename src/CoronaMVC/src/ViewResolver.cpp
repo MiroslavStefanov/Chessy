@@ -35,7 +35,7 @@ namespace mvc
 		auto it = m_views.find(m_activeViewId);
 		if (it != m_views.end() && modelAndView.HasModel())
 		{
-			it->second->SetModel(modelAndView.GetModelId(), modelAndView.ReleaseModel());
+			it->second->SetModel(modelAndView.ReleaseModel());
 		}
 	}
 

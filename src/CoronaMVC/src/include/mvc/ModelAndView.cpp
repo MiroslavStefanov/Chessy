@@ -18,14 +18,13 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	ModelAndView::ModelAndView(ViewId viewId) : m_viewId(viewId), m_modelId(STRING_ID(""))
+	ModelAndView::ModelAndView(ViewId viewId) : m_viewId(viewId)
 	{
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ModelAndView::ModelAndView(ModelAndView&& other) noexcept
 		: m_viewId(other.m_viewId)
-		, m_modelId(other.m_modelId)
 		, m_model(std::move(other.m_model))
 	{
 	}
@@ -49,21 +48,14 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	StringId ModelAndView::GetModelId() const
-	{
-		return m_modelId;
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
 	std::unique_ptr<Model> ModelAndView::ReleaseModel()
 	{
 		return std::move(m_model);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ModelAndView::SetModel(StringId modelId, std::unique_ptr<Model>&& dataModel)
+	void ModelAndView::SetModel(std::unique_ptr<Model>&& dataModel)
 	{
-		m_modelId = modelId;
 		m_model = std::move(dataModel);
 	}
 }

@@ -13,7 +13,7 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ChessboardView::SetModel(StringId modelId, std::unique_ptr<mvc::Model>&& model)
+	void ChessboardView::SetModel(std::unique_ptr<mvc::Model>&& model)
 	{
 		std::unique_ptr<mvc::Model> localModel = std::move(model);
 		auto chessGameViewModel = dynamic_cast<ChessGameViewModel*>(localModel.get());

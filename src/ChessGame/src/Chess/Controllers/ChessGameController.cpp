@@ -101,12 +101,12 @@ namespace chess
 		if (m_gameOver)
 		{
 			mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::GameOver));
-			modelAndView.SetModel(STRING_ID("playerTurn"), CreateGameOverViewModel());
+			modelAndView.SetModel(CreateGameOverViewModel());
 			return modelAndView;
 		}
 
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(STRING_ID("playerTurn"), CreateChessGameViewModel());
+		modelAndView.SetModel(CreateChessGameViewModel());
 		return modelAndView;
 	}
 

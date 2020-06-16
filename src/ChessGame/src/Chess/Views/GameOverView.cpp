@@ -6,7 +6,7 @@
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void GameOverView::SetModel(StringId modelId, std::unique_ptr<mvc::Model>&& model)
+	void GameOverView::SetModel(std::unique_ptr<mvc::Model>&& model)
 	{
 		std::unique_ptr<mvc::Model> localModel = std::move(model);
 		auto gameOverViewModel = dynamic_cast<GameOverViewModel*>(localModel.get());
