@@ -16,7 +16,8 @@ namespace mvc
 			return;
 		}
 
-		m_controllers[eventType].push_back(controller);
+		const auto [iterator, success] = m_controllers.emplace(eventType, controller);
+		assert(success && "There already is a controller for this event type");
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,13 +30,10 @@ namespace mvc
 			return;
 		}
 
-		for (auto controller : it->second)
+		auto modelAndView = it->second->ConsumeEvent(event);
+		if (modelAndView.IsValid())
 		{
-			auto modelAndView = controller->ConsumeEvent(event);
-			if (modelAndView.IsValid())
-			{
-				m_modelAndViewResponses.push_back(std::move(modelAndView));
-			}
+			m_modelAndViewResponses.push_back(std::move(modelAndView));
 		}
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////

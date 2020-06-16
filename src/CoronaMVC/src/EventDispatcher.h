@@ -15,7 +15,7 @@ namespace mvc
 
 		void ProcessEventResponses(ViewResolver& viewResolver);
 	private:
-		std::unordered_map<EventType, std::vector<const BaseController*>> m_controllers;
+		std::unordered_map<EventType, const BaseController*> m_controllers;
 		std::vector<ModelAndView> m_modelAndViewResponses;
 	};
 }
