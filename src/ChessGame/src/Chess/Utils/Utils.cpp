@@ -11,7 +11,7 @@ namespace chess
 		case EColor::White:
 			return EColor::Black;
 		case EColor::Black:
-		return EColor::White;
+			return EColor::White;
 		default:
 			return EColor::Colorless;
 		}
@@ -25,7 +25,7 @@ namespace chess
 			return position.AsPosition().row == 0;
 		case chess::EColor::Black:
 			return position.AsPosition().row == CHESS_BOARD_SIDE - 1;
-		case chess::EColor::Colorless:
+		default:
 			assert(false);
 			return false;
 		}

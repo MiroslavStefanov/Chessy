@@ -5,15 +5,36 @@
 namespace chess
 {
 	//////////////////////////////////////////////////////////////////////////////////////////
-	PlayerCheckStateResolver::PlayerCheckStateResolver(KingHitters&& kingHitters, const TilePosition& kingPosition, TilePositionSet playerReachablePositions)
-		: m_kingHitters(std::move(kingHitters))
-		, m_kingPosition(kingPosition)
-		, m_reachablePositions(std::move(playerReachablePositions))
+	PlayerCheckStateResolver::PlayerCheckStateResolver()
+		: m_kingPosition(TilePosition::Invalid())
+		, m_resolvedState(EPlayerCheckState::Clear)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	EPlayerCheckState PlayerCheckStateResolver::ResolvePlayerCheckState() const
+	PlayerCheckStateResolver::PlayerCheckStateResolver(KingHitters&& kingHitters, const TilePosition& kingPosition, TilePositionSet playerReachablePositions)
+		: m_kingHitters(std::move(kingHitters))
+		, m_kingPosition(kingPosition)
+		, m_reachablePositions(std::move(playerReachablePositions))
+		, m_resolvedState(EPlayerCheckState::Clear)
+	{
+		m_resolvedState = ResolvePlayerCheckState();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	EPlayerCheckState PlayerCheckStateResolver::GetCheckState() const
+	{
+		return m_resolvedState;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	const PlayerCheckStateResolver::ShelterPositions& PlayerCheckStateResolver::GetShelterPositions() const
+	{
+		return m_shelterPositions;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	EPlayerCheckState PlayerCheckStateResolver::ResolvePlayerCheckState()
 	{
 		static constexpr std::size_t CHECKMATE_MIN_HITTERS_COUNT = 2;
 		static constexpr EChessPieceType CHECKMATE_NO_SHELTER_PIECE_TYPE = EChessPieceType::Knight;
@@ -42,7 +63,8 @@ namespace chess
 			return EPlayerCheckState::Checkmate;
 		}
 
-		if (CanFindShelter(hitter.second))
+		m_shelterPositions = FindSheltersForPositions(hitter.second);
+		if (!m_shelterPositions.empty())
 		{
 			return EPlayerCheckState::Check;
 		}
@@ -51,13 +73,15 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	bool PlayerCheckStateResolver::CanFindShelter(const TilePosition& hitterTilePosition) const
+	PlayerCheckStateResolver::ShelterPositions PlayerCheckStateResolver::FindSheltersForPositions(const TilePosition& hitterTilePosition) const
 	{
+		ShelterPositions result;
+
 		const auto kingPosition = m_kingPosition.AsPosition();
 		const auto hitterPosition = hitterTilePosition.AsPosition();
 
 		const auto deltaTiles = kingPosition - hitterPosition;
-		assert(deltaTiles.col == 0 || deltaTiles.row == 0 || deltaTiles.col == deltaTiles.row);
+		assert(deltaTiles.col == 0 || deltaTiles.row == 0 || std::abs(deltaTiles.col) == std::abs(deltaTiles.row));
 
 		const int deltaFactor = std::max(deltaTiles.col, deltaTiles.row);
 		const auto shelterCheckDirection = deltaTiles / deltaFactor;
@@ -67,11 +91,10 @@ namespace chess
 			const bool isReachablePosition = m_reachablePositions.find(shelterCheckPosition) != m_reachablePositions.end();
 			if (isReachablePosition)
 			{
-				return true;
+				result.emplace(shelterCheckPosition);
 			}
 		}
 
-		return false;
+		return result;
 	}
-
 }

@@ -15,10 +15,10 @@ namespace chess
 		BoardService();
 
 		const std::vector<ChessPieceId>& GetBoardState() const;
-		const std::vector<TilePosition>& GetChessPiecePossibleMoves(ChessPieceId pieceId) const;
-		PlayerCheckStateResolver CreatePlayerCheckStateResolver(EColor playerColor) const;
+		std::vector<TilePosition> GetChessPiecePossibleMoves(ChessPieceId pieceId, bool isPlayerInCheck) const;
+		EPlayerCheckState GetPlayerCheckState(EColor playerColor) const;
 
-		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
+		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position, bool isPlayerInCheck) const;
 		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
 		bool IsChessPieceOnBoard(ChessPieceId chessPieceId) const;
 
@@ -30,7 +30,7 @@ namespace chess
 
 	private:
 		ChessPicesPositions GetInitialChessPiecesPositions() const;
-		void OnBoardChanged(const ChessPicesPositions& newBoard);
+		void OnBoardChanged(const ChessPicesPositions& newBoard, EColor currentTurnColor);
 
 		EDirection GetCastleDirection(ChessPieceId movedPieceId, const TilePosition& movedToPosition) const;
 		void OnCastle(EColor playerColor, EDirection castleDirection);
@@ -39,6 +39,7 @@ namespace chess
 		void RemoveChessPieceOnPosition(const TilePosition& position);
 		void RefreshBoardState(const ChessPicesPositions& chessPiecesPositions);
 		void RecalculatePossibleMoves(const ChessPicesPositions& chessPiecesPositions);
+		PlayerCheckStateResolver CreatePlayerCheckStateResolver(EColor playerColor) const;
 
 		PlayerCheckStateResolver::KingHitters GetKingHitters(EColor kingColor) const;
 		std::unique_ptr<ChessPieceMovementIterator> CreatePossibleMovesIterator(ChessPieceId pieceId) const;
@@ -48,6 +49,7 @@ namespace chess
 		std::vector<ChessPieceId> m_cachedBoardState;
 		VectorMap<EColor, PlayerPossibleMoves> m_playerPossibleMoves;
 		VectorMap<EColor, PlayerCastleCache> m_playerCastleCache;
+		VectorMap<EColor, PlayerCheckStateResolver> m_playerCheckStateResolvers;
 		EnPassantCache m_enPassantCache;
 	};
 }

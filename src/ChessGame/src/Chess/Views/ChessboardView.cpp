@@ -93,7 +93,7 @@ namespace chess
 			return;
 
 		device->RenderChessboard(m_model.ChessBoard);
-		device->RenderActivePlayer(m_model.ActivePlayerColor);
+		device->RenderActivePlayer(m_model.ActivePlayerColor, m_model.ActivePlayerInCheck);
 		if (m_model.PickedPieceId.IsValid())
 		{
 			device->RenderPickedChessPiece(m_model.PickedPieceId);

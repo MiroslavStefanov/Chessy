@@ -19,9 +19,13 @@ namespace chess
 			{EColor::White, PlayerCastleCache(EColor::White)}, 
 			{EColor::Black, PlayerCastleCache(EColor::Black)} 
 		}
+		, m_playerCheckStateResolvers{
+			{EColor::White, PlayerCheckStateResolver()},
+			{EColor::Black, PlayerCheckStateResolver()}
+		}
 	{
 		m_piecesPositions = GetInitialChessPiecesPositions();
-		OnBoardChanged(m_piecesPositions);
+		OnBoardChanged(m_piecesPositions, EColor::Colorless);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -31,10 +35,30 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	const std::vector<TilePosition>& BoardService::GetChessPiecePossibleMoves(ChessPieceId pieceId) const
+	std::vector<TilePosition> BoardService::GetChessPiecePossibleMoves(ChessPieceId pieceId, bool isPlayerInCheck) const
 	{
 		assert(pieceId.IsValid());
-		return m_playerPossibleMoves[pieceId.GetColor()].GetChessPiecePossibleMoves(pieceId);
+
+		auto possibleMoves = m_playerPossibleMoves[pieceId.GetColor()].GetChessPiecePossibleMoves(pieceId);
+		if (isPlayerInCheck)
+		{
+			const auto& shelterPositions = m_playerCheckStateResolvers[pieceId.GetColor()].GetShelterPositions();
+			auto newEndIt = std::remove_if(possibleMoves.begin(), possibleMoves.end(), [&shelterPositions](const TilePosition& position)
+				{
+					return shelterPositions.find(position) == shelterPositions.end();
+				}
+			);
+			possibleMoves.erase(newEndIt, possibleMoves.end());
+		}
+
+		return possibleMoves;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	EPlayerCheckState BoardService::GetPlayerCheckState(EColor playerColor) const
+	{
+		assert(m_playerCheckStateResolvers.HasKey(playerColor));
+		return m_playerCheckStateResolvers[playerColor].GetCheckState();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -47,14 +71,14 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	bool BoardService::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
+	bool BoardService::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position, bool isPlayerInCheck) const
 	{
 		if (!chessPieceId.IsValid())
 		{
 			return false;
 		}
 
-		const auto& possibleMoves = GetChessPiecePossibleMoves(chessPieceId);
+		const auto& possibleMoves = GetChessPiecePossibleMoves(chessPieceId, isPlayerInCheck);
 		return std::find(possibleMoves.cbegin(), possibleMoves.cend(), position) != possibleMoves.cend();
 	}
 
@@ -85,8 +109,6 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void BoardService::MoveChessPieceToPosition(ChessPieceId chessPiece, const TilePosition& position)
 	{
-		assert(CanMoveChessPieceToPosition(chessPiece, position));
-
 		const auto castleDirection = GetCastleDirection(chessPiece, position);
 		if (IsValidCastleDirection(castleDirection))
 		{
@@ -102,7 +124,7 @@ namespace chess
 		m_enPassantCache.UpdateOnChessPieceMove(chessPiece, oldPosition, position);
 		m_playerCastleCache[chessPiece.GetColor()].UpdateOnChessPieceMove(chessPiece);
 
-		OnBoardChanged(m_piecesPositions);
+		OnBoardChanged(m_piecesPositions, chessPiece.GetColor());
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +142,7 @@ namespace chess
 		m_piecesPositions.erase(pawnId);
 		m_piecesPositions.emplace(promotedPieceId, pawnPosition);
 
-		OnBoardChanged(m_piecesPositions);
+		OnBoardChanged(m_piecesPositions, pawnId.GetColor());
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -142,10 +164,16 @@ namespace chess
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	void BoardService::OnBoardChanged(const ChessPicesPositions& newBoard)
+	void BoardService::OnBoardChanged(const ChessPicesPositions& newBoard, EColor currentTurnColor)
 	{
 		RefreshBoardState(newBoard);
 		RecalculatePossibleMoves(newBoard);
+
+		const auto enemyColor = GetAlternateColor(currentTurnColor);
+		if (m_playerCheckStateResolvers.HasKey(enemyColor))
+		{
+			m_playerCheckStateResolvers[enemyColor] = CreatePlayerCheckStateResolver(enemyColor);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

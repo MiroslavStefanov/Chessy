@@ -12,5 +12,6 @@ namespace chess
 		ChessPieceId PickedPieceId = ChessPieceId::Invalid();
 		std::vector<TilePositionViewModel> PossibleMoves;
 		std::vector<ChessTileViewModel> ChessBoard;
+		bool ActivePlayerInCheck = false;
 	};
 }

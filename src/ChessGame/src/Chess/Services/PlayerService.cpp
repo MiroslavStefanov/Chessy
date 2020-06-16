@@ -47,6 +47,11 @@ namespace chess
 	{
 		assert(m_playerCheckStates.HasKey(m_activePlayerColor));
 		m_playerCheckStates[m_activePlayerColor] = checkState;
+		
+		if (checkState == EPlayerCheckState::Checkmate)
+		{
+			m_turnState = ETurnState::GameOver;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

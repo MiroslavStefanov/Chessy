@@ -30,6 +30,7 @@ namespace chess
 		static constexpr auto ACTIVE_PLAYER_TEXT = "Player to play: ";
 		static constexpr auto PICKED_PIECE_TEXT = "Picked chess piece: ";
 		static constexpr auto POSSIBLE_MOVES_TEXT = "Can Move To: ";
+		static constexpr auto PLAYER_IN_CHECK_TEXT = " You are in check!";
 
 		static const VectorMap<EColor, char> TILE_COLOR_VISUAL_TABLE;
 		static const VectorMap<EColor, const char*> DEFAULT_PLAYER_NAME_TEXT_TABLE;

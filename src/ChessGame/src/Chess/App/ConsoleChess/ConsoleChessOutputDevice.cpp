@@ -63,12 +63,18 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	void ConsoleChessOutputDevice::RenderActivePlayer(EColor activePlayerColor)
+	void ConsoleChessOutputDevice::RenderActivePlayer(EColor activePlayerColor, bool isInCheck)
 	{
 		m_frameBuffer
 			<< ConsoleChessVisuals::ACTIVE_PLAYER_TEXT
-			<< ConsoleChessVisuals::DEFAULT_PLAYER_NAME_TEXT_TABLE[activePlayerColor]
-			<< std::endl;
+			<< ConsoleChessVisuals::DEFAULT_PLAYER_NAME_TEXT_TABLE[activePlayerColor];
+
+		if (isInCheck)
+		{
+			m_frameBuffer << ConsoleChessVisuals::PLAYER_IN_CHECK_TEXT;
+		}
+
+		m_frameBuffer << std::endl;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

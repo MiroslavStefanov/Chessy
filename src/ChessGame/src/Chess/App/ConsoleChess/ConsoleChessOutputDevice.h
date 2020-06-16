@@ -18,7 +18,7 @@ namespace chess
 		void RenderChessboard(const std::vector<ChessTileViewModel>& chessBoardTiles);
 		void RenderPossibleMoves(const std::vector<TilePositionViewModel>& possibleMoves);
 		void RenderPickedChessPiece(ChessPieceId chessPieceId);
-		void RenderActivePlayer(EColor activePlayerColor);
+		void RenderActivePlayer(EColor activePlayerColor, bool isInCheck);
 		void RenderTurnState(ETurnState turnState);
 
 	private:

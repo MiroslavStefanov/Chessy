@@ -113,10 +113,11 @@ namespace chess
 		model->ActivePlayerColor = playerService.GetActivePlayerColor();
 		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService.GetBoardState(), playerService.GetPickedPiece());
 		model->PickedPieceId = playerService.GetPickedPiece();
+		model->ActivePlayerInCheck = playerService.IsActivePlayerInCheck();
 
 		if (model->PickedPieceId.IsValid())
 		{
-			const auto& possibleMoves = boardService.GetChessPiecePossibleMoves(model->PickedPieceId);
+			const auto& possibleMoves = boardService.GetChessPiecePossibleMoves(model->PickedPieceId, playerService.IsActivePlayerInCheck());
 			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), ModelMapper::MapTilePositionView);
 		}
 
@@ -144,7 +145,7 @@ namespace chess
 
 		return playerService.GetPickedPiece() == chessPieceId
 			&& boardService.IsChessPieceOnBoard(chessPieceId)
-			&& boardService.CanMoveChessPieceToPosition(chessPieceId, position);
+			&& boardService.CanMoveChessPieceToPosition(chessPieceId, position, playerService.IsActivePlayerInCheck());
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessGameController::CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const
@@ -156,10 +157,9 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ChessGameController::UpdateCheckState()
 	{
-		auto playerService = GetDependency<PlayerService>();
-		const auto activePlayerColor = playerService->GetActivePlayerColor();
+		auto& playerService = GetDependency<PlayerService>();
+		const auto activePlayerColor = playerService.GetActivePlayerColor();
 
-		auto playerCheckStateResolver = GetDependency<BoardService>()->CreatePlayerCheckStateResolver(activePlayerColor);
-		playerService->SetActivePlayerCheckState(playerCheckStateResolver.ResolvePlayerCheckState());
+		playerService.SetActivePlayerCheckState(GetDependency<BoardService>().GetPlayerCheckState(activePlayerColor));
 	}
 }
