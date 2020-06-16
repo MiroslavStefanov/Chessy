@@ -32,9 +32,7 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView ChessGameController::OnApplicationStartedEvent(mvc::ApplicationStartedEvent const& event)
 	{
-		auto playerService = GetDependency<PlayerService>();
-		playerService->StartGame();
-
+		GetDependency<PlayerService>().StartGame();
 		return CreateChessboardModelAndView();
 	}
 
@@ -47,9 +45,7 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto playerService = GetDependency<PlayerService>();
-		playerService->PickChessPiece(event.PieceId);
-
+		GetDependency<PlayerService>().PickChessPiece(event.PieceId);
 		return CreateChessboardModelAndView();
 	}
 
@@ -62,9 +58,7 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto playerService = GetDependency<PlayerService>();
-		playerService->DropChessPiece();
-
+		GetDependency<PlayerService>().DropChessPiece();
 		return CreateChessboardModelAndView();
 	}
 
@@ -77,11 +71,8 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto boardService = GetDependency<BoardService>();
-		boardService->MoveChessPieceToPosition(event.PieceId, event.NewPosition);
-
-		auto playerService = GetDependency<PlayerService>();
-		playerService->OnChessPieceMovedToPosition(event.PieceId, event.NewPosition);
+		GetDependency<BoardService>().MoveChessPieceToPosition(event.PieceId, event.NewPosition);
+		GetDependency<PlayerService>().OnChessPieceMovedToPosition(event.PieceId, event.NewPosition);
 
 		return CreateChessboardModelAndView();
 	}
@@ -95,11 +86,8 @@ namespace chess
 			return mvc::ModelAndView::Invalid();
 		}
 
-		auto boardService = GetDependency<BoardService>();
-		boardService->PromotePawn(event.PawnId, event.PromotedToPiece);
-
-		auto playerService = GetDependency<PlayerService>();
-		playerService->OnPawnPromoted();
+		GetDependency<BoardService>().PromotePawn(event.PawnId, event.PromotedToPiece);
+		GetDependency<PlayerService>().OnPawnPromoted();
 
 		return CreateChessboardModelAndView();
 	}
@@ -115,18 +103,18 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	std::unique_ptr<mvc::Model> ChessGameController::CreateChessGameViewModel() const
 	{
-		auto playerService = GetDependency<PlayerService>();
-		auto boardService = GetDependency<BoardService>();
+		auto& playerService = GetDependency<PlayerService>();
+		auto& boardService = GetDependency<BoardService>();
 
 		auto model = std::make_unique<ChessGameViewModel>();
-		model->TurnState = playerService->GetTurnState();
-		model->ActivePlayerColor = playerService->GetActivePlayerColor();
-		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService->GetBoardState(), playerService->GetPickedPiece());
-		model->PickedPieceId = playerService->GetPickedPiece();
+		model->TurnState = playerService.GetTurnState();
+		model->ActivePlayerColor = playerService.GetActivePlayerColor();
+		model->ChessBoard = ModelMapper::ProduceChessBoardView(boardService.GetBoardState(), playerService.GetPickedPiece());
+		model->PickedPieceId = playerService.GetPickedPiece();
 
 		if (model->PickedPieceId.IsValid())
 		{
-			const auto& possibleMoves = boardService->GetChessPiecePossibleMoves(model->PickedPieceId);
+			const auto& possibleMoves = boardService.GetChessPiecePossibleMoves(model->PickedPieceId);
 			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), ModelMapper::MapTilePositionView);
 		}
 
@@ -136,27 +124,30 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessGameController::CanPickChessPiece(ChessPieceId chessPieceId) const
 	{
-		return GetDependency<PlayerService>()->CanPickChessPiece(chessPieceId)
-			&& GetDependency<BoardService>()->IsChessPieceOnBoard(chessPieceId);
+		return GetDependency<PlayerService>().CanPickChessPiece(chessPieceId)
+			&& GetDependency<BoardService>().IsChessPieceOnBoard(chessPieceId);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessGameController::CanDropChessPiece() const
 	{
-		return GetDependency<PlayerService>()->CanDropChessPiece();
+		return GetDependency<PlayerService>().CanDropChessPiece();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessGameController::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
 	{
-		return GetDependency<PlayerService>()->GetPickedPiece() == chessPieceId
-			&& GetDependency<BoardService>()->IsChessPieceOnBoard(chessPieceId)
-			&& GetDependency<BoardService>()->CanMoveChessPieceToPosition(chessPieceId, position);
+		auto& playerService = GetDependency<PlayerService>();
+		auto& boardService = GetDependency<BoardService>();
+
+		return playerService.GetPickedPiece() == chessPieceId
+			&& boardService.IsChessPieceOnBoard(chessPieceId)
+			&& boardService.CanMoveChessPieceToPosition(chessPieceId, position);
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	bool ChessGameController::CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const
 	{
-		return GetDependency<PlayerService>()->GetPickedPiece() == pawnId
-			&& GetDependency<BoardService>()->CanPromotePawn(pawnId, promotedToPiece);
+		return GetDependency<PlayerService>().GetPickedPiece() == pawnId
+			&& GetDependency<BoardService>().CanPromotePawn(pawnId, promotedToPiece);
 	}
 }

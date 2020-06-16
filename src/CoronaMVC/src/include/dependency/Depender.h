@@ -35,7 +35,10 @@ namespace mvc
 
 	protected:
 		template<class T>
-		T* GetDependency() const { return std::get<T*>(m_dependencies); }
+		T& GetDependency() { return *std::get<T*>(m_dependencies); }
+
+		template<class T>
+		const T& GetDependency() const { return *std::get<T*>(m_dependencies); }
 
 	private:
 		void InitializeDependencies()

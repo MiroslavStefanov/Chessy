@@ -13,13 +13,7 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void View::RaiseEvent(const Event& event)
 	{
-		auto eventDispatcher = GetDependency<EventDispatcher>();
-		if (!eventDispatcher)
-		{
-			assert(false);
-			return;
-		}
-
-		eventDispatcher->DispatchEvent(event);
+		auto& eventDispatcher = GetDependency<EventDispatcher>();
+		eventDispatcher.DispatchEvent(event);
 	}
 }
