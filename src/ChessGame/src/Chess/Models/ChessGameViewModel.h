@@ -5,14 +5,11 @@
 
 namespace chess
 {
-	enum class ETurnState;
-	enum class EColor;
-
 	struct ChessGameViewModel : public mvc::Model
 	{
-		ETurnState TurnState;
-		EColor ActivePlayerColor;
-		ChessPieceId PickedPieceId;
+		ETurnState TurnState = ETurnState::ErrorState;
+		EColor ActivePlayerColor = EColor::Colorless;
+		ChessPieceId PickedPieceId = ChessPieceId::Invalid();
 		std::vector<TilePositionViewModel> PossibleMoves;
 		std::vector<ChessTileViewModel> ChessBoard;
 	};
