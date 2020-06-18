@@ -107,8 +107,9 @@ namespace mvc
 	{
 		assert(m_modelAndViewResponses.size() == 1);
 		auto& errorModelAndView = m_modelAndViewResponses.front();
-		if (errorModelAndView.HasModel()) //there already is a error view model
+		if (errorModelAndView.HasModel()) //there already is an error view model
 		{
+			m_lastError.clear();
 			return;
 		}
 
