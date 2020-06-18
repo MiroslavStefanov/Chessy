@@ -23,9 +23,13 @@ namespace mvc
 		void SetInputDevice(std::unique_ptr<InputDevice>&& inputDevice);
 		void SetOutputDevice(std::unique_ptr<OutputDevice>&& outputDevice);
 
+		void SetLogFileName(const std::string& fileName);
+
 	private:
 		void SimulateFrame();
 		void RegisterControllersForEvents();
+
+		std::string GetDefaultLogFileName();
 
 	private:
 		DependencyWrapper<class EventDispatcher> m_eventDispatcher;
@@ -35,7 +39,5 @@ namespace mvc
 		std::unique_ptr<OutputDevice> m_outputDevice;
 
 		std::vector<std::unique_ptr<BaseController>> m_controllers;
-
-		bool m_isRunning;
 	};
 }

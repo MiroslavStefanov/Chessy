@@ -15,6 +15,9 @@ namespace mvc
 		void RenderActiveView(OutputDevice* outputDevice) const;
 
 	private:
+		View& GetViewById(ViewId id) const;
+
+	private:
 		std::unordered_map<ViewId, std::unique_ptr<View>, ViewIdHash> m_views;
 		ViewId m_activeViewId;
 	};

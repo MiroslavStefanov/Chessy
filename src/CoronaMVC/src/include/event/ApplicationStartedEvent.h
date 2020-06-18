@@ -8,6 +8,7 @@ namespace mvc
 	{
 	public:
 		EventType GetType() const override;
+		std::string GetDescription() const override;
 	};
 }
 

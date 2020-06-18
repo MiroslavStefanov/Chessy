@@ -8,5 +8,11 @@ namespace mvc
 	{
 		return EventTypeInfo<ApplicationStopRequestedEvent>::Type;
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	std::string ApplicationStopRequestedEvent::GetDescription() const
+	{
+		return "Application stop was requested";
+	}
 }
 

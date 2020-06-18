@@ -8,13 +8,12 @@
 #include "mvc/View.h"
 #include "mvc/ModelAndView.h"
 #include "event/ApplicationStartedEvent.h"
+#include "logger/FileLoggerImpl.h"
 
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	BaseApplication::BaseApplication() : m_isRunning(false)
-	{
-	}
+	BaseApplication::BaseApplication() = default;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	BaseApplication::~BaseApplication() = default;
@@ -22,7 +21,11 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::Initialize()
 	{
+		SetLogFileName(GetDefaultLogFileName());
+
 		PreInitialize();
+		assert(m_inputDevice);
+		assert(m_outputDevice);
 
 		PopulateControllers();
 		RegisterControllersForEvents();
@@ -33,11 +36,8 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::Start()
 	{
-		m_isRunning = true;
-
 		m_eventDispatcher->DispatchEvent(ApplicationStartedEvent());
-
-		while (m_isRunning)
+		while(!m_eventDispatcher->IsApplicationStopRequested())
 		{
 			SimulateFrame();
 		}
@@ -73,6 +73,12 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetLogFileName(const std::string& fileName)
+	{
+		Logger::Get().SetLoggerImplementation(std::make_unique<FileLoggerImpl>(fileName));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::SimulateFrame()
 	{
 		m_eventDispatcher->ProcessEventResponses(*m_viewResolver);
@@ -80,8 +86,6 @@ namespace mvc
 		m_outputDevice->Update();
 		m_inputDevice->Update();
 		m_viewResolver->InputActiveView(m_inputDevice.get());
-
-		m_isRunning = !m_eventDispatcher->IsApplicationStopRequested();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,5 +95,14 @@ namespace mvc
 		{
 			controller->RegisterToDispatcher(*m_eventDispatcher);
 		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	std::string BaseApplication::GetDefaultLogFileName()
+	{
+		static constexpr auto DEFAULT_LOG_FILE_NAME_PREFIX = "Log_";
+
+		const std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		return std::string(DEFAULT_LOG_FILE_NAME_PREFIX) + std::to_string(now);
 	}
 }

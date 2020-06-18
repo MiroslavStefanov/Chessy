@@ -13,7 +13,6 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	ModelAndView ModelAndView::CreateFromViewId(ViewId viewId)
 	{
-		assert(viewId.IsValid());
 		return ModelAndView(viewId);
 	}
 

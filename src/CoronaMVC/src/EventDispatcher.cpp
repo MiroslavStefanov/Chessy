@@ -6,18 +6,14 @@
 #include "ViewResolver.h"
 
 #include "SystemEventTypes.h"
+#include "exception/UnhandledEventException.h"
 
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void EventDispatcher::AddController(EventType eventType, const BaseController* controller)
 	{
-		if (!controller)
-		{
-			assert(false);
-			return;
-		}
-
+		LogReturnIf(!controller && "Null controller added for event type {0}", VOID_RETURN, eventType);
 		m_controllers[eventType].push_back(controller);
 	}
 
@@ -29,8 +25,7 @@ namespace mvc
 		auto it = m_controllers.find(event.GetType());
 		if (it == m_controllers.end())
 		{
-			assert(false);
-			return;
+			throw UnhandledEventExcpetion(event);
 		}
 
 		for (auto controller : it->second)

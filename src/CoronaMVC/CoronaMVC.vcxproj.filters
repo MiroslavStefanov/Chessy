@@ -25,6 +25,12 @@
     <Filter Include="Source Files\dependency">
       <UniqueIdentifier>{6875c6bd-a3aa-43c0-bded-59498cbd03df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\logger">
+      <UniqueIdentifier>{274fc271-ec23-473e-b0ab-29b7322704c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\exception">
+      <UniqueIdentifier>{3c99cbff-d4c5-4180-80dc-12520521db31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EventDispatcher.h">
@@ -87,6 +93,30 @@
     <ClInclude Include="src\include\event\ApplicationStopRequestedEvent.h">
       <Filter>Source Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\logger\Logger.h">
+      <Filter>Source Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\logger\LogSeverity.h">
+      <Filter>Source Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\logger\FileLoggerImpl.h">
+      <Filter>Source Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\logger\LoggerImpl.h">
+      <Filter>Source Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\exception\LoggedException.h">
+      <Filter>Source Files\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\exception\UnhandledEventException.h">
+      <Filter>Source Files\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\exception\ViewNotFoundException.h">
+      <Filter>Source Files\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\exception\FileException.h">
+      <Filter>Source Files\exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventDispatcher.cpp">
@@ -118,6 +148,24 @@
     </ClCompile>
     <ClCompile Include="src\include\event\ApplicationStopRequestedEvent.cpp">
       <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\logger\Logger.cpp">
+      <Filter>Source Files\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\logger\FileLoggerImpl.cpp">
+      <Filter>Source Files\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\exception\LoggedException.cpp">
+      <Filter>Source Files\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\exception\UnhandledEventException.cpp">
+      <Filter>Source Files\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\exception\ViewNotFoundException.cpp">
+      <Filter>Source Files\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\include\exception\FileException.cpp">
+      <Filter>Source Files\exception</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -33,11 +33,7 @@ namespace mvc
 	template<class T>
 	inline T* DependencyWrapper<T>::GetDependency()
 	{
-		if (!s_instance)
-		{
-			assert(false);
-			return nullptr;
-		}
+		assert(s_instance);
 
 		auto& dependency = **s_instance;
 		return &dependency;
@@ -47,12 +43,7 @@ namespace mvc
 	template<class T>
 	inline DependencyWrapper<T>::DependencyWrapper() : m_initializationRequested(false)
 	{
-		if (s_instance)
-		{
-			assert(false);
-			return;
-		}
-
+		LogReturnIf(s_instance && "Duplicated dependency", VOID_RETURN);
 		s_instance = this;
 	}
 
@@ -84,13 +75,11 @@ namespace mvc
 	template<class T>
 	inline void DependencyWrapper<T>::Initialize()
 	{
-		if (m_initializationRequested)
-		{
-			assert(false); //Assert if dependency cycle exists
-			return;
-		}
+		assert(!m_initializationRequested); //Assert that there are no cyclic dependencies
 
 		m_initializationRequested = true;
 		m_dependency = std::make_unique<T>();
+
+		m_initializationRequested = false;
 	}
 }

@@ -6,6 +6,8 @@
 #include "io/InputDevice.h"
 #include "io/OutputDevice.h"
 
+#include "exception/ViewNotFoundException.h"
+
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,11 +21,8 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::AddView(ViewId viewId, std::unique_ptr<View>&& view)
 	{
-		if (!viewId.IsValid() || !view)
-		{
-			assert(false);
-			return;
-		}
+		LogReturnIf(!viewId.IsValid() && "Trying to add view invalid id", VOID_RETURN);
+		LogReturnIf(!view && "Trying to add null view with id {0}", VOID_RETURN, (int)viewId);
 
 		m_views[viewId] = std::move(view);
 	}
@@ -31,32 +30,40 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::UpdateView(ModelAndView modelAndView)
 	{
+		auto& view = GetViewById(modelAndView.GetViewId());
+
 		m_activeViewId = modelAndView.GetViewId();
-		auto it = m_views.find(m_activeViewId);
-		if (it != m_views.end() && modelAndView.HasModel())
+		if (modelAndView.HasModel())
 		{
-			it->second->SetModel(modelAndView.ReleaseModel());
+			view.SetModel(modelAndView.ReleaseModel());
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::InputActiveView(InputDevice* inputDevice) const
 	{
-		auto it = m_views.find(m_activeViewId);
-		if (it != m_views.end())
-		{
-			it->second->ProcessInput(inputDevice);
-		}
+		auto& view = GetViewById(m_activeViewId);
+		view.ProcessInput(inputDevice);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ViewResolver::RenderActiveView(OutputDevice* outputDevice) const
 	{
-		auto it = m_views.find(m_activeViewId);
-		if (it != m_views.end())
+		auto& view = GetViewById(m_activeViewId);
+		view.ProcessOutput(outputDevice);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	View& ViewResolver::GetViewById(ViewId id) const
+	{
+		auto it = m_views.find(id);
+		if (it == m_views.end())
 		{
-			it->second->ProcessOutput(outputDevice);
+			throw ViewNotFoundException(id);
 		}
+
+		assert(it->second);
+		return *it->second;
 	}
 
 }

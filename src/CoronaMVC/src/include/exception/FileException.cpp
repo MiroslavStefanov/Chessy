@@ -1,18 +1,18 @@
 #include "pch.h"
-#include "ApplicationStartedEvent.h"
+#include "FileException.h"
 
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	EventType ApplicationStartedEvent::GetType() const
+	FileException::FileException(std::string message) noexcept
+		: LoggedException(message)
 	{
-		return EventTypeInfo<ApplicationStartedEvent>::Type;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::string ApplicationStartedEvent::GetDescription() const
+	FileException::FileException(std::string message, const std::exception& cause) noexcept
+		: LoggedException(message, cause)
 	{
-		return "Application started";
 	}
-}
 
+}

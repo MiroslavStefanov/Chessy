@@ -16,7 +16,7 @@ namespace mvc
 
 		operator int() const;
 	private:
-		int value;
+		int m_value;
 	};
 
 	struct ViewIdHash

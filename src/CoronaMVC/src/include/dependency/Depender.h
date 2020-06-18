@@ -8,9 +8,9 @@ namespace mvc
 	{
 	private:
 		template<class T>
-		static void InitializeDependency(T*& dependency)
+		static T* GetInitializedDependency(const T* dependency)
 		{
-			dependency = DependencyWrapper<T>::GetDependency();
+			return DependencyWrapper<T>::GetDependency();
 		}
 
 		template<std::size_t idx, class... Ts>
@@ -18,7 +18,8 @@ namespace mvc
 		{
 			void operator() (std::tuple<Ts...>& tuple)
 			{
-				InitializeDependency(std::get<idx>(tuple));
+				auto& dependency = std::get<idx>(tuple);
+				dependency = GetInitializedDependency(dependency);
 				DependencyInitializer<idx - 1, Ts...>{}(tuple);
 			}
 		};
@@ -26,19 +27,37 @@ namespace mvc
 		template<class... Ts>
 		struct DependencyInitializer<0, Ts...>
 		{
-			void operator() (std::tuple<Ts...>& tuple) { InitializeDependency(std::get<0>(tuple)); }
+			void operator() (std::tuple<Ts...>& tuple) 
+			{ 
+				auto& dependency = std::get<0>(tuple);
+				dependency = GetInitializedDependency(dependency);
+			}
 		};
 
 	public:
-		Depender() { InitializeDependencies(); }
+		Depender() 
+		{ 
+			InitializeDependencies(); 
+		}
+
 		virtual ~Depender() = default;
 
 	protected:
 		template<class T>
-		T& GetDependency() { return *std::get<T*>(m_dependencies); }
+		T& GetDependency() 
+		{ 
+			auto dependecy = std::get<T*>(m_dependencies);
+			assert(dependecy);
+			return *dependecy;
+		}
 
 		template<class T>
-		const T& GetDependency() const { return *std::get<T*>(m_dependencies); }
+		const T& GetDependency() const 
+		{ 
+			auto dependecy = std::get<T*>(m_dependencies);
+			assert(dependecy);
+			return *dependecy;
+		}
 
 	private:
 		void InitializeDependencies()

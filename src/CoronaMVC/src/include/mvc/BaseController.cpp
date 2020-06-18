@@ -53,7 +53,7 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseController::RegisterConsumer(EventType eventType, std::function<ModelAndView(const Event&)> consumer)
 	{
-		m_eventConsumers[eventType] = consumer;
+		m_eventConsumers[eventType] = std::move(consumer);
 	}
 
 }
