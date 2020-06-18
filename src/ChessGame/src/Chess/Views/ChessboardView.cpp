@@ -52,37 +52,6 @@ namespace chess
 		default:
 			break;
 		}
-
-		if (!inputPosition.IsValid())
-		{
-			return;
-		}
-
-		const auto& inputTile = m_model.ChessBoard[inputPosition.AsIndex()];
-		if (inputTile.IsPicked)
-		{
-			RaiseEvent(ChessPieceDroppedEvent());
-		}
-		else if (!m_model.PickedPieceId.IsValid() && inputTile.Piece.IsValid() && inputTile.Piece.GetColor() == m_model.ActivePlayerColor)
-		{
-			RaiseEvent(ChessPiecePickedEvent(inputTile.Piece));
-		}
-		else
-		{
-			const bool isPossibleMove = std::any_of(
-				m_model.PossibleMoves.cbegin(),
-				m_model.PossibleMoves.cend(),
-				[&inputPosition](const TilePositionViewModel& position) -> bool
-				{
-					return Position(position.Row, position.Column) == inputPosition.AsPosition();
-				}
-			);
-
-			if (isPossibleMove)
-			{
-				RaiseEvent(ChessPieceMovedEvent(m_model.PickedPieceId, inputPosition));
-			}
-		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
