@@ -31,6 +31,12 @@
     <Filter Include="Source Files\exception">
       <UniqueIdentifier>{3c99cbff-d4c5-4180-80dc-12520521db31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\system_defaults">
+      <UniqueIdentifier>{7d9e218f-4463-4cc6-9f75-606aa26d92d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\system_defaults\error_view">
+      <UniqueIdentifier>{c5dd5205-ea30-4e88-aa00-327aac6c0fa4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EventDispatcher.h">
@@ -117,6 +123,12 @@
     <ClInclude Include="src\include\exception\FileException.h">
       <Filter>Source Files\exception</Filter>
     </ClInclude>
+    <ClInclude Include="src\system_defaults\SystemDefaultsFactory.h">
+      <Filter>Source Files\system_defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="src\system_defaults\error_view\ErrorView.h">
+      <Filter>Source Files\system_defaults\error_view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EventDispatcher.cpp">
@@ -166,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="src\include\exception\FileException.cpp">
       <Filter>Source Files\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system_defaults\SystemDefaultsFactory.cpp">
+      <Filter>Source Files\system_defaults</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system_defaults\error_view\ErrorView.cpp">
+      <Filter>Source Files\system_defaults\error_view</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -26,4 +26,6 @@ namespace mvc
 		const ViewId m_viewId;
 		std::unique_ptr<Model> m_model;
 	};
+
+	using ControllerExceptionHandler = std::function<ModelAndView(const std::exception & e)>;
 }

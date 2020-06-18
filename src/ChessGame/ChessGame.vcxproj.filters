@@ -34,6 +34,12 @@
     <Filter Include="Chess\ChessPieces\Movement">
       <UniqueIdentifier>{e1cd4bce-99ee-4ac9-9abd-91163ad20cc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Chess\ErrorHandling">
+      <UniqueIdentifier>{8abe41b7-5205-4196-b833-c8bcf9e041bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\ErrorHandling\Exceptions">
+      <UniqueIdentifier>{ae9389ce-74fc-41b9-ada1-7f9f204d0ddc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Chess\ChessPieces\ChessPiece.cpp">
@@ -140,6 +146,33 @@
     </ClCompile>
     <ClCompile Include="src\Chess\Models\GameOverViewModel.cpp">
       <Filter>Chess\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\ErrorCodes.cpp">
+      <Filter>Chess\ErrorHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\ValidationResult.cpp">
+      <Filter>Chess\ErrorHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\InvalidChessPieceException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\InvalidPlayerColorException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\InvalidPawnPromotionException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\InvalidChessPieceMoveException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\OutOfBoardException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\ChessPieceAlreadyPickedException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Chess\ErrorHandling\Exceptions\ChessPieceNotPickedException.cpp">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +286,33 @@
     </ClInclude>
     <ClInclude Include="src\Chess\Models\GameOverViewModel.h">
       <Filter>Chess\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\ErrorCodes.h">
+      <Filter>Chess\ErrorHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\ValidationResult.h">
+      <Filter>Chess\ErrorHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\InvalidChessPieceException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\InvalidPlayerColorException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\InvalidPawnPromotionException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\InvalidChessPieceMoveException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\OutOfBoardException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\ChessPieceAlreadyPickedException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Chess\ErrorHandling\Exceptions\ChessPieceNotPickedException.h">
+      <Filter>Chess\ErrorHandling\Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

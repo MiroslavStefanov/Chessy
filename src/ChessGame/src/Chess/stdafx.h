@@ -10,7 +10,9 @@
 #include <algorithm>
 #include <cassert>
 
+
 namespace chess
 {
+	enum class ErrorCode;
 	static constexpr auto CHESS_BOARD_SIDE = 8;
 }

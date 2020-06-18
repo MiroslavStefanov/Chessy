@@ -140,14 +140,12 @@ namespace chess
 
 		const Value& operator[](const Key& key) const
 		{
-			return Find(key)->second;
-			return const_cast<VectorMap*>(this)->Find(key)->second;
+			return Find(key, true)->second;
 		}
 
 		Value& operator[](const Key& key)
 		{
-			auto constIterator = Find(key);
-			return const_cast<Value&>(constIterator->second);
+			return const_cast<Value&>(Find(key, true)->second);
 		}
 
 		bool HasKey(const Key& key) const
@@ -156,9 +154,15 @@ namespace chess
 		}
 
 	private:
-		typename std::vector<value_type>::const_iterator Find(const Key& key) const
+		typename std::vector<value_type>::const_iterator Find(const Key& key, bool throwIfNotFound = false) const
 		{
-			return std::find_if(m_entries.cbegin(), m_entries.cend(), [&key](const value_type& val) {return KeyEqual{}(key, val.first); });
+			auto it = std::find_if(m_entries.cbegin(), m_entries.cend(), [&key](const value_type& val) {return KeyEqual{}(key, val.first); });
+			if (throwIfNotFound && it == m_entries.end())
+			{
+				throw std::out_of_range("There is no such key in VectorMap");
+			}
+
+			return it;
 		}
 
 	private:

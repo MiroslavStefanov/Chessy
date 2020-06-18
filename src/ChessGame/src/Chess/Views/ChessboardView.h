@@ -16,6 +16,8 @@ namespace chess
 		void PlaySelectedPieceOnPosition(const TilePosition& position);
 		void PromotePawnToChessPieceType(EChessPieceType chessPieceType);
 
+		void AddError(ErrorCode error);
+
 	private:
 		ChessGameViewModel m_model;
 	};

@@ -14,6 +14,8 @@ namespace mvc
 		void InputActiveView(InputDevice* inputDevice) const;
 		void RenderActiveView(OutputDevice* outputDevice) const;
 
+		ViewId GetActiveViewId() const;
+
 	private:
 		View& GetViewById(ViewId id) const;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "dependency/DependencyWrapper.h"
+#include "mvc/ModelAndView.h"
 
 namespace mvc
 {
@@ -23,13 +24,14 @@ namespace mvc
 		void SetInputDevice(std::unique_ptr<InputDevice>&& inputDevice);
 		void SetOutputDevice(std::unique_ptr<OutputDevice>&& outputDevice);
 
+		void SetLogger(std::unique_ptr<LoggerImpl>&& logger);
 		void SetLogFileName(const std::string& fileName);
+		void SetControllerExceptionHandler(ControllerExceptionHandler errorHandler);
 
 	private:
+		void SetDefaultDependencies();
 		void SimulateFrame();
 		void RegisterControllersForEvents();
-
-		std::string GetDefaultLogFileName();
 
 	private:
 		DependencyWrapper<class EventDispatcher> m_eventDispatcher;

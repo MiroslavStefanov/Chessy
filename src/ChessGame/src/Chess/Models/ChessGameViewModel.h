@@ -2,6 +2,7 @@
 #include "mvc/Model.h"
 #include "Models/TilePositionViewModel.h"
 #include "Models/ChessTileViewModel.h"
+#include "ErrorHandling/ErrorCodes.h"
 
 namespace chess
 {
@@ -13,5 +14,6 @@ namespace chess
 		std::vector<TilePositionViewModel> PossibleMoves;
 		std::vector<ChessTileViewModel> ChessBoard;
 		bool ActivePlayerInCheck = false;
+		ErrorCodes Errors;
 	};
 }

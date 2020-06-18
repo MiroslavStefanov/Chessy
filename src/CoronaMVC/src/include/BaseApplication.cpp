@@ -10,6 +10,9 @@
 #include "event/ApplicationStartedEvent.h"
 #include "logger/FileLoggerImpl.h"
 
+#include "system_defaults/SystemDefaultsFactory.h"
+#include "system_defaults/error_view/ErrorView.h"
+
 namespace mvc
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +24,7 @@ namespace mvc
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::Initialize()
 	{
-		SetLogFileName(GetDefaultLogFileName());
+		SetDefaultDependencies();
 
 		PreInitialize();
 		assert(m_inputDevice);
@@ -73,9 +76,29 @@ namespace mvc
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetLogger(std::unique_ptr<LoggerImpl>&& logger)
+	{
+		Logger::Get().SetLoggerImplementation(std::move(logger));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	void BaseApplication::SetLogFileName(const std::string& fileName)
 	{
 		Logger::Get().SetLoggerImplementation(std::make_unique<FileLoggerImpl>(fileName));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetControllerExceptionHandler(ControllerExceptionHandler errorHandler)
+	{
+		m_eventDispatcher->SetControllerExceptionHandler(std::move(errorHandler));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void BaseApplication::SetDefaultDependencies()
+	{
+		SetLogger(SystemDefaultsFactory::MakeDefaultLogger());
+		SetControllerExceptionHandler(SystemDefaultsFactory::MakeDefaultControllerExceptionHandler());
+		m_viewResolver->AddView(DefaultErrorView::DEFAULT_ERROR_VIEW_ID, std::make_unique<DefaultErrorView>(*m_viewResolver));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,14 +118,5 @@ namespace mvc
 		{
 			controller->RegisterToDispatcher(*m_eventDispatcher);
 		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::string BaseApplication::GetDefaultLogFileName()
-	{
-		static constexpr auto DEFAULT_LOG_FILE_NAME_PREFIX = "Log_";
-
-		const std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-		return std::string(DEFAULT_LOG_FILE_NAME_PREFIX) + std::to_string(now);
 	}
 }

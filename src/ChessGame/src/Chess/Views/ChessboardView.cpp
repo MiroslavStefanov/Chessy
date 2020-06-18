@@ -17,11 +17,7 @@ namespace chess
 	{
 		std::unique_ptr<mvc::Model> localModel = std::move(model);
 		auto chessGameViewModel = dynamic_cast<ChessGameViewModel*>(localModel.get());
-		if (!chessGameViewModel)
-		{
-			assert(false);
-			return;
-		}
+		LogReturnIf(!chessGameViewModel, VOID_RETURN);
 
 		m_model = std::move(*chessGameViewModel);
 	}
@@ -72,18 +68,28 @@ namespace chess
 			device->RenderPossibleMoves(m_model.PossibleMoves);
 		}
 		device->RenderTurnState(m_model.TurnState);
+		device->RenderErrors(m_model.Errors);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ChessboardView::PickChessPiceOnPosition(const TilePosition& position)
 	{
-		assert(position.IsValid());
+		if (!position.IsValid())
+		{
+			AddError(ErrorCode::InvalidTile);
+			return;
+		}
+
 		const auto& inputTile = m_model.ChessBoard[position.AsIndex()];
 
 		const bool canPickChessPiece = !m_model.PickedPieceId.IsValid()
 			&& inputTile.Piece.IsValid()
 			&& inputTile.Piece.GetColor() == m_model.ActivePlayerColor;
-		assert(canPickChessPiece);
+		if (!canPickChessPiece)
+		{
+			AddError(ErrorCode::CannotPickChessPiece);
+			return;
+		}
 
 		RaiseEvent(ChessPiecePickedEvent(inputTile.Piece));
 	}
@@ -91,8 +97,18 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ChessboardView::PlaySelectedPieceOnPosition(const TilePosition& position)
 	{
-		assert(position.IsValid());
-		assert(m_model.PickedPieceId.IsValid() && m_model.PickedPieceId.GetColor() == m_model.ActivePlayerColor);
+		if (!position.IsValid())
+		{
+			AddError(ErrorCode::InvalidTile);
+			return;
+		}
+		
+		const bool validPickedChessPiece = m_model.PickedPieceId.IsValid() && m_model.PickedPieceId.GetColor() == m_model.ActivePlayerColor;
+		if (!validPickedChessPiece)
+		{
+			AddError(ErrorCode::InvalidPickedChessPiece);
+			return;
+		}
 
 		const auto& inputTile = m_model.ChessBoard[position.AsIndex()];
 		const bool isDeselect = inputTile.IsPicked;
@@ -115,31 +131,46 @@ namespace chess
 		}
 		else
 		{
-			assert(false);
+			AddError(ErrorCode::InvalidChessPieceMove);
 		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ChessboardView::PromotePawnToChessPieceType(EChessPieceType chessPieceType)
 	{
-		assert(chessPieceType != EChessPieceType::COUNT);
+		if (chessPieceType == EChessPieceType::COUNT)
+		{
+			AddError(ErrorCode::CannotPromotePawn);
+			return;
+		}
 
 		const bool pickedPawn = m_model.PickedPieceId.IsValid()
 			&& m_model.PickedPieceId.GetType() == EChessPieceType::Pawn;
-		assert(pickedPawn);
 
 		auto pawnPositionIt = std::find_if(m_model.ChessBoard.cbegin(), m_model.ChessBoard.cend(), [](const ChessTileViewModel& tile) {
 			return tile.IsPicked;
 			});
-		assert(pawnPositionIt != m_model.ChessBoard.cend());
 
-		const TilePosition pawnPosition = TilePosition(Position(pawnPositionIt - m_model.ChessBoard.cbegin()));
-		assert(pawnPosition.IsValid());
+		const TilePosition pawnPosition = pawnPositionIt != m_model.ChessBoard.cend() ?
+			TilePosition(Position(pawnPositionIt - m_model.ChessBoard.cbegin())) :
+			TilePosition::Invalid();
 
-		const bool canPromotePawn = m_model.PickedPieceId.GetColor() == m_model.ActivePlayerColor
+		const bool canPromote = pawnPosition.IsValid()
+			&& m_model.PickedPieceId.GetColor() == m_model.ActivePlayerColor
 			&& IsPawnPromotionPosition(m_model.PickedPieceId.GetColor(), pawnPosition);
-		assert(canPromotePawn);
+
+		if (!pickedPawn || !canPromote)
+		{
+			AddError(ErrorCode::CannotPromotePawn);
+			return;
+		}
 
 		RaiseEvent(PawnPromotedEvent(m_model.PickedPieceId, chessPieceType));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ChessboardView::AddError(ErrorCode error)
+	{
+		m_model.Errors.push_back(error);
 	}
 }

@@ -15,6 +15,12 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderText(const std::string& text)
+	{
+		m_frameBuffer << text << std::endl;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	void ConsoleChessOutputDevice::RenderChessboard(const std::vector<ChessTileViewModel>& chessBoardTiles)
 	{
 		const size_t boardTiles = CHESS_BOARD_SIDE * CHESS_BOARD_SIDE;
@@ -93,6 +99,15 @@ namespace chess
 			<< std::endl
 			<< ConsoleChessVisuals::WINNER_TEXT
 			<< ConsoleChessVisuals::DEFAULT_PLAYER_NAME_TEXT_TABLE[winnerColor];
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	void ConsoleChessOutputDevice::RenderErrors(const ErrorCodes& errors)
+	{
+		for (auto error : errors)
+		{
+			m_frameBuffer << ConsoleChessVisuals::ERROR_CODE_TEXT_TABLE[error] << std::endl;
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

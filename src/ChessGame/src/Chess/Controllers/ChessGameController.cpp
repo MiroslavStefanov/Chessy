@@ -18,6 +18,8 @@
 #include "Services/PlayerService.h"
 #include "Services/BoardService.h"
 
+#include "ErrorHandling/ValidationResult.h"
+
 namespace chess
 {
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,10 +42,10 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView ChessGameController::OnChessPiecePickedEvent(ChessPiecePickedEvent const& event)
 	{
-		if (!CanPickChessPiece(event.PieceId))
+		auto validation = ValidatePickChessPiece(event.PieceId);
+		if (!validation.IsValid())
 		{
-			//TODO: error handling
-			return mvc::ModelAndView::Invalid();
+			return CreateModelAndView(std::move(validation.PopErrors()));
 		}
 
 		GetDependency<PlayerService>().PickChessPiece(event.PieceId);
@@ -53,10 +55,10 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView ChessGameController::OnChessPieceDroppedEvent(ChessPieceDroppedEvent const& event)
 	{
-		if (!CanDropChessPiece())
+		auto validation = ValidateDropChessPiece();
+		if (!validation.IsValid())
 		{
-			//TODO: error handling
-			return mvc::ModelAndView::Invalid();
+			return CreateModelAndView(std::move(validation.PopErrors()));
 		}
 
 		GetDependency<PlayerService>().DropChessPiece();
@@ -66,10 +68,10 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView ChessGameController::OnChessPieceMovedEvent(ChessPieceMovedEvent const& event)
 	{
-		if (!CanMoveChessPieceToPosition(event.PieceId, event.NewPosition))
+		auto validation = ValidateMoveChessPieceToPosition(event.PieceId, event.NewPosition);
+		if (!validation.IsValid())
 		{
-			//TODO: error handling
-			return mvc::ModelAndView::Invalid();
+			return CreateModelAndView(std::move(validation.PopErrors()));
 		}
 
 		GetDependency<BoardService>().MoveChessPieceToPosition(event.PieceId, event.NewPosition);
@@ -82,10 +84,10 @@ namespace chess
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	mvc::ModelAndView ChessGameController::OnPawnPromotedEvent(PawnPromotedEvent const& event)
 	{
-		if (!CanPromotePawn(event.PawnId, event.PromotedToPiece))
+		auto validation = ValidatePromotePawn(event.PawnId, event.PromotedToPiece);
+		if (!validation.IsValid())
 		{
-			//TODO: error handling
-			return mvc::ModelAndView::Invalid();
+			return CreateModelAndView(std::move(validation.PopErrors()));
 		}
 
 		GetDependency<BoardService>().PromotePawn(event.PawnId, event.PromotedToPiece);
@@ -96,7 +98,7 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	mvc::ModelAndView ChessGameController::CreateModelAndView() const
+	mvc::ModelAndView ChessGameController::CreateModelAndView(ErrorCodes&& errors) const
 	{
 		if (m_gameOver)
 		{
@@ -106,12 +108,12 @@ namespace chess
 		}
 
 		mvc::ModelAndView modelAndView = mvc::ModelAndView::CreateFromViewId(ViewTypeToId(ViewType::Chessboard));
-		modelAndView.SetModel(CreateChessGameViewModel());
+		modelAndView.SetModel(CreateChessGameViewModel(std::move(errors)));
 		return modelAndView;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	std::unique_ptr<mvc::Model> ChessGameController::CreateChessGameViewModel() const
+	std::unique_ptr<mvc::Model> ChessGameController::CreateChessGameViewModel(ErrorCodes&& errors) const
 	{
 		auto& playerService = GetDependency<PlayerService>();
 		auto& boardService = GetDependency<BoardService>();
@@ -129,6 +131,7 @@ namespace chess
 			std::transform(possibleMoves.begin(), possibleMoves.end(), std::back_inserter(model->PossibleMoves), ModelMapper::MapTilePositionView);
 		}
 
+		model->Errors = std::move(errors);
 		return model;
 	}
 
@@ -146,33 +149,80 @@ namespace chess
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	bool ChessGameController::CanPickChessPiece(ChessPieceId chessPieceId) const
+	ValidationResult ChessGameController::ValidatePickChessPiece(ChessPieceId chessPieceId) const
 	{
-		return GetDependency<PlayerService>().CanPickChessPiece(chessPieceId)
-			&& GetDependency<BoardService>().IsChessPieceOnBoard(chessPieceId);
+		ValidationResult result;
+
+		if (!GetDependency<PlayerService>().CanPickChessPiece(chessPieceId))
+		{
+			result.AddError(ErrorCode::CannotPickChessPiece);
+		}
+
+		if (!GetDependency<BoardService>().IsChessPieceOnBoard(chessPieceId))
+		{
+			result.AddError(ErrorCode::ChessPieceNotOnBoard);
+		}
+		
+		return result;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	bool ChessGameController::CanDropChessPiece() const
+	ValidationResult ChessGameController::ValidateDropChessPiece() const
 	{
-		return GetDependency<PlayerService>().CanDropChessPiece();
+		ValidationResult result;
+
+		if (!GetDependency<PlayerService>().CanDropChessPiece())
+		{
+			result.AddError(ErrorCode::CannotDropChessPiece);
+		}
+
+		return result;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	bool ChessGameController::CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
+	ValidationResult ChessGameController::ValidateMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const
 	{
 		auto& playerService = GetDependency<PlayerService>();
 		auto& boardService = GetDependency<BoardService>();
 
-		return playerService.GetPickedPiece() == chessPieceId
-			&& boardService.IsChessPieceOnBoard(chessPieceId)
-			&& boardService.CanMoveChessPieceToPosition(chessPieceId, position, playerService.IsActivePlayerInCheck());
+		ValidationResult result;
+
+		if (playerService.GetPickedPiece() != chessPieceId)
+		{
+			result.AddError(ErrorCode::InvalidPickedChessPiece);
+		}
+
+		if (!boardService.IsChessPieceOnBoard(chessPieceId))
+		{
+			result.AddError(ErrorCode::ChessPieceNotOnBoard);
+		}
+
+		try
+		{
+			if (!boardService.CanMoveChessPieceToPosition(chessPieceId, position, playerService.IsActivePlayerInCheck()))
+			{
+				result.AddError(ErrorCode::InvalidChessPieceMove);
+			}
+		}
+		catch (...)
+		{
+			result.AddError(ErrorCode::InternalError);
+		}
+
+		return result;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	bool ChessGameController::CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const
+	ValidationResult ChessGameController::ValidatePromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const
 	{
-		return GetDependency<PlayerService>().GetPickedPiece() == pawnId
-			&& GetDependency<BoardService>().CanPromotePawn(pawnId, promotedToPiece);
+		ValidationResult result;
+
+		if (GetDependency<PlayerService>().GetPickedPiece() != pawnId
+			|| !GetDependency<BoardService>().CanPromotePawn(pawnId, promotedToPiece))
+		{
+			result.AddError(ErrorCode::CannotPromotePawn);
+		}
+
+		return result;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

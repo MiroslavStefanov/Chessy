@@ -1,6 +1,7 @@
 #pragma once
 #include "mvc/BaseController.h"
 #include "dependency/Depender.h"
+#include "ErrorHandling/ErrorCodes.h"
 
 namespace chess
 {
@@ -8,6 +9,7 @@ namespace chess
 	class PlayerService;
 	class BoardService;
 	class TilePosition;
+	class ValidationResult;
 
 	class ChessGameController : public mvc::BaseController, private mvc::Depender<PlayerService, BoardService>
 	{
@@ -21,15 +23,15 @@ namespace chess
 		mvc::ModelAndView OnChessPieceMovedEvent(class ChessPieceMovedEvent const& event);
 		mvc::ModelAndView OnPawnPromotedEvent(class PawnPromotedEvent const& event);
 
-		mvc::ModelAndView CreateModelAndView() const;
-		std::unique_ptr<mvc::Model> CreateChessGameViewModel() const;
+		mvc::ModelAndView CreateModelAndView(ErrorCodes&& errors = ErrorCodes()) const;
+		std::unique_ptr<mvc::Model> CreateChessGameViewModel(ErrorCodes&& errors) const;
 		std::unique_ptr<mvc::Model> CreateGameOverViewModel() const;
 
 	private:
-		bool CanPickChessPiece(ChessPieceId chessPieceId) const;
-		bool CanDropChessPiece() const;
-		bool CanMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
-		bool CanPromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
+		ValidationResult ValidatePickChessPiece(ChessPieceId chessPieceId) const;
+		ValidationResult ValidateDropChessPiece() const;
+		ValidationResult ValidateMoveChessPieceToPosition(ChessPieceId chessPieceId, const TilePosition& position) const;
+		ValidationResult ValidatePromotePawn(ChessPieceId pawnId, EChessPieceType promotedToPiece) const;
 
 		void UpdateCheckState();
 

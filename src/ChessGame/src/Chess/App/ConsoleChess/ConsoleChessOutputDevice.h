@@ -1,7 +1,6 @@
 #pragma once
 #include "io/OutputDevice.h"
-
-#include <sstream>
+#include "ErrorHandling/ErrorCodes.h"
 
 namespace chess
 {
@@ -14,6 +13,7 @@ namespace chess
 	{
 	public:
 		void Update() override;
+		void RenderText(const std::string& text) override;
 
 		void RenderChessboard(const std::vector<ChessTileViewModel>& chessBoardTiles);
 		void RenderPossibleMoves(const std::vector<TilePositionViewModel>& possibleMoves);
@@ -21,6 +21,7 @@ namespace chess
 		void RenderActivePlayer(EColor activePlayerColor, bool isInCheck);
 		void RenderTurnState(ETurnState turnState);
 		void RenderGameOverMessage(EColor winnerColor);
+		void RenderErrors(const ErrorCodes& errors);
 
 	private:
 		void ClearConsole();

@@ -5,6 +5,8 @@
 #include "Utils/PlayerPossibleMoves.h"
 #include "Utils/PlayerCheckStateResolver.h"
 
+#include "ErrorHandling/Exceptions/InvalidPlayerColorException.h"
+
 namespace chess
 {
 	class ChessPieceMovementIterator;
@@ -27,10 +29,17 @@ namespace chess
 
 	private:
 		using ChessPicesPositions = std::unordered_map<ChessPieceId, TilePosition, ChessPieceIdHash>;
+		using PlayerProperties = VectorMap <EColor, std::tuple <PlayerPossibleMoves, PlayerCastleCache, PlayerCheckStateResolver>>;
 
 	private:
 		ChessPicesPositions GetInitialChessPiecesPositions() const;
 		void OnBoardChanged(const ChessPicesPositions& newBoard, EColor currentTurnColor);
+
+		template<class Property>
+		Property& GetPlayerProperty(EColor playerColor);
+
+		template<class Property>
+		const Property& GetPlayerProperty(EColor playerColor) const;
 
 		EDirection GetCastleDirection(ChessPieceId movedPieceId, const TilePosition& movedToPosition) const;
 		void OnCastle(EColor playerColor, EDirection castleDirection);
@@ -49,10 +58,27 @@ namespace chess
 	private:
 		ChessPicesPositions m_piecesPositions;
 		std::vector<ChessPieceId> m_cachedBoardState;
-		VectorMap<EColor, PlayerPossibleMoves> m_playerPossibleMoves;
-		VectorMap<EColor, PlayerCastleCache> m_playerCastleCache;
-		VectorMap<EColor, PlayerCheckStateResolver> m_playerCheckStateResolvers;
+
+		PlayerProperties m_playerProperties;
 		EnPassantCache m_enPassantCache;
 	};
+	template<class Property>
+	inline Property& BoardService::GetPlayerProperty(EColor playerColor)
+	{
+		try
+		{
+			auto& properties = m_playerProperties[playerColor];
+			return std::get<Property>(properties);
+		}
+		catch (std::exception & e)
+		{
+			throw InvalidPlayerColorException(e);
+		}
+	}
+	template<class Property>
+	inline const Property& BoardService::GetPlayerProperty(EColor playerColor) const
+	{
+		return const_cast<BoardService*>(this)->GetPlayerProperty<Property>(playerColor);
+	}
 }
 

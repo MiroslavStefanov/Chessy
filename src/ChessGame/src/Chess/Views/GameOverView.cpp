@@ -10,11 +10,8 @@ namespace chess
 	{
 		std::unique_ptr<mvc::Model> localModel = std::move(model);
 		auto gameOverViewModel = dynamic_cast<GameOverViewModel*>(localModel.get());
-		if (!gameOverViewModel)
-		{
-			assert(false);
-			return;
-		}
+		LogReturnIf(!gameOverViewModel, VOID_RETURN);
+
 
 		m_model = std::move(*gameOverViewModel);
 	}

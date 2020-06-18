@@ -12,6 +12,7 @@ namespace chess
 		ConsoleChessInputDevice();
 
 		void Update() override;
+		bool HasAnyInput() const override;
 
 		const TilePosition& GetTilePosition() const;
 		EChessPieceType GetChessPieceType() const;

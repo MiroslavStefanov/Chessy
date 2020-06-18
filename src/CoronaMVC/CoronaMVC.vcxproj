@@ -46,6 +46,8 @@
     <ClInclude Include="src\include\StringHash.h" />
     <ClInclude Include="src\include\ViewId.h" />
     <ClInclude Include="src\SystemEventTypes.h" />
+    <ClInclude Include="src\system_defaults\error_view\ErrorView.h" />
+    <ClInclude Include="src\system_defaults\SystemDefaultsFactory.h" />
     <ClInclude Include="src\ViewResolver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +66,8 @@
     <ClCompile Include="src\include\mvc\View.cpp" />
     <ClCompile Include="src\include\pch.cpp" />
     <ClCompile Include="src\include\ViewId.cpp" />
+    <ClCompile Include="src\system_defaults\error_view\ErrorView.cpp" />
+    <ClCompile Include="src\system_defaults\SystemDefaultsFactory.cpp" />
     <ClCompile Include="src\ViewResolver.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

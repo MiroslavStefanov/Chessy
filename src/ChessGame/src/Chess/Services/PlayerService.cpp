@@ -3,6 +3,11 @@
 #include "ChessPieces/ChessPieceTypes.h"
 #include "Utils/Utils.h"
 
+#include "ErrorHandling/Exceptions/InvalidChessPieceException.h"
+#include "ErrorHandling/Exceptions/InvalidPlayerColorException.h"
+#include "ErrorHandling/Exceptions/ChessPieceAlreadyPickedException.h"
+#include "ErrorHandling/Exceptions/ChessPieceNotPickedException.h"
+
 namespace chess
 {
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +43,14 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	bool PlayerService::IsActivePlayerInCheck() const
 	{
-		assert(m_playerCheckStates.HasKey(m_activePlayerColor));
-		return m_playerCheckStates[m_activePlayerColor] == EPlayerCheckState::Check;
+		try
+		{
+			return m_playerCheckStates[m_activePlayerColor] == EPlayerCheckState::Check;
+		}
+		catch (std::out_of_range & e)
+		{
+			throw InvalidPlayerColorException(e);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +87,15 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void PlayerService::PickChessPiece(ChessPieceId pieceId)
 	{
-		assert(!m_pickedPiece.IsValid() && pieceId.IsValid());
+		if (!pieceId.IsValid())
+		{
+			throw InvalidChessPieceException(pieceId);
+		}
+
+		if (m_pickedPiece.IsValid())
+		{
+			throw ChessPieceAlreadyPickedException();
+		}
 
 		m_pickedPiece = pieceId;
 		m_turnState = ETurnState::Select;
@@ -85,7 +104,10 @@ namespace chess
 	//////////////////////////////////////////////////////////////////////////////////////////
 	void PlayerService::DropChessPiece()
 	{
-		assert(m_pickedPiece.IsValid());
+		if (!m_pickedPiece.IsValid())
+		{
+			throw ChessPieceNotPickedException();
+		}
 
 		m_pickedPiece = ChessPieceId::Invalid();
 		m_turnState = ETurnState::Unselect;

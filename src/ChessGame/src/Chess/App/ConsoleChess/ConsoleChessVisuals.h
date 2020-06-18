@@ -36,6 +36,7 @@ namespace chess
 		static const VectorMap<EColor, char> TILE_COLOR_VISUAL_TABLE;
 		static const VectorMap<EColor, const char*> DEFAULT_PLAYER_NAME_TEXT_TABLE;
 		static const VectorMap<ETurnState, const char*> TURN_STATE_NAME_TEXT_TABLE;
+		static const VectorMap<ErrorCode, const char*> ERROR_CODE_TEXT_TABLE;
 
 	private:
 		static constexpr char INVALID_VISUAL = (char)227;

@@ -10,4 +10,5 @@ namespace mvc
 	class View;
 	class ModelAndView;
 	class Event;
+	class LoggerImpl;
 }

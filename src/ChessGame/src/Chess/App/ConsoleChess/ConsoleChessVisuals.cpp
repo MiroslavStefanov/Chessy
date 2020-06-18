@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ConsoleChessVisuals.h"
 #include "ChessPieces/ChessPieceTypes.h"
+#include "ErrorHandling/ErrorCodes.h"
 
 namespace chess
 {
@@ -77,6 +78,19 @@ namespace chess
 		{ETurnState::ErrorState, "ErrorState"},
 		{ETurnState::GameOver, "GameOver"},
 		{ETurnState::PawnPromotion, "PawnPromotion"}
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	const VectorMap<ErrorCode, const char*> ConsoleChessVisuals::ERROR_CODE_TEXT_TABLE =
+	{
+		{ErrorCode::InvalidTile, "Not a valid tile!"},
+		{ErrorCode::CannotPickChessPiece, "Cannot pick that chess piece right now!"},
+		{ErrorCode::CannotDropChessPiece, "Cannot drop the picked chess piece!"},
+		{ErrorCode::InvalidPickedChessPiece, "The picked chess piece is not valid!"},
+		{ErrorCode::InvalidChessPieceMove, "Cannot perform that move!"},
+		{ErrorCode::CannotPromotePawn, "Cannot promote that pawn to that chess piece!"},
+		{ErrorCode::ChessPieceNotOnBoard, "That chess piece is not on the board!"},
+		{ErrorCode::InternalError, "Internal error!"}
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
