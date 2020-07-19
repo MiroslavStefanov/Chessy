@@ -34,8 +34,8 @@ namespace chess
 		const ChessPiece King =
 		{
 			1
-			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 3) }
-			, { TilePosition(3) }
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 4) }
+			, { TilePosition(4) }
 			, {
 				  { EDirection::ForwardLeft, EMoveType::KingMove }
 				, { EDirection::Forward, EMoveType::KingMove }
@@ -86,8 +86,8 @@ namespace chess
 		const ChessPiece Queen =
 		{
 			1
-			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 4) }
-			, { TilePosition(4) }
+			, { TilePosition(CHESS_BOARD_SIDE * (CHESS_BOARD_SIDE - 1) + 3) }
+			, { TilePosition(3) }
 			, {
 				  { EDirection::Forward, EMoveType::Multiple }
 				, { EDirection::Backward, EMoveType::Multiple }
